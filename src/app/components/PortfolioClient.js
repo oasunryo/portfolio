@@ -1202,14 +1202,7 @@ export default function PortfolioClient({ initialItems }) {
           </div>
         </div>
 
-        {/* Local styling for hover scale/glow effect on skill cards */}
-        <style jsx>{`
-          .skill-card-hover:hover {
-            border-color: rgba(var(--accent-primary-rgb), 0.25) !important;
-            box-shadow: 0 4px 20px rgba(var(--accent-primary-rgb), 0.03);
-            transform: translateY(-2px);
-          }
-        `}</style>
+        {/* Local styling for hover scale/glow effect on skill cards moved to globals.css */}
       </section>
 
       {/* About & Contact Section */}
@@ -1286,12 +1279,7 @@ export default function PortfolioClient({ initialItems }) {
         </div>
       )}
 
-      {/* Inject spinner animation style */}
-      <style jsx global>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
+      {/* Spinner keyframes moved to globals.css */}
 
       {/* Codedgar-style Fixed Bottom Status Bar */}
       <div className="status-bar hidden sm:block">

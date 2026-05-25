@@ -1189,3 +1189,23 @@ footer {
 .dot-yellow { background: #ffbd2e; }
 .dot-green { background: #22c55e; }
 
+/* Custom skill card hover styling (moved from styled-jsx) */
+.skill-card-hover {
+  transition: all 0.3s ease !important;
+}
+
+.skill-card-hover:hover {
+  border-color: rgba(var(--accent-primary-rgb), 0.25) !important;
+  box-shadow: 0 4px 20px rgba(var(--accent-primary-rgb), 0.03) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Custom spinner animation (moved from styled-jsx global) */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  animation: spin 1s infinite linear !important;
+}
+
