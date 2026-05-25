@@ -858,3 +858,201 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================
+   Semiconductor Backend Process Roadmap Style (Ozgur Tech Skin)
+   ========================================== */
+.roadmap-container {
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  padding: 3rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+.roadmap-title {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: hsl(var(--accent-primary));
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 3.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.roadmap-title::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: hsl(var(--accent-secondary));
+  border-radius: 50%;
+  box-shadow: 0 0 8px hsl(var(--accent-secondary));
+}
+
+.roadmap-flow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  gap: 1rem;
+  z-index: 2;
+  margin-bottom: 3rem;
+}
+
+.roadmap-line {
+  position: absolute;
+  top: 22px;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: var(--rule);
+  z-index: 1;
+}
+
+.roadmap-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 3;
+  width: 18%;
+  cursor: pointer;
+}
+
+.roadmap-node {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: var(--transition-smooth);
+}
+
+.roadmap-step:hover .roadmap-node {
+  color: var(--bg);
+  background: hsl(var(--accent-primary));
+  border-color: hsl(var(--accent-primary));
+  box-shadow: 0 0 15px rgba(var(--accent-primary-rgb), 0.35);
+  transform: scale(1.08);
+}
+
+.roadmap-node-active {
+  color: var(--bg) !important;
+  background: hsl(var(--accent-primary)) !important;
+  border-color: hsl(var(--accent-primary)) !important;
+  box-shadow: 0 0 15px rgba(var(--accent-primary-rgb), 0.35) !important;
+}
+
+.roadmap-step-name {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 1rem;
+  text-align: center;
+  letter-spacing: -0.2px;
+  transition: var(--transition-fast);
+}
+
+.roadmap-step:hover .roadmap-step-name {
+  color: var(--fg);
+}
+
+.roadmap-step-name-active {
+  color: var(--fg) !important;
+}
+
+/* Roadmap Details Box (Ozgur Glass Block) */
+.roadmap-details-box {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid var(--rule);
+  padding: 2rem;
+  min-height: 120px;
+  transition: var(--transition-smooth);
+}
+
+.roadmap-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.roadmap-details-step-title {
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--fg);
+  letter-spacing: -0.5px;
+}
+
+.roadmap-details-defects-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 2px;
+  color: #ff5277;
+  background: rgba(255, 82, 119, 0.08);
+  border: 1px solid rgba(255, 82, 119, 0.2);
+  text-transform: uppercase;
+}
+
+.roadmap-details-description {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.roadmap-details-philosophy {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: hsl(var(--accent-secondary));
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-top: 1px dashed var(--rule);
+  padding-top: 0.85rem;
+}
+
+.roadmap-details-philosophy::before {
+  content: '🛡️';
+}
+
+@media (max-width: 768px) {
+  .roadmap-flow {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+  .roadmap-line {
+    display: none;
+  }
+  .roadmap-step {
+    width: 100%;
+    flex-direction: row;
+    gap: 1.25rem;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .roadmap-step-name {
+    margin-top: 0;
+    text-align: left;
+  }
+}
