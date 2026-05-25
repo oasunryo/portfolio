@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
-// 간단한 Markdown-to-HTML 파서 함수 (라이트 에디토리얼 테마 지원)
+// Markdown-to-HTML parser (Toss White Theme aligned)
 function parseMarkdown(markdownText) {
   if (!markdownText) return '';
   
@@ -11,23 +11,17 @@ function parseMarkdown(markdownText) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 
-  // 인용구/캘아웃 변환 - 차분한 샌드베이지 및 디지털 블루 테두리 적용
-  html = html.replace(/^>\s+💡\s+(.+)$/gm, '<blockquote style="border-left:4px solid hsl(var(--accent-primary)); background:var(--surface); padding:1.25rem; border-radius:4px; margin-bottom:1.5rem; font-size:0.92rem;">💡 $1</blockquote>');
-  html = html.replace(/^>\s+(.+)$/gm, '<blockquote style="border-left:4px solid hsl(var(--accent-secondary)); background:var(--surface); padding:1.25rem; border-radius:4px; margin-bottom:1.5rem; font-size:0.92rem;">$1</blockquote>');
+  html = html.replace(/^&gt;\s+💡\s+(.+)$/gm, '<blockquote style="border-left:3px solid var(--accent); background:var(--surface); padding:1.25rem; border-radius:16px; margin-bottom:1.5rem; font-size:0.92rem;">💡 $1</blockquote>');
+  html = html.replace(/^&gt;\s+(.+)$/gm, '<blockquote style="border-left:3px solid var(--rule-strong); background:var(--surface); padding:1.25rem; border-radius:16px; margin-bottom:1.5rem; font-size:0.92rem;">$1</blockquote>');
 
-  // 헤더 변환 (h2, h3)
-  html = html.replace(/^##\s+(.+)$/gm, '<h2 style="color:var(--fg); font-family:var(--font-display); font-size:1.35rem; font-weight:400; margin-top:2rem; margin-bottom:0.75rem; border-left:3px solid hsl(var(--accent-primary)); padding-left:0.75rem;">$1</h2>');
-  html = html.replace(/^###\s+(.+)$/gm, '<h3 style="color:hsl(var(--accent-primary)); font-size:1.05rem; font-weight:600; margin-top:1.5rem; margin-bottom:0.5rem; font-family:var(--font-mono);">$1</h3>');
+  html = html.replace(/^##\s+(.+)$/gm, '<h2 style="color:var(--fg); font-size:1.25rem; font-weight:700; margin-top:2rem; margin-bottom:0.75rem; border-left:3px solid var(--accent); padding-left:0.75rem;">$1</h2>');
+  html = html.replace(/^###\s+(.+)$/gm, '<h3 style="color:var(--accent); font-size:1rem; font-weight:700; margin-top:1.5rem; margin-bottom:0.5rem;">$1</h3>');
 
-  // 볼드 텍스트 변환
   html = html.replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--fg); font-weight:700;">$1</strong>');
 
-  // 리스트 변환 (ul / li)
   html = html.replace(/^\-\s+(.+)$/gm, '<li style="margin-bottom:0.4rem; padding-left:0.25rem;">$1</li>');
-  html = html.replace(/(<li style="margin-bottom:0\.4rem; padding-left:0\.25rem;">.*<\/li>)/gs, '<ul style="padding-left:1.25rem; margin-bottom:1.25rem; list-style-type:square; font-size:0.92rem;">$1</ul>');
-  html = html.replace(/<\/ul>\s*<ul>/g, '');
+  html = html.replace(/<li style="margin-bottom:0\.4rem; padding-left:0\.25rem;">.*<\/li>/gs, (match) => '<ul style="padding-left:1.25rem; margin-bottom:1.25rem; list-style-type:disc; font-size:0.92rem;">' + match + '</ul>');
 
-  // 줄바꿈을 문단(<p>) 혹은 <br>로 변경 (이스케이프 에러 완전 해결)
   html = html.replace(/\n\n/g, '</p><p style="margin-bottom:1rem; color:var(--text-secondary);">');
   html = html.replace(/\n/g, '<br />');
   
@@ -38,76 +32,36 @@ function parseMarkdown(markdownText) {
   return html;
 }
 
-// 5대 반도체 후공정 단계 로드맵 데이터 (영/한 완벽 다국어화)
+// Roadmap data (KO/EN)
 const roadmapSteps = [
   {
-    num: "01",
-    name: "Wafer Dicing",
-    defects: "Chipping, Micro-cracks",
-    desc: {
-      ko: "웨이퍼상의 개별 칩(Die)을 다이아몬드 블레이드나 레이저를 이용해 초정밀 톱질하여 분리해내는 공정입니다. 칩의 손상을 극소화하는 것이 품질의 핵심입니다.",
-      en: "A precise sawing process separating individual silicon dies from the wafer using diamond blades or lasers. Minimizing chipping is the key parameter for quality."
-    },
-    philosophy: {
-      ko: "절단면 치핑(Chipping) 및 미세 균열 전수 시뮬레이션을 기반으로 초정밀 툴 마모도 감시 가이드 숙지",
-      en: "Establishes tool wear monitoring protocols based on physical simulation of kerf chipping and micro-crack propagation."
-    }
+    num: "01", name: "Wafer Dicing", defects: "Chipping, Micro-cracks",
+    desc: { ko: "웨이퍼상의 개별 칩(Die)을 다이아몬드 블레이드나 레이저를 이용해 초정밀 톱질하여 분리해내는 공정입니다. 칩의 손상을 극소화하는 것이 품질의 핵심입니다.", en: "A precise sawing process separating individual silicon dies from the wafer using diamond blades or lasers. Minimizing chipping is the key parameter for quality." },
+    philosophy: { ko: "절단면 치핑(Chipping) 및 미세 균열 전수 시뮬레이션을 기반으로 초정밀 툴 마모도 감시 가이드 숙지", en: "Establishes tool wear monitoring protocols based on physical simulation of kerf chipping and micro-crack propagation." }
   },
   {
-    num: "02",
-    name: "Die Attach",
-    defects: "Voiding, Tilt, Delamination",
-    desc: {
-      ko: "분리된 실리콘 칩을 패키지 기판(Substrate) 위에 정밀 리퀴드 에폭시나 다이 에이태치 필름(DAF)으로 물리적 본딩을 진행하는 공정입니다.",
-      en: "A bonding process mounting the silicon die onto the package substrate using high-performance liquid epoxy or die attach film (DAF)."
-    },
-    philosophy: {
-      ko: "접착 계면의 미세 기포(Void) 분석 및 실리콘 칩의 경사(Tilt) 방지를 위한 전공 공학 매커니즘 스터디",
-      en: "Analyzes interface micro-voiding and prevents die tilt through advanced thermal-mechanical shear calculations."
-    }
+    num: "02", name: "Die Attach", defects: "Voiding, Tilt, Delamination",
+    desc: { ko: "분리된 실리콘 칩을 패키지 기판(Substrate) 위에 정밀 리퀴드 에폭시나 다이 에이태치 필름(DAF)으로 물리적 본딩을 진행하는 공정입니다.", en: "A bonding process mounting the silicon die onto the package substrate using high-performance liquid epoxy or die attach film (DAF)." },
+    philosophy: { ko: "접착 계면의 미세 기포(Void) 분석 및 실리콘 칩의 경사(Tilt) 방지를 위한 전공 공학 매커니즘 스터디", en: "Analyzes interface micro-voiding and prevents die tilt through advanced thermal-mechanical shear calculations." }
   },
   {
-    num: "03",
-    name: "Wire Bonding",
-    defects: "Lifted Weld, Neck Break",
-    desc: {
-      ko: "칩의 알루미늄/구리 패드와 기판의 리드(Lead) 사이를 수 마이크로미터 두께의 미세한 금선/구리선으로 연결하여 전기 신호 통로를 확보합니다.",
-      en: "Interconnects the aluminum/copper pads of the die to the substrate leads using microscopic gold or copper wires of just a few micrometers."
-    },
-    philosophy: {
-      ko: "와이어 텐션 균일화 및 접합부 기계적 신뢰성 테스트용 전단 강도(Shear Strength) 최적화 방법론 이해",
-      en: "Understands wire tension uniformity and wire-pull shear strength optimization formulas to ensure joint reliability."
-    }
+    num: "03", name: "Wire Bonding", defects: "Lifted Weld, Neck Break",
+    desc: { ko: "칩의 알루미늄/구리 패드와 기판의 리드(Lead) 사이를 수 마이크로미터 두께의 미세한 금선/구리선으로 연결하여 전기 신호 통로를 확보합니다.", en: "Interconnects the aluminum/copper pads of the die to the substrate leads using microscopic gold or copper wires of just a few micrometers." },
+    philosophy: { ko: "와이어 텐션 균일화 및 접합부 기계적 신뢰성 테스트용 전단 강도(Shear Strength) 최적화 방법론 이해", en: "Understands wire tension uniformity and wire-pull shear strength optimization formulas to ensure joint reliability." }
   },
   {
-    num: "04",
-    name: "Molding",
-    defects: "Void, Wire Sweep, Incomplete Fill",
-    desc: {
-      ko: "외부의 충격, 열, 습기 및 정전기로부터 칩과 연결선을 보호하기 위해 에폭시 몰딩 컴파운드(EMC) 수지로 감싸 패키지를 밀봉하는 공정입니다.",
-      en: "Encapsulates the sensitive die and wires using Epoxy Molding Compound (EMC) resin to seal against mechanical impact, heat, and moisture."
-    },
-    philosophy: {
-      ko: "EMC 고온 점도 변화로 인한 와이어 휩(Wire Sweep, 쏠림) 불량 방지를 위한 열응력 해석론 탐구",
-      en: "Investigates transfer molding thermo-fluid dynamics to prevent wire sweep and mold voiding during resin flow."
-    }
+    num: "04", name: "Molding", defects: "Void, Wire Sweep, Incomplete Fill",
+    desc: { ko: "외부의 충격, 열, 습기 및 정전기로부터 칩과 연결선을 보호하기 위해 에폭시 몰딩 컴파운드(EMC) 수지로 감싸 패키지를 밀봉하는 공정입니다.", en: "Encapsulates the sensitive die and wires using Epoxy Molding Compound (EMC) resin to seal against mechanical impact, heat, and moisture." },
+    philosophy: { ko: "EMC 고온 점도 변화로 인한 와이어 휩(Wire Sweep, 쏠림) 불량 방지를 위한 열응력 해석론 탐구", en: "Investigates transfer molding thermo-fluid dynamics to prevent wire sweep and mold voiding during resin flow." }
   },
   {
-    num: "05",
-    name: "Package Test",
-    defects: "Contact Failure, Parametric Drift",
-    desc: {
-      ko: "최종 생산된 패키지 반도체에 대해 실제 온도 챔버 환경과 고주파 테스터 장비(ATE)를 사용하여 전기 신호 정상 동작 여부를 판정합니다.",
-      en: "Applies thermal chambers and automated test equipment (ATE) to evaluate final electrical signal integrity and screen outliers."
-    },
-    philosophy: {
-      ko: "웨이퍼 맵 불량 패턴 통계 분석을 통해 불량 다발 유발 장비 역추적 및 수율 최적화 분석 역량 보유",
-      en: "Utilizes wafer spatial defect signature analytics to isolate equipment failures and optimize final packaging yield."
-    }
+    num: "05", name: "Package Test", defects: "Contact Failure, Parametric Drift",
+    desc: { ko: "최종 생산된 패키지 반도체에 대해 실제 온도 챔버 환경과 고주파 테스터 장비(ATE)를 사용하여 전기 신호 정상 동작 여부를 판정합니다.", en: "Applies thermal chambers and automated test equipment (ATE) to evaluate final electrical signal integrity and screen outliers." },
+    philosophy: { ko: "웨이퍼 맵 불량 패턴 통계 분석을 통해 불량 다발 유발 장비 역추적 및 수율 최적화 분석 역량 보유", en: "Utilizes wafer spatial defect signature analytics to isolate equipment failures and optimize final packaging yield." }
   }
 ];
 
-// Notion "Portfolio Skills" 실물 데이터베이스 정밀 이식 (28개 영/한 완벽 매핑)
+// 28 Skills Database (KO/EN)
 const portfolioSkills = [
   { name: "AI Prompting", category: "Technical", level: 3, desc: { ko: "문서 작성 및 데이터 분석 워크플로우 자동화", en: "Automation of documentation/analysis workflows" }, cert: "AIOF No.2 Career-Jump", project: "SK Hy-Po : Cohort 8" },
   { name: "Figma", category: "Technical", level: 3, desc: { ko: "설비 상태 모니터링/불량율/수율(KPI) 대시보드 UX 설계", en: "Dashboard UX for monitoring (defect/uptime/KPI)" }, cert: "", project: "App UX/UI Improvement" },
@@ -139,191 +93,108 @@ const portfolioSkills = [
   { name: "Economics", category: "Interpersonal", level: 1, desc: { ko: "비즈니스 지표 및 시황 분석 리터러시", en: "Business literacy" }, cert: "MaeKyung Economic Test...", project: "Techlog." }
 ];
 
-// Notion-style P. (Proficiency) 레벨 원형 진행도 표시 컴포넌트
-function getCircularProgress(level) {
-  const radius = 8;
-  const stroke = 2.2;
-  const normalizedRadius = radius - stroke;
-  const circumference = normalizedRadius * 2 * Math.PI;
-  const percentage = level === 3 ? 100 : level === 2 ? 66 : 33;
-  const strokeDashoffset = circumference - (percentage / 100) * circumference;
+// Skill Segmented Tab Categories
+const skillSegments = [
+  { id: 'all', label: { ko: '전체 보기', en: 'View All' }, icon: '📌' },
+  { id: 'core', label: { ko: '핵심 기술', en: 'Core Tech' }, icon: '🛠️', filter: (s) => s.category === 'Technical' && s.level === 3 },
+  { id: 'process', label: { ko: '후공정 실무', en: 'Backend Process' }, icon: '⚙️', filter: (s) => s.category === 'Technical' && s.level === 2 },
+  { id: 'data', label: { ko: '데이터분석', en: 'Data & Analytics' }, icon: '📊', filter: (s) => s.category === 'Technical' && s.level === 1 },
+  { id: 'soft', label: { ko: '소통 · 협업', en: 'Soft Skills' }, icon: '💡', filter: (s) => s.category === 'Interpersonal' },
+];
 
+// Circular Progress Ring
+function CircularProgress({ level }) {
+  const r = 8, sw = 2.2, nr = r - sw;
+  const c = nr * 2 * Math.PI;
+  const pct = level === 3 ? 100 : level === 2 ? 66 : 33;
+  const off = c - (pct / 100) * c;
   return (
-    <svg height={radius * 2} width={radius * 2} style={{ transform: 'rotate(-90deg)', marginRight: '6px' }}>
-      <circle
-        stroke="rgba(25,24,24,0.08)"
-        fill="transparent"
-        strokeWidth={stroke}
-        r={normalizedRadius}
-        cx={radius}
-        cy={radius}
-      />
-      <circle
-        stroke="hsl(var(--accent-primary))"
-        fill="transparent"
-        strokeWidth={stroke}
-        strokeDasharray={circumference + ' ' + circumference}
-        style={{ strokeDashoffset, transition: 'stroke-dashoffset 0.35s' }}
-        r={normalizedRadius}
-        cx={radius}
-        cy={radius}
-      />
+    <svg height={r * 2} width={r * 2} style={{ transform: 'rotate(-90deg)', marginRight: '4px' }}>
+      <circle stroke="#E5E8EB" fill="transparent" strokeWidth={sw} r={nr} cx={r} cy={r} />
+      <circle stroke="var(--accent)" fill="transparent" strokeWidth={sw} strokeDasharray={`${c} ${c}`} style={{ strokeDashoffset: off, transition: 'stroke-dashoffset 0.35s' }} r={nr} cx={r} cy={r} />
     </svg>
   );
 }
 
-// KO/EN UI 딕셔너리 사전
+// KO/EN translations
 const translations = {
   ko: {
-    nav_selected: "selected cases",
-    nav_roadmap: "technology",
-    nav_archive: "archives",
-    nav_skills: "skills matrix",
-    hero_badge: "Notion API 실시간 연동 // 반도체 후공정 포트폴리오",
-    hero_title_1: "미래 반도체의 완성을 책임지는",
-    hero_title_accent: "반도체 후공정 (패키징 & 테스트)",
-    hero_title_2: "엔지니어 Junseo Oh 입니다.",
-    hero_subtitle: "노션(Notion) 데이터베이스와 실시간으로 연동된 고품격 크림 에디토리얼 대시보드입니다. 1티어 OSAT 대기업 앰코테크놀로지 연계 실무 지식, SK하이닉스 청년 반도체 인재 양성(SK Hy-Po) 8기 과정 수료 이력 및 Spotfire 기반 수율/공정 결함 통계 R&D 분석 결과물들을 정밀 탐색해 보세요.",
-    btn_explore: "포트폴리오 탐색 시작",
-    selected_title: "Selected Case Studies.",
-    selected_sub: "// 02 / SELECTED CASES",
-    view_details: "→ 자세히 보기",
-    roadmap_title: "Back-end Technology Flow.",
-    roadmap_sub: "// 03 / TECHNOLOGY",
+    nav_selected: "selected cases", nav_roadmap: "technology", nav_archive: "archives", nav_skills: "skills",
+    hero_badge: "Notion API 실시간 연동 포트폴리오",
+    hero_title_1: "반도체 패키징과 테스트의 신뢰성을",
+    hero_title_accent: "데이터로 증명합니다.",
+    hero_title_2: "엔지니어 오준서의 포트폴리오입니다.",
+    hero_subtitle: "노션(Notion) 데이터베이스와 실시간으로 연동된 미니멀 포트폴리오입니다. Amkor Technology OSAT 실무, SK Hy-Po 8기, Spotfire 기반 수율 분석 등 반도체 후공정 엔지니어링 역량을 탐색해 보세요.",
+    btn_explore: "포트폴리오 탐색",
+    selected_title: "주요 프로젝트",
+    view_details: "자세히 보기 →",
+    roadmap_title: "후공정 기술 흐름",
     roadmap_flow_title: "Process Flow & Engineering Philosophy",
-    roadmap_philosophy_label: "엔지니어 품질 철학:",
-    archive_title: "Semiconductor Archives.",
-    archive_sub: "// 04 / ARCHIVES",
-    archive_search_placeholder: "프로젝트, 툴(Python, JEDEC), 또는 이력으로 검색...",
-    tab_projects: "🔬 Projects",
-    tab_career: "🏆 Career & Education",
-    tab_courses: "📚 Relevant Coursework",
-    tab_credentials: "🎫 Credentials & Books",
-    th_tag: "분류 / 태그",
-    th_title: "프로젝트 및 활동명",
-    th_org: "소속 / 기관",
-    th_period: "진행 기간",
-    no_results: "검색 조건에 맞는 프로젝트가 존재하지 않습니다.",
-    trajectory_title: "Career Trajectory.",
-    trajectory_sub: "// 05 / TRAJECTORY",
-    approach_title: "Engineering Approach & Strengths.",
-    approach_sub: "// 06 / CORE STRENGTHS",
-    approach_quote: '"반도체 불량은 양산 후에 사후 대응하는 것이 아닙니다. 5Why 및 피시본(Fishbone) 다이어그램 기반의 정밀 분석 프레임워크와 설비 트러블슈팅 역량, 그리고 유관 부서와의 주도적인 협업을 통해 신뢰성을 완성하는 것이 엔지니어로서의 오너십입니다."',
-    tools_title: "Tools & Interactive Skills.",
-    tools_sub: "// 07 / TOOLCHAIN & SKILLS",
-    quick_view_label: "// 요약 뷰: 핵심 기술 툴체인",
-    deep_dive_label: "// 상세 분석: 노션 실물 보유 역량 데이터베이스",
-    notion_skills_db_title: "Notion Portfolio Skills Database.",
-    footer_title: "Let's Create High-Yield Innovations.",
-    footer_desc: "가상 시뮬레이션 데이터 및 전공 공학 지식을 결합해 반도체 후공정 수율 극대화를 이끌 준비가 되었습니다. 협업 요청이나 질문이 있으시면 언제든지 편하게 이메일로 연락주세요!",
-    copyright: "© 2026. Junseo Oh. All rights reserved. (Inspired by codedgar.com)",
-    modal_contribution: "역할 및 기여",
-    modal_period: "분석 기간",
-    modal_close: "닫기",
-    modal_github: "GitHub 소스코드/분석서 바로가기",
-    modal_loading: "노션 페이지 본문을 불러오는 중입니다..."
+    roadmap_philosophy_label: "엔지니어 품질 철학 :",
+    archive_title: "전체 아카이브",
+    archive_search_placeholder: "프로젝트, 툴, 이력으로 검색...",
+    tab_projects: "프로젝트", tab_career: "경력 · 교육", tab_courses: "이수 과목", tab_credentials: "자격 · 서적",
+    th_tag: "분류", th_title: "프로젝트명", th_org: "소속", th_period: "기간",
+    no_results: "검색 조건에 맞는 프로젝트가 없습니다.",
+    trajectory_title: "커리어 타임라인",
+    approach_title: "엔지니어링 강점",
+    approach_quote: '"반도체 불량은 사후 대응이 아닙니다. 5Why 및 피시본 분석, 설비 트러블슈팅, 유관 부서 협업을 통해 신뢰성을 완성하는 것이 엔지니어의 오너십입니다."',
+    tools_title: "기술 스택 & 스킬",
+    quick_view_label: "핵심 기술 툴체인",
+    deep_dive_label: "노션 실물 보유 역량 데이터베이스",
+    notion_skills_db_title: "Interactive Skills Database",
+    footer_title: "함께 만들어갈 높은 수율",
+    footer_desc: "데이터 분석과 전공 공학 지식을 결합해 반도체 후공정 수율 극대화를 이끌 준비가 되었습니다. 편하게 연락주세요.",
+    copyright: "© 2026. Junseo Oh. All rights reserved.",
+    modal_contribution: "역할 및 기여", modal_period: "분석 기간", modal_close: "닫기",
+    modal_github: "GitHub 바로가기", modal_loading: "본문을 불러오는 중..."
   },
   en: {
-    nav_selected: "selected cases",
-    nav_roadmap: "technology",
-    nav_archive: "archives",
-    nav_skills: "skills matrix",
-    hero_badge: "Notion API Live Linked // Semiconductor Backend Portfolio",
-    hero_title_1: "Securing the Future of Microchips,",
-    hero_title_accent: "Semiconductor Back-end (Packaging & Test)",
+    nav_selected: "selected cases", nav_roadmap: "technology", nav_archive: "archives", nav_skills: "skills",
+    hero_badge: "Notion API Live-Linked Portfolio",
+    hero_title_1: "Proving semiconductor packaging",
+    hero_title_accent: "reliability with data.",
     hero_title_2: "Engineer Junseo Oh.",
-    hero_subtitle: "A premium editorial portfolio dashboard live-linked with Notion API. Explore yield analytics with TIBCO Spotfire, SK hynix SK Hy-Po 8th cohort training, and Amkor Technology OSAT engineering insights.",
+    hero_subtitle: "A minimal portfolio live-linked with Notion API. Explore yield analytics with TIBCO Spotfire, SK hynix Hy-Po training, and Amkor Technology OSAT engineering practice.",
     btn_explore: "Explore Portfolio",
-    selected_title: "Selected Case Studies.",
-    selected_sub: "// 02 / SELECTED CASES",
-    view_details: "→ View Details",
-    roadmap_title: "Back-end Technology Flow.",
-    roadmap_sub: "// 03 / TECHNOLOGY",
+    selected_title: "Selected Projects",
+    view_details: "View Details →",
+    roadmap_title: "Backend Technology Flow",
     roadmap_flow_title: "Process Flow & Engineering Philosophy",
-    roadmap_philosophy_label: "Engineering Philosophy:",
-    archive_title: "Semiconductor Archives.",
-    archive_sub: "// 04 / ARCHIVES",
-    archive_search_placeholder: "Search projects, tools (Python, JEDEC), or keywords...",
-    tab_projects: "🔬 Projects",
-    tab_career: "🏆 Career & Education",
-    tab_courses: "📚 Relevant Coursework",
-    tab_credentials: "🎫 Credentials & Books",
-    th_tag: "Category / Tag",
-    th_title: "Projects & Activities",
-    th_org: "Organization",
-    th_period: "Period",
-    no_results: "No projects match your search filters.",
-    trajectory_title: "Career Trajectory.",
-    trajectory_sub: "// 05 / TRAJECTORY",
-    approach_title: "Engineering Approach & Strengths.",
-    approach_sub: "// 06 / CORE STRENGTHS",
-    approach_quote: '"Defect control in semiconductors is not about post-mass-production sorting. True engineering ownership is about proactively preventing failures through physical root-cause analysis, equipment troubleshooting, and collaborative cross-functional alignment."',
-    tools_title: "Tools & Interactive Skills.",
-    tools_sub: "// 07 / TOOLCHAIN & SKILLS",
-    quick_view_label: "// Quick View: Core Technical Toolchain",
-    deep_dive_label: "// Deep Dive: Interactive Skills Inventory",
-    notion_skills_db_title: "Notion Portfolio Skills Database.",
-    footer_title: "Let's Create High-Yield Innovations.",
-    footer_desc: "I am fully prepared to maximize semiconductor back-end yields by integrating data analytics with solid engineering principles. Feel free to reach out to me for collaborations or inquiries!",
-    copyright: "© 2026. Junseo Oh. All rights reserved. (Inspired by codedgar.com)",
-    modal_contribution: "Role & Contribution",
-    modal_period: "Duration",
-    modal_close: "Close",
-    modal_github: "Go to GitHub Source / Analysis",
-    modal_loading: "Loading page content from Notion API..."
+    roadmap_philosophy_label: "Engineering Philosophy :",
+    archive_title: "Full Archives",
+    archive_search_placeholder: "Search projects, tools, or keywords...",
+    tab_projects: "Projects", tab_career: "Career & Education", tab_courses: "Coursework", tab_credentials: "Credentials",
+    th_tag: "Category", th_title: "Title", th_org: "Organization", th_period: "Period",
+    no_results: "No matching projects found.",
+    trajectory_title: "Career Timeline",
+    approach_title: "Engineering Strengths",
+    approach_quote: '"Defect control is not about post-production sorting. True ownership means proactively preventing failures through physical root-cause analysis, equipment troubleshooting, and collaborative cross-functional alignment."',
+    tools_title: "Tools & Skills",
+    quick_view_label: "Core Technical Toolchain",
+    deep_dive_label: "Interactive Skills Inventory",
+    notion_skills_db_title: "Interactive Skills Database",
+    footer_title: "Let's Create High-Yield Innovations",
+    footer_desc: "I am prepared to maximize semiconductor back-end yields by integrating data analytics with engineering principles. Feel free to reach out.",
+    copyright: "© 2026. Junseo Oh. All rights reserved.",
+    modal_contribution: "Role & Contribution", modal_period: "Duration", modal_close: "Close",
+    modal_github: "View on GitHub", modal_loading: "Loading content..."
   }
 };
 
-// 실물 노션 데이터 영문 이식 번역본 (High-Fidelity)
+// English project translations
 const projectTranslations = {
-  "Spotfire-Based Analysis of Correlation Between Semiconductor Process & Defects": {
-    title: "TIBCO Spotfire-Based Analysis of Correlation Between Semiconductor Process & Defects",
-    description: "Models and visualizes defect patterns and process parameters to identify root causes of package yields using Spotfire.",
-    role: "Yield Data Analyst"
-  },
-  "Job Bootcamp : Process Manufacturing - Semiconductor": {
-    title: "Semiconductor Process & Manufacturing Job Bootcamp",
-    description: "Hands-on simulation bootcamp focused on dicing, wire bonding, molding, and standard operating procedures (SOP).",
-    role: "Process Engineering Trainee"
-  },
-  "SK Hy-Po : Cohort 8": {
-    title: "SK hynix SK Hy-Po Training Program (Cohort 8)",
-    description: "Intensive semiconductor academy by SK hynix, covering front-end processes, back-end packaging, and device reliability testing.",
-    role: "Trainee"
-  },
-  "OSAT Enigneer": {
-    title: "OSAT Packaging & Test Engineering Practice",
-    description: "Analysis of copper wire bonding tension, thermal cycling spec validation, and high-temp reliability specs under JEDEC standards.",
-    role: "OSAT Engineering Practitioner"
-  },
-  "Battery Capacity Tester Design and Development": {
-    title: "Battery Capacity Tester Design & Hardware Development",
-    description: "Designed a constant-current battery capacity measurement circuit with MATLAB simulation and physical verification.",
-    role: "Hardware Design Engineer"
-  },
-  "Battery Charger Design and Development": {
-    title: "Smart Battery Charger Design & Development",
-    description: "Designed and simulated an electro-thermal battery charging system in Simscape, optimizing charging profile efficiency.",
-    role: "Simulation Engineer"
-  },
-  "Audio Level Meter Design and Development": {
-    title: "Audio Level Meter & Analog Filter Design",
-    description: "Designed an active bandpass filter and multi-stage audio level meter using MATLAB and circuit simulation.",
-    role: "Analog Circuit Designer"
-  },
-  "Development of a Business Type Recommendation Algorithm for University District Commercial Areas": {
-    title: "District Commercial Area Recommendation Algorithm",
-    description: "Programmed a district recommendation algorithm using SQL database querying and Python clustering models.",
-    role: "Data & SQL Engineer"
-  },
-  "ThermOptic : Edge-Based Autonomous Control Platform for AI-Era Data Center Energy Optimization": {
-    title: "ThermOptic: Edge-Based Data Center Thermal Control Platform",
-    description: "Developed an autonomous edge controller using MATLAB and physical thermal modeling to optimize server rack cooling.",
-    role: "Thermal System Designer"
-  }
+  "Spotfire-Based Analysis of Correlation Between Semiconductor Process & Defects": { title: "TIBCO Spotfire-Based Analysis of Correlation Between Semiconductor Process & Defects", description: "Models and visualizes defect patterns and process parameters to identify root causes of package yields using Spotfire.", role: "Yield Data Analyst" },
+  "Job Bootcamp : Process Manufacturing - Semiconductor": { title: "Semiconductor Process & Manufacturing Job Bootcamp", description: "Hands-on simulation bootcamp focused on dicing, wire bonding, molding, and standard operating procedures (SOP).", role: "Process Engineering Trainee" },
+  "SK Hy-Po : Cohort 8": { title: "SK hynix SK Hy-Po Training Program (Cohort 8)", description: "Intensive semiconductor academy by SK hynix, covering front-end processes, back-end packaging, and device reliability testing.", role: "Trainee" },
+  "OSAT Enigneer": { title: "OSAT Packaging & Test Engineering Practice", description: "Analysis of copper wire bonding tension, thermal cycling spec validation, and high-temp reliability specs under JEDEC standards.", role: "OSAT Engineering Practitioner" },
+  "Battery Capacity Tester Design and Development": { title: "Battery Capacity Tester Design & Hardware Development", description: "Designed a constant-current battery capacity measurement circuit with MATLAB simulation and physical verification.", role: "Hardware Design Engineer" },
+  "Battery Charger Design and Development": { title: "Smart Battery Charger Design & Development", description: "Designed and simulated an electro-thermal battery charging system in Simscape, optimizing charging profile efficiency.", role: "Simulation Engineer" },
+  "Audio Level Meter Design and Development": { title: "Audio Level Meter & Analog Filter Design", description: "Designed an active bandpass filter and multi-stage audio level meter using MATLAB and circuit simulation.", role: "Analog Circuit Designer" },
+  "Development of a Business Type Recommendation Algorithm for University District Commercial Areas": { title: "District Commercial Area Recommendation Algorithm", description: "Programmed a district recommendation algorithm using SQL database querying and Python clustering models.", role: "Data & SQL Engineer" },
+  "ThermOptic : Edge-Based Autonomous Control Platform for AI-Era Data Center Energy Optimization": { title: "ThermOptic: Edge-Based Data Center Thermal Control Platform", description: "Developed an autonomous edge controller using MATLAB and physical thermal modeling to optimize server rack cooling.", role: "Thermal System Designer" }
 };
 
-// 핵심 3대 프로젝트 상세 소개 본문 영문 번역본
 const projectContentTranslations = {
   "Spotfire-Based Analysis of Correlation Between Semiconductor Process & Defects": `
 🎯 **Objective**: Model and analyze wafer defect maps to trace low yield patterns back to specific process equipment chambers.
@@ -361,22 +232,22 @@ const projectContentTranslations = {
 };
 
 export default function PortfolioClient({ initialItems = [] }) {
-  // 사용자의 노션 데이터를 성격에 맞는 4가지 대분류 탭으로 효율적 매핑
-  const [activeTab, setActiveTab] = useState('Projects'); // Projects, CareerEdu, Courses, Credentials
+  const [activeTab, setActiveTab] = useState('Projects');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProject, setSelectedProject] = useState(null);
   const [modalContent, setModalContent] = useState('');
   const [isModalLoading, setIsModalLoading] = useState(false);
-
-  // 후공정 로드맵 선택 상태
   const [selectedRoadmapStep, setSelectedRoadmapStep] = useState(roadmapSteps[0]);
-
-  // 스킬 인터랙티브 필터 및 정렬 상태
-  const [skillCategoryFilter, setSkillCategoryFilter] = useState('All'); // All, Technical, Interpersonal
-  const [skillSortOrder, setSkillSortOrder] = useState('Proficiency'); // Proficiency, Alphabetical
-
-  // VIM 스타일 하단 상태 바를 위한 실시간 로컬 시간 Hook
+  const [activeSkillSegment, setActiveSkillSegment] = useState('all');
   const [timeStr, setTimeStr] = useState('12:00 PM');
+  const [lang, setLang] = useState('ko');
+
+  // Carousel drag state
+  const carouselRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
@@ -387,412 +258,190 @@ export default function PortfolioClient({ initialItems = [] }) {
     return () => clearInterval(interval);
   }, []);
 
-  // 다국어 상태 관리 (기본값: 'ko')
-  const [lang, setLang] = useState('ko');
-
   const t = translations[lang] || translations.ko;
 
-  // 뱃지 영문 번역 함수
+  // Badge translation
   const translateBadge = (badgeStr) => {
     if (!badgeStr) return '';
-    const mappings = {
-      '🏆 OSAT 실무': '🏆 OSAT Engineering',
-      '📊 YIELD DATA': '📊 Yield Data',
-      '🔥 SK HY-PO': '🔥 SK Hy-Po',
-      '🔬 RESEARCH': '🔬 Research Paper',
-      '⚡ TESTER DESIGN': '⚡ Tester Design',
-      '💻 SILICON CAMP': '💻 Silicon Camp',
-      '📚 COURSEWORK': '📚 Coursework',
-      '⭐ CORE SEMI': '⭐ Core Semi',
-      '🎫 LICENSE': '🎫 License',
-      '📖 STUDY': '📖 Study Review',
-      '💡 GENERAL': '💡 General'
-    };
-    return mappings[badgeStr] || badgeStr;
+    const m = { '🏆 OSAT 실무': '🏆 OSAT Engineering', '📊 YIELD DATA': '📊 Yield Data', '🔥 SK HY-PO': '🔥 SK Hy-Po', '🔬 RESEARCH': '🔬 Research', '⚡ TESTER DESIGN': '⚡ Tester Design', '💻 SILICON CAMP': '💻 Silicon Camp', '📚 COURSEWORK': '📚 Coursework', '⭐ CORE SEMI': '⭐ Core Semi', '🎫 LICENSE': '🎫 License', '📖 STUDY': '📖 Study', '💡 GENERAL': '💡 General' };
+    return m[badgeStr] || badgeStr;
   };
 
-  // ==========================================
-  // [데이터 레이어 분류 및 스마트 다국어/정렬 알고리즘]
-  // ==========================================
-  
-  // 1. 노션 데이터 다국어 실시간 스왑 로직 적용
+  // Localized items
   const localizedItems = (initialItems || []).map(item => {
     if (!item) return null;
     if (lang === 'ko') return item;
-    
-    // Find matching english translation in dictionary by title prefix
     const itemTitle = item.title || '';
-    const matchingKey = Object.keys(projectTranslations).find(k => 
-      itemTitle.startsWith(k.substring(0, 15)) || k.startsWith(itemTitle.substring(0, 15))
-    );
-    
+    const matchingKey = Object.keys(projectTranslations).find(k => itemTitle.startsWith(k.substring(0, 15)) || k.startsWith(itemTitle.substring(0, 15)));
     if (matchingKey && projectTranslations[matchingKey]) {
       const trans = projectTranslations[matchingKey];
-      return {
-        ...item,
-        title: trans.title,
-        description: trans.description,
-        role: trans.role,
-        badge: item.badge ? translateBadge(item.badge) : ''
-      };
+      return { ...item, title: trans.title, description: trans.description, role: trans.role, badge: item.badge ? translateBadge(item.badge) : '' };
     }
-    
-    return {
-      ...item,
-      badge: item.badge ? translateBadge(item.badge) : ''
-    };
+    return { ...item, badge: item.badge ? translateBadge(item.badge) : '' };
   }).filter(Boolean);
 
-  // 2. 핵심 킬러 성과 Featured 프로젝트 (반도체 연관 프로젝트 및 핵심 경력 우선 배치)
   const featuredProjects = localizedItems.filter(p => p?.featured && p?.category !== 'Courses');
+  const projects = localizedItems.filter(p => p?.category === 'Projects' || (p?.rawSemiconductor && p?.category !== 'Courses' && p?.category !== 'Career' && p?.category !== 'Education'));
+  const careerAndEdu = localizedItems.filter(p => { const tl = (p?.title || '').toLowerCase(); const rl = (p?.role || '').toLowerCase(); return p?.category === 'Career' || p?.category === 'Education' || tl.includes('hy-po') || rl.includes('amkor') || rl.includes('hynix'); });
+  const courses = localizedItems.filter(p => p?.category === 'Courses' || (p?.title || '').toLowerCase().startsWith('course'));
+  const credentials = localizedItems.filter(p => p?.category === 'Licenses' || p?.category === 'Books' || (p?.title || '').toLowerCase().includes('test certificate') || (p?.title || '').toLowerCase().includes('review'));
 
-  // 3. 탭 A: Projects (실무형 프로젝트 및 부트캠프)
-  const projects = localizedItems.filter(p => 
-    p?.category === 'Projects' || 
-    (p?.rawSemiconductor && p?.category !== 'Courses' && p?.category !== 'Career' && p?.category !== 'Education')
-  );
-
-  // 4. 탭 B: Career & Education (앰코테크놀로지, SK Hy-Po, Schneider 등 대외 실무 및 교육)
-  const careerAndEdu = localizedItems.filter(p => {
-    const titleVal = (p?.title || '').toLowerCase();
-    const roleVal = (p?.role || '').toLowerCase();
-    return p?.category === 'Career' || 
-      p?.category === 'Education' || 
-      titleVal.includes('hy-po') ||
-      roleVal.includes('amkor') ||
-      roleVal.includes('hynix');
-  });
-
-  // 5. 탭 C: Relevant Coursework (학부 이수 과목)
-  const courses = localizedItems.filter(p => 
-    p?.category === 'Courses' || 
-    (p?.title || '').toLowerCase().startsWith('course')
-  );
-
-  // 6. 탭 D: Credentials & Books (자격증, 서적 연구 분석 리뷰)
-  const credentials = localizedItems.filter(p => 
-    p?.category === 'Licenses' || 
-    p?.category === 'Books' || 
-    (p?.title || '').toLowerCase().includes('test certificate') ||
-    (p?.title || '').toLowerCase().includes('review')
-  );
-
-  // 현재 선택된 탭에 맞춰 활성 데이터 리스트 설정
   let activeList = [];
   if (activeTab === 'Projects') activeList = projects;
   else if (activeTab === 'CareerEdu') activeList = careerAndEdu;
   else if (activeTab === 'Courses') activeList = courses;
   else if (activeTab === 'Credentials') activeList = credentials;
 
-  // 검색 쿼리에 따른 실시간 필터링 로직
   const filteredItems = activeList.filter(item => {
     if (!item) return false;
-    const titleVal = (item.title || '').toLowerCase();
-    const descVal = (item.description || '').toLowerCase();
-    const roleVal = (item.role || '').toLowerCase();
-    const query = searchQuery.toLowerCase();
-    
-    const matchesSearch = titleVal.includes(query) ||
-      (item.tags || []).some(tag => (tag || '').toLowerCase().includes(query)) ||
-      descVal.includes(query) ||
-      roleVal.includes(query);
-    return matchesSearch;
+    const q = searchQuery.toLowerCase();
+    return (item.title || '').toLowerCase().includes(q) || (item.tags || []).some(tag => (tag || '').toLowerCase().includes(q)) || (item.description || '').toLowerCase().includes(q) || (item.role || '').toLowerCase().includes(q);
   });
 
-  // 필터링 및 정렬된 실물 스킬 리스트 가공 (영/한 스왑)
-  const filteredSkills = portfolioSkills.filter(s => {
-    if (skillCategoryFilter === 'All') return true;
-    return s.category === skillCategoryFilter;
-  }).sort((a, b) => {
-    if (skillSortOrder === 'Proficiency') {
-      if (b.level !== a.level) return b.level - a.level;
-      return a.name.localeCompare(b.name);
-    } else {
-      return a.name.localeCompare(b.name);
-    }
-  });
+  // Skill segment filtering
+  const activeSegmentDef = skillSegments.find(s => s.id === activeSkillSegment);
+  const filteredSkills = activeSegmentDef?.filter ? portfolioSkills.filter(activeSegmentDef.filter) : portfolioSkills;
+  const sortedSkills = [...filteredSkills].sort((a, b) => { if (b.level !== a.level) return b.level - a.level; return a.name.localeCompare(b.name); });
 
-  // 모달 열기 핸들러 (실시간 영문 마크다운 본문 스왑 완벽 내장)
+  // Carousel mouse drag handlers
+  const handleMouseDown = useCallback((e) => {
+    if (!carouselRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - carouselRef.current.offsetLeft);
+    setScrollLeft(carouselRef.current.scrollLeft);
+  }, []);
+
+  const handleMouseMove = useCallback((e) => {
+    if (!isDragging || !carouselRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - carouselRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    carouselRef.current.scrollLeft = scrollLeft - walk;
+  }, [isDragging, startX, scrollLeft]);
+
+  const handleMouseUp = useCallback(() => setIsDragging(false), []);
+
+  const scrollCarousel = (direction) => {
+    if (!carouselRef.current) return;
+    const scrollAmount = 360;
+    carouselRef.current.scrollBy({ left: direction === 'next' ? scrollAmount : -scrollAmount, behavior: 'smooth' });
+  };
+
+  // Modal handler
   const handleOpenModal = async (project) => {
     setSelectedProject(project);
     setModalContent('');
     setIsModalLoading(true);
-
-    // 1. 영어 상태이고 3대 프로젝트 영문 번역본이 딕셔너리에 존재하는 경우 즉시 교체
     const originalTitle = initialItems.find(item => item.id === project.id)?.title || '';
     if (lang === 'en' && projectContentTranslations[originalTitle]) {
       setModalContent(projectContentTranslations[originalTitle]);
       setIsModalLoading(false);
       return;
     }
-
     try {
       const res = await fetch(`/api/project-content?id=${project.id}`);
       const data = await res.json();
       setModalContent(data.content || project.content);
-    } catch (err) {
-      setModalContent(project.content || '상세 소개 내용을 불러오는데 실패했습니다. 다시 시도해 주세요.');
+    } catch {
+      setModalContent(project.content || '상세 내용을 불러오는데 실패했습니다.');
     } finally {
       setIsModalLoading(false);
     }
   };
 
   return (
-    <div className="portfolio-content" style={{ paddingBottom: '8rem' }}>
-      {/* Ambient backgrounds */}
-      <div className="ambient-glow-1"></div>
-      <div className="ambient-glow-2"></div>
+    <div className="portfolio-content" style={{ paddingBottom: '5rem' }}>
 
-      {/* Navigation Header */}
-      <header className="rule-b">
+      {/* ━━━ Navigation Header ━━━ */}
+      <header>
         <div className="nav-container">
-          <div className="logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-mono)' }}>
-            junseo.oh // <span style={{ color: 'hsl(var(--accent-primary))', fontWeight: 'bold' }}>{t.nav_selected}</span>
+          <div className="logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+            junseo.oh <span style={{ color: 'var(--accent)', fontWeight: 800 }}>//</span> <span style={{ color: 'var(--accent)' }}>portfolio</span>
           </div>
-          <nav className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-            <a className="nav-link" onClick={() => document.getElementById('selected').scrollIntoView({ behavior: 'smooth' })}>{t.nav_selected}</a>
-            <a className="nav-link" onClick={() => document.getElementById('roadmap').scrollIntoView({ behavior: 'smooth' })}>{t.nav_roadmap}</a>
-            <a className="nav-link" onClick={() => document.getElementById('archived').scrollIntoView({ behavior: 'smooth' })}>{t.nav_archive}</a>
-            <a className="nav-link" onClick={() => document.getElementById('tools').scrollIntoView({ behavior: 'smooth' })}>{t.nav_skills}</a>
-            
-            {/* KO / EN 다국어 토글 미니멀 버튼 */}
-            <button 
-              onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')}
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.7rem',
-                padding: '0.25rem 0.5rem',
-                border: '1px solid var(--rule)',
-                background: 'var(--surface)',
-                color: 'hsl(var(--accent-primary))',
-                cursor: 'pointer',
-                borderRadius: '4px',
-                transition: 'all 0.2s ease',
-                fontWeight: 'bold',
-                textTransform: 'uppercase'
-              }}
-            >
-              {lang === 'ko' ? 'en' : 'ko'}
+          <nav className="nav-links">
+            <a className="nav-link" onClick={() => document.getElementById('selected')?.scrollIntoView({ behavior: 'smooth' })}>{t.nav_selected}</a>
+            <a className="nav-link" onClick={() => document.getElementById('roadmap')?.scrollIntoView({ behavior: 'smooth' })}>{t.nav_roadmap}</a>
+            <a className="nav-link" onClick={() => document.getElementById('archived')?.scrollIntoView({ behavior: 'smooth' })}>{t.nav_archive}</a>
+            <a className="nav-link" onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}>{t.nav_skills}</a>
+            <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ padding: '0.3rem 0.75rem', border: '1px solid var(--rule)', background: 'var(--surface)', color: 'var(--accent)', cursor: 'pointer', borderRadius: '100px', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'var(--font-primary)', transition: 'all 0.2s ease' }}>
+              {lang === 'ko' ? 'EN' : 'KO'}
             </button>
           </nav>
         </div>
       </header>
 
-      {/* 01 / Intro Section (히어로) */}
-      <section id="intro" className="hero" style={{ padding: '8rem 2rem 5rem 2rem' }}>
-        <div className="hero-badge" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'hsl(var(--accent-secondary))' }}>
-          {t.hero_badge}
-        </div>
-        <h1 className="hero-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: '400', lineHeight: '1.05', letterSpacing: '-1.5px', marginTop: '1.5rem', marginBottom: '2.5rem' }}>
+      {/* ━━━ 01 / Hero ━━━ */}
+      <section id="intro" className="hero">
+        <div className="hero-badge">{t.hero_badge}</div>
+        <h1 className="hero-title" style={{ marginBottom: '1.5rem' }}>
           {t.hero_title_1}<br />
-          <span style={{ color: 'hsl(var(--accent-primary))', fontStyle: 'italic' }}>{t.hero_title_accent}</span><br />
+          <span>{t.hero_title_accent}</span><br />
           {t.hero_title_2}
         </h1>
-        
-        {/* Codedgar-style wide sand Callout Box for intro details */}
-        <div style={{
-          background: 'var(--surface)',
-          borderLeft: '4px solid hsl(var(--accent-primary))',
-          padding: '2.25rem',
-          borderRadius: '4px',
-          maxWidth: '850px',
-          lineHeight: '1.75',
-          fontSize: '1.05rem',
-          color: 'var(--text-secondary)',
-          marginTop: '1.5rem',
-          marginBottom: '3rem'
-        }}>
-          {t.hero_subtitle}
-        </div>
-
+        <p className="hero-subtitle">{t.hero_subtitle}</p>
         <div className="hero-buttons">
-          <button className="btn-primary" onClick={() => document.getElementById('selected').scrollIntoView({ behavior: 'smooth' })}>
-            {t.btn_explore}
-          </button>
-          <a href="https://github.com/oasunryo" target="_blank" rel="noreferrer" className="btn-secondary">
-            GitHub
-          </a>
+          <button className="btn-primary" onClick={() => document.getElementById('selected')?.scrollIntoView({ behavior: 'smooth' })}>{t.btn_explore}</button>
+          <a href="https://github.com/oasunryo" target="_blank" rel="noreferrer" className="btn-secondary">GitHub</a>
         </div>
       </section>
 
-      {/* 02 / Selected Cases (완전히 0부터 새로이 디자인된 1열 가로 에디토리얼 레이아웃) */}
+      {/* ━━━ 02 / Selected Cases — Apple Horizontal Carousel ━━━ */}
       {featuredProjects.length > 0 && (
-        <section id="selected" className="rule-t" style={{ padding: '6rem 2rem' }}>
+        <section id="selected" style={{ padding: '5rem 2rem' }}>
           <div className="frame">
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', letterSpacing: '2px', display: 'block', marginBottom: '0.75rem' }}>
-              {t.selected_sub}
-            </span>
-            <h2 className="section-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', marginBottom: '4rem' }}>
-              {t.selected_title}
-            </h2>
-            
-            {/* 1열 가로배치 와이드 에디토리얼 레이아웃 */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              {featuredProjects.map(p => (
-                <div 
-                  key={p.id} 
-                  className="card skill-card-hover" 
-                  onClick={() => handleOpenModal(p)}
-                  style={{
-                    background: 'var(--surface)',
-                    border: '1px solid var(--rule)',
-                    padding: '3rem',
-                    borderRadius: '4px',
-                    position: 'relative',
-                    cursor: 'pointer',
-                    minHeight: 'auto',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    gap: '2rem'
-                  }}
-                >
-                  {/* Top Scanline hover indicator */}
-                  <div className="section-scanline"></div>
-
-                  {/* Header Row: Window Dot Controls + Info Badge */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div className="window-dots" style={{ margin: 0 }}>
-                      <span className="window-dot dot-red"></span>
-                      <span className="window-dot dot-yellow"></span>
-                      <span className="window-dot dot-green"></span>
+            <h2 className="section-title">{t.selected_title}</h2>
+            <div className="carousel-container">
+              <button className="carousel-btn carousel-btn-prev" onClick={() => scrollCarousel('prev')} aria-label="Previous">‹</button>
+              <div className="carousel-track" ref={carouselRef} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}>
+                {featuredProjects.map(p => (
+                  <div key={p.id} className="carousel-card" onClick={() => handleOpenModal(p)}>
+                    <div>
+                      <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--accent)', background: 'rgba(var(--accent-rgb), 0.06)', border: '1px solid rgba(var(--accent-rgb), 0.15)', padding: '0.25rem 0.65rem', borderRadius: '100px', display: 'inline-block', marginBottom: '1rem' }}>{p.badge}</span>
+                      <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--fg)', marginBottom: '0.75rem', lineHeight: 1.3, letterSpacing: '-0.3px' }}>{p.title}</h3>
+                      <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>{p.description}</p>
                     </div>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'hsl(var(--accent-secondary))', fontWeight: 'bold', textTransform: 'uppercase', background: 'rgba(var(--accent-secondary-rgb), 0.05)', padding: '0.25rem 0.6rem', borderRadius: '2px', border: '1px solid rgba(var(--accent-secondary-rgb), 0.15)' }}>
-                      {p.badge}
-                    </span>
-                  </div>
-
-                  {/* Main Editorial Row: Title, Description and Role Info */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.25rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
-                      <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: '400', margin: 0, color: 'var(--fg)', letterSpacing: '-0.5px', maxWidth: '80%' }}>
-                        {p.title}
-                      </h3>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--muted)', fontStyle: 'italic' }}>
-                        // {p.role}
-                      </span>
-                    </div>
-                    <p style={{ fontSize: '1.02rem', color: 'var(--text-secondary)', lineHeight: '1.65', margin: 0, maxWidth: '800px' }}>
-                      {p.description}
-                    </p>
-                  </div>
-
-                  {/* Footer Row: Tags and Details Trigger */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem', borderTop: '1px solid var(--rule)', paddingTop: '1.5rem' }}>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-                      {(p.tags || []).map(t => (
-                        <span key={t} className="tag" style={{ margin: 0 }}>{t}</span>
-                      ))}
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)' }}>
-                        {p.period}
-                      </span>
-                      <span style={{ color: 'hsl(var(--accent-primary))', fontFamily: 'var(--font-mono)', fontSize: '0.82rem', fontWeight: 'bold' }}>
-                        {t.view_details}
-                      </span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--rule)', paddingTop: '1rem', marginTop: '1.25rem' }}>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
+                        {(p.tags || []).slice(0, 3).map(tag => (<span key={tag} className="tag">{tag}</span>))}
+                      </div>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--accent)' }}>{t.view_details}</span>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <button className="carousel-btn carousel-btn-next" onClick={() => scrollCarousel('next')} aria-label="Next">›</button>
             </div>
           </div>
         </section>
       )}
 
-      {/* 03 / Roadmap (반도체 후공정 5대 로드맵 섹션) */}
-      <section id="roadmap" className="rule-t" style={{ padding: '6rem 2rem' }}>
+      {/* ━━━ 03 / Roadmap ━━━ */}
+      <section id="roadmap" style={{ padding: '5rem 2rem' }}>
         <div className="frame">
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', letterSpacing: '2px', display: 'block', marginBottom: '0.75rem' }}>
-            {t.roadmap_sub}
-          </span>
-          <h2 className="section-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', marginBottom: '4rem' }}>
-            {t.roadmap_title}
-          </h2>
-          
-          <div className="roadmap-container" style={{ background: 'var(--surface)', border: '1px solid var(--rule)', padding: '3rem', borderRadius: '4px' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'hsl(var(--accent-primary))', marginBottom: '2rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              {t.roadmap_flow_title}
-            </div>
-            
-            {/* Horizontal Line flow diagram */}
-            <div className="roadmap-flow" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', marginBottom: '3.5rem', flexWrap: 'wrap', gap: '2rem' }}>
-              <div className="roadmap-line" style={{ display: 'none' }}></div> {/* Obsolete line hidden */}
-              
+          <h2 className="section-title">{t.roadmap_title}</h2>
+          <div className="roadmap-container">
+            <div style={{ fontSize: '0.82rem', color: 'var(--accent)', marginBottom: '2rem', fontWeight: 700 }}>{t.roadmap_flow_title}</div>
+            <div className="roadmap-flow" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '2rem' }}>
               {roadmapSteps.map((step) => {
                 const isActive = selectedRoadmapStep.num === step.num;
                 return (
-                  <div 
-                    key={step.num} 
-                    className="roadmap-step" 
-                    onClick={() => setSelectedRoadmapStep(step)}
-                    style={{
-                      flex: '1 1 150px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      cursor: 'pointer',
-                      zIndex: 2,
-                      padding: '1.25rem',
-                      background: isActive ? 'var(--bg)' : 'transparent',
-                      border: isActive ? '1px solid var(--rule)' : '1px solid transparent',
-                      borderRadius: '4px',
-                      transition: 'all 0.3s ease'
-                    }}
-                  >
-                    <div 
-                      className={`roadmap-node ${isActive ? 'roadmap-node-active' : ''}`}
-                      style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.82rem',
-                        fontWeight: 'bold',
-                        background: isActive ? 'hsl(var(--accent-primary))' : 'var(--surface-raised)',
-                        color: isActive ? 'var(--bg)' : 'var(--muted)',
-                        border: '1px solid var(--rule)',
-                        transition: 'all 0.3s ease',
-                        marginBottom: '0.75rem'
-                      }}
-                    >
+                  <div key={step.num} className="roadmap-step" onClick={() => setSelectedRoadmapStep(step)} style={{ flex: '1 1 140px', display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', padding: '1rem', background: isActive ? 'var(--bg)' : 'transparent', border: isActive ? '1px solid var(--rule)' : '1px solid transparent', borderRadius: '16px', transition: 'all 0.3s ease' }}>
+                    <div className={`roadmap-node ${isActive ? 'roadmap-node-active' : ''}`} style={{ width: '36px', height: '36px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '0.82rem', fontWeight: 700, background: isActive ? 'var(--accent)' : 'var(--surface-raised)', color: isActive ? '#fff' : 'var(--muted)', border: `2px solid ${isActive ? 'var(--accent)' : 'var(--rule)'}`, transition: 'all 0.3s ease', marginBottom: '0.5rem' }}>
                       {step.num}
                     </div>
-                    <div 
-                      className={`roadmap-step-name ${isActive ? 'roadmap-step-name-active' : ''}`}
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.78rem',
-                        fontWeight: isActive ? 'bold' : 'normal',
-                        color: isActive ? 'var(--fg)' : 'var(--muted)',
-                        textAlign: 'center'
-                      }}
-                    >
-                      {step.name}
-                    </div>
+                    <div style={{ fontSize: '0.75rem', fontWeight: isActive ? 700 : 500, color: isActive ? 'var(--fg)' : 'var(--muted)', textAlign: 'center', transition: 'all 0.2s ease' }}>{step.name}</div>
                   </div>
                 );
               })}
             </div>
-
-            {/* Selected node details editorial box */}
-            <div className="roadmap-details-box" style={{ background: 'var(--bg)', border: '1px solid var(--rule)', padding: '2.5rem', borderRadius: '4px', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              <div className="roadmap-details-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid var(--rule)', paddingBottom: '1rem' }}>
-                <div className="roadmap-details-step-title" style={{ fontFamily: 'var(--font-display)', fontSize: '1.45rem', fontWeight: '400', color: 'var(--fg)' }}>
-                  {selectedRoadmapStep.num}. {selectedRoadmapStep.name}
-                </div>
-                <div className="roadmap-details-defects-badge" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'hsl(var(--accent-secondary))', background: 'rgba(var(--accent-secondary-rgb), 0.04)', border: '1px solid rgba(var(--accent-secondary-rgb), 0.15)', padding: '0.3rem 0.75rem', borderRadius: '2px' }}>
-                  Key Defects: {selectedRoadmapStep.defects}
-                </div>
+            <div className="roadmap-details-box">
+              <div className="roadmap-details-header">
+                <div className="roadmap-details-step-title">{selectedRoadmapStep.num}. {selectedRoadmapStep.name}</div>
+                <div className="roadmap-details-defects-badge">Key Defects: {selectedRoadmapStep.defects}</div>
               </div>
-              <div className="roadmap-details-description" style={{ fontSize: '0.98rem', color: 'var(--text-secondary)', lineHeight: '1.65' }}>
-                {selectedRoadmapStep.desc[lang]}
-              </div>
-              <div className="roadmap-details-philosophy" style={{ fontSize: '0.92rem', color: 'var(--fg)', fontFamily: 'var(--font-sans)', borderTop: '1px solid var(--rule)', paddingTop: '1rem', fontStyle: 'italic' }}>
-                <strong style={{ fontFamily: 'var(--font-mono)', color: 'hsl(var(--accent-primary))', notStyle: 'normal', marginRight: '0.5rem' }}>{t.roadmap_philosophy_label}</strong>
+              <div className="roadmap-details-description">{selectedRoadmapStep.desc[lang]}</div>
+              <div className="roadmap-details-philosophy">
+                <strong style={{ color: 'var(--accent)', marginRight: '0.5rem', fontWeight: 700 }}>{t.roadmap_philosophy_label}</strong>
                 {selectedRoadmapStep.philosophy[lang]}
               </div>
             </div>
@@ -800,192 +449,76 @@ export default function PortfolioClient({ initialItems = [] }) {
         </div>
       </section>
 
-      {/* 04 / Archived (고효율 탭 분류 아카이브 대시보드 - 에디토리얼 단색 스타일) */}
-      <section id="archived" className="rule-t" style={{ padding: '6rem 2rem' }}>
+      {/* ━━━ 04 / Archives ━━━ */}
+      <section id="archived" style={{ padding: '5rem 2rem' }}>
         <div className="frame">
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', letterSpacing: '2px', display: 'block', marginBottom: '0.75rem' }}>
-            {t.archive_sub}
-          </span>
-          <h2 className="section-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', marginBottom: '4rem' }}>
-            {t.archive_title}
-          </h2>
-          
-          {/* Search Box */}
-          <div style={{ maxWidth: '600px', marginBottom: '3.5rem', position: 'relative' }}>
-            <input
-              type="text"
-              placeholder={t.archive_search_placeholder}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '1rem 1.5rem',
-                border: '1px solid var(--rule)',
-                background: 'var(--surface)',
-                color: 'var(--fg)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.85rem',
-                outline: 'none',
-                borderRadius: '4px',
-                transition: 'all 0.3s ease',
-              }}
-            />
+          <h2 className="section-title">{t.archive_title}</h2>
+          <div style={{ maxWidth: '540px', marginBottom: '2.5rem' }}>
+            <input type="text" placeholder={t.archive_search_placeholder} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={{ width: '100%', padding: '0.85rem 1.25rem', border: '1px solid var(--rule)', background: 'var(--surface)', color: 'var(--fg)', fontFamily: 'var(--font-primary)', fontSize: '0.88rem', outline: 'none', borderRadius: '16px', transition: 'all 0.3s ease' }} />
           </div>
 
-          {/* 4대 대분류 정보 탭 필터 (소문자 미니멀 스타일) */}
-          <div className="filter-container" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
+          {/* Toss Segmented Tab for Archives */}
+          <div className="segmented-control" style={{ marginBottom: '2rem' }}>
             {[
               { id: 'Projects', label: t.tab_projects, count: projects.length },
               { id: 'CareerEdu', label: t.tab_career, count: careerAndEdu.length },
               { id: 'Courses', label: t.tab_courses, count: courses.length },
               { id: 'Credentials', label: t.tab_credentials, count: credentials.length }
             ].map(tab => (
-              <button 
-                key={tab.id}
-                className={`filter-btn ${activeTab === tab.id ? 'active' : ''}`}
-                onClick={() => { setActiveTab(tab.id); setSearchQuery(''); }}
-                style={{
-                  padding: '0.6rem 1.2rem',
-                  borderRadius: '4px',
-                  border: '1px solid var(--rule)',
-                  background: activeTab === tab.id ? 'var(--fg)' : 'var(--surface)',
-                  color: activeTab === tab.id ? 'var(--bg)' : 'var(--text-secondary)',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.78rem',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  textTransform: 'lowercase'
-                }}
-              >
+              <button key={tab.id} className={`segmented-tab ${activeTab === tab.id ? 'active' : ''}`} onClick={() => { setActiveTab(tab.id); setSearchQuery(''); }}>
                 {tab.label} ({tab.count})
               </button>
             ))}
           </div>
 
-          {/* 격자형 슬림 테이블 렌더링 (가로 폭 널찍하고 기품 넘치는 에디토리얼 단색 스타일) */}
-          <div className="table-container" style={{ overflowX: 'auto', background: 'var(--surface)', border: '1px solid var(--rule)', borderRadius: '4px', padding: '1rem 2rem' }}>
-            <table className="archive-table" style={{ width: '100%', borderCollapse: 'collapse', border: 'none' }}>
+          {/* Archive Table */}
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--rule)', borderRadius: '24px', padding: '0.5rem 1.5rem', overflow: 'hidden' }}>
+            <table className="archive-table">
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--rule-strong)' }}>
-                  <th style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', padding: '1rem 0.5rem', textAlign: 'left', textTransform: 'lowercase', width: '20%' }}>{t.th_tag}</th>
-                  <th style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', padding: '1rem 0.5rem', textAlign: 'left', textTransform: 'lowercase', width: '45%' }}>{t.th_title}</th>
-                  <th style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', padding: '1rem 0.5rem', textAlign: 'left', textTransform: 'lowercase', width: '20%' }}>{t.th_org}</th>
-                  <th style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', padding: '1rem 0.5rem', textAlign: 'right', textTransform: 'lowercase', width: '15%' }}>{t.th_period}</th>
+                  <th style={{ fontSize: '0.72rem', color: 'var(--muted)', padding: '1rem 0.5rem', textAlign: 'left', fontWeight: 600, width: '18%' }}>{t.th_tag}</th>
+                  <th style={{ fontSize: '0.72rem', color: 'var(--muted)', padding: '1rem 0.5rem', textAlign: 'left', fontWeight: 600, width: '45%' }}>{t.th_title}</th>
+                  <th style={{ fontSize: '0.72rem', color: 'var(--muted)', padding: '1rem 0.5rem', textAlign: 'left', fontWeight: 600, width: '22%' }}>{t.th_org}</th>
+                  <th style={{ fontSize: '0.72rem', color: 'var(--muted)', padding: '1rem 0.5rem', textAlign: 'right', fontWeight: 600, width: '15%' }}>{t.th_period}</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredItems.map(item => (
-                  <tr 
-                    key={item.id} 
-                    onClick={() => handleOpenModal(item)}
-                    style={{ borderBottom: '1px solid var(--rule)', cursor: 'pointer', transition: 'background 0.2s ease' }}
-                    className="archive-row-hover"
-                  >
-                    <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'hsl(var(--accent-secondary))', padding: '1.25rem 0.5rem' }}>
-                      {item.badge || item.category}
-                    </td>
-                    <td style={{ fontWeight: '500', color: 'var(--fg)', padding: '1.25rem 0.5rem', fontSize: '0.96rem' }}>
-                      {item.title}
-                    </td>
-                    <td style={{ fontStyle: 'italic', color: 'var(--text-secondary)', padding: '1.25rem 0.5rem', fontSize: '0.88rem' }}>
-                      {item.role}
-                    </td>
-                    <td style={{ textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '0.82rem', padding: '1.25rem 0.5rem' }}>
-                      {(item.period || '').split(' ~ ')[0] || 'done'}
-                    </td>
+                  <tr key={item.id} onClick={() => handleOpenModal(item)} className="archive-row-hover" style={{ borderBottom: '1px solid var(--rule)', cursor: 'pointer', transition: 'background 0.2s ease' }}>
+                    <td style={{ fontSize: '0.78rem', color: 'var(--accent)', padding: '1.1rem 0.5rem', fontWeight: 600 }}>{item.badge || item.category}</td>
+                    <td style={{ fontWeight: 600, color: 'var(--fg)', padding: '1.1rem 0.5rem', fontSize: '0.92rem' }}>{item.title}</td>
+                    <td style={{ color: 'var(--text-secondary)', padding: '1.1rem 0.5rem', fontSize: '0.85rem' }}>{item.role}</td>
+                    <td style={{ textAlign: 'right', color: 'var(--muted)', fontSize: '0.8rem', padding: '1.1rem 0.5rem' }}>{(item.period || '').split(' ~ ')[0] || 'done'}</td>
                   </tr>
                 ))}
-
                 {filteredItems.length === 0 && (
-                  <tr>
-                    <td colSpan="4" style={{ textAlign: 'center', padding: '5rem 0', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '0.82rem' }}>
-                      {t.no_results}
-                    </td>
-                  </tr>
+                  <tr><td colSpan="4" style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--muted)', fontSize: '0.88rem' }}>{t.no_results}</td></tr>
                 )}
               </tbody>
             </table>
           </div>
         </div>
-        
-        {/* Local Table Hover style */}
-        <style jsx global>{`
-          .archive-row-hover:hover {
-            background: rgba(25, 24, 24, 0.02) !important;
-          }
-        `}</style>
       </section>
 
-      {/* 05 / Trajectory (학술 및 경력 타임라인 연대표) */}
-      <section id="trajectory" className="rule-t" style={{ padding: '6rem 2rem' }}>
+      {/* ━━━ 05 / Career Trajectory ━━━ */}
+      <section id="trajectory" style={{ padding: '5rem 2rem' }}>
         <div className="frame">
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', letterSpacing: '2px', display: 'block', marginBottom: '0.75rem' }}>
-            {t.trajectory_sub}
-          </span>
-          <h2 className="section-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', marginBottom: '4rem' }}>
-            {t.trajectory_title}
-          </h2>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem', marginTop: '3rem', position: 'relative' }}>
-            <div style={{ position: 'absolute', left: '15px', top: '5px', bottom: '5px', width: '1px', background: 'var(--rule)' }}></div>
-            
+          <h2 className="section-title">{t.trajectory_title}</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', position: 'relative', paddingLeft: '2.5rem' }}>
+            <div style={{ position: 'absolute', left: '11px', top: '8px', bottom: '8px', width: '2px', background: 'var(--rule)', borderRadius: '1px' }} />
             {[
-              { 
-                year: '2026', 
-                title: { ko: 'OSAT 엔지니어 직무 연계 스터디', en: 'OSAT Packaging & Test Engineering Study' }, 
-                org: 'Amkor Technology', 
-                desc: {
-                  ko: '세계적 반도체 후공정(OSAT) 1티어 대기업 Amkor와의 연계 교육 및 경력 궤적 완성.',
-                  en: 'Completed industrial study linkage programs mapped directly to Tier-1 OSAT leader Amkor Technology.'
-                }
-              },
-              { 
-                year: '2026', 
-                title: { ko: 'SK 하이포(SK Hy-Po) : 8기 교육 과정', en: 'SK hynix SK Hy-Po Program : Cohort 8' }, 
-                org: 'SK hynix', 
-                desc: {
-                  ko: 'SK하이닉스 주관 청년 반도체 인재 육성 과정 수료. 전공 공정 기초 및 후공정 신뢰성 테스트 심화 정복.',
-                  en: 'Graduated from SK hynix intensive academy, mastering front-end lithography and back-end reliability packaging mechanics.'
-                }
-              },
-              { 
-                year: '2025', 
-                title: { ko: '반도체 공정 및 불량 분석 데이터 애널리스트', en: 'Semiconductor Process & Defect Data Analyst' }, 
-                org: 'Letuin Edu', 
-                desc: {
-                  ko: 'Spotfire 기반 반도체 결함 분석 및 수율 통계적 분석 프로젝트 수행. Python 및 Pandas를 활용한 결함 감지 R&D 진행.',
-                  en: 'Engineered yield analysis models with Spotfire and developed spatial defect pattern recognition algorithms using Python.'
-                }
-              },
-              { 
-                year: '2021 ~ 2025', 
-                title: { ko: '핵심 공학 전공 이수 및 학술 연대', en: 'Core Academic Engineering Coursework' }, 
-                org: 'Kwangwoon University', 
-                desc: {
-                  ko: '전기공학과 전공 이수 (반도체소자공학, 디지털논리회로설계, 전기전자재료물성학 및 회로이론 정복).',
-                  en: 'Majored in Electrical Engineering, mastering Semiconductor Device Engineering, Digital Logic Design, and Material Properties.'
-                }
-              }
-            ].map((t, idx) => (
-              <div key={idx} style={{ display: 'flex', gap: '2rem', position: 'relative', paddingLeft: '3rem' }}>
-                <div style={{
-                  position: 'absolute',
-                  left: '10px',
-                  top: '6px',
-                  width: '11px',
-                  height: '11px',
-                  borderRadius: '50%',
-                  background: 'var(--bg)',
-                  border: '2px solid hsl(var(--accent-primary))',
-                  boxShadow: '0 0 8px hsl(var(--accent-primary))'
-                }}></div>
-                <div style={{ width: '15%', fontFamily: 'var(--font-mono)', fontSize: '0.9rem', color: 'hsl(var(--accent-primary))', fontWeight: '600' }}>
-                  {t.year}
-                </div>
-                <div style={{ width: '85%' }}>
-                  <h3 style={{ fontSize: '1.15rem', color: 'var(--fg)', fontWeight: '600', marginBottom: '0.4rem' }}>{t.title[lang]}</h3>
-                  <span style={{ display: 'block', fontSize: '0.82rem', fontFamily: 'var(--font-mono)', color: 'hsl(var(--accent-secondary))', marginBottom: '0.75rem' }}>{t.org}</span>
-                  <p style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>{t.desc[lang]}</p>
+              { year: '2026', title: { ko: 'OSAT 엔지니어 직무 연계 스터디', en: 'OSAT Packaging & Test Engineering Study' }, org: 'Amkor Technology', desc: { ko: '세계적 반도체 후공정(OSAT) 1티어 대기업 Amkor와의 연계 교육 및 경력 궤적 완성.', en: 'Completed industrial study linkage programs mapped directly to Tier-1 OSAT leader Amkor Technology.' } },
+              { year: '2026', title: { ko: 'SK 하이포(SK Hy-Po) : 8기 교육 과정', en: 'SK hynix SK Hy-Po Program : Cohort 8' }, org: 'SK hynix', desc: { ko: 'SK하이닉스 주관 청년 반도체 인재 육성 과정 수료.', en: 'Graduated from SK hynix intensive academy, mastering front-end lithography and back-end reliability packaging mechanics.' } },
+              { year: '2025', title: { ko: '반도체 공정 및 불량 분석 데이터 애널리스트', en: 'Semiconductor Process & Defect Data Analyst' }, org: 'Letuin Edu', desc: { ko: 'Spotfire 기반 반도체 결함 분석 및 수율 통계적 분석 프로젝트 수행.', en: 'Engineered yield analysis models with Spotfire and developed spatial defect pattern recognition algorithms using Python.' } },
+              { year: '2021 ~ 2025', title: { ko: '핵심 공학 전공 이수', en: 'Core Academic Engineering Coursework' }, org: 'Kwangwoon University', desc: { ko: '전기공학과 전공 이수 (반도체소자공학, 디지털논리회로설계, 전기전자재료물성학).', en: 'Majored in Electrical Engineering, mastering Semiconductor Device Engineering, Digital Logic Design, and Material Properties.' } }
+            ].map((entry, idx) => (
+              <div key={idx} style={{ display: 'flex', gap: '1.5rem', position: 'relative' }}>
+                <div style={{ position: 'absolute', left: '-2.5rem', top: '6px', width: '10px', height: '10px', borderRadius: '50%', background: 'var(--bg)', border: '2.5px solid var(--accent)', boxShadow: '0 0 0 4px rgba(var(--accent-rgb), 0.1)' }} />
+                <div style={{ width: '100px', fontSize: '0.88rem', color: 'var(--accent)', fontWeight: 700, flexShrink: 0 }}>{entry.year}</div>
+                <div>
+                  <h3 style={{ fontSize: '1.05rem', color: 'var(--fg)', fontWeight: 700, marginBottom: '0.3rem' }}>{entry.title[lang]}</h3>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: 'var(--accent)', marginBottom: '0.5rem', fontWeight: 600 }}>{entry.org}</span>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.65 }}>{entry.desc[lang]}</p>
                 </div>
               </div>
             ))}
@@ -993,113 +526,32 @@ export default function PortfolioClient({ initialItems = [] }) {
         </div>
       </section>
 
-      {/* 06 / Core Strengths (엔지니어 핵심 강점 & 신뢰성 철학) */}
-      <section id="approach" className="rule-t" style={{ padding: '6rem 2rem' }}>
+      {/* ━━━ 06 / Strengths ━━━ */}
+      <section id="approach" style={{ padding: '5rem 2rem' }}>
         <div className="frame">
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', letterSpacing: '2px', display: 'block', marginBottom: '0.75rem' }}>
-            {t.approach_sub}
-          </span>
-          <h2 className="section-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', marginBottom: '4rem' }}>
-            {t.approach_title}
-          </h2>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2.5rem', marginBottom: '4rem' }}>
-            <p style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '1.35rem',
-              fontWeight: 400,
-              color: 'var(--fg)',
-              lineHeight: '1.6',
-              borderLeft: '4px solid hsl(var(--accent-primary))',
-              paddingLeft: '1.5rem',
-              fontStyle: 'italic',
-              maxWidth: '850px'
-            }}>
-              {t.approach_quote}
-            </p>
+          <h2 className="section-title">{t.approach_title}</h2>
+          <div style={{ background: 'var(--surface)', borderRadius: '24px', padding: '2rem 2.5rem', marginBottom: '2.5rem', borderLeft: '4px solid var(--accent)' }}>
+            <p style={{ fontSize: '1.1rem', fontWeight: 500, color: 'var(--fg)', lineHeight: 1.65 }}>{t.approach_quote}</p>
           </div>
-
-          {/* 1열 가로 배치로 기품을 높인 강점 카드들 */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '2rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {[
-              {
-                num: "01",
-                name: "Root Cause Analysis (RCA)",
-                level: 2,
-                desc: "Defect troubleshooting framework (5Why / Fishbone / Pareto)",
-                action: {
-                  ko: "공정 결함 및 수율 저하 발생 시, 단순 현상 기록을 넘어 5Why 및 피시본(Fishbone) 다이어그램 분석법을 적용하여 물리적 결함 유발의 근본적인 메커니즘을 과학적이고 입체적으로 추적합니다.",
-                  en: "Applies 5Why and Fishbone diagram frameworks to logically trace and control the root causes of physical defect mechanisms, rather than simply documenting symptoms."
-                }
-              },
-              {
-                num: "02",
-                name: "Trouble Shooting",
-                level: 2,
-                desc: "Equipment/process troubleshooting & recovery",
-                action: {
-                  ko: "장비 트러블 및 오동작 발생 시, 수율 분석 데이터와 정밀 매뉴얼에 의거하여 문제를 빠르게 진단하고 정형화된 트러블슈팅 프로토콜을 가동해 공정 유실(Loss) 시간을 방지합니다.",
-                  en: "Traces and restores faulty equipment states by auditing real-time sensor parameters, optimizing recovery protocols, and preventing costly inline production loss."
-                }
-              },
-              {
-                num: "03",
-                name: "Customer Service & Collaboration",
-                level: 3,
-                desc: "Stakeholder communication, follow-through & active listening",
-                action: {
-                  ko: "1티어 OSAT 대기업 앰코 실무 교육 및 반도체 공정 직무 부트캠프를 거치며, 고객사(Stakeholder) 및 다각적 유관 부서와의 소통 과정에서 깊이 경청하고 적극적인 대응 조치로 일정을 고수합니다.",
-                  en: "Maintains absolute timeline integrity and aligns cross-functional engineering metrics through proactive active listening, polished stakeholder interfacing, and meticulous follow-through."
-                }
-              },
-              {
-                num: "04",
-                name: "Aftercare & Ownership",
-                level: 3,
-                desc: "Follow-up mindset & entrepreneurship initiative",
-                action: {
-                  ko: "단순히 개별 공정을 마치는 것에서 멈추지 않고, 후공정 출하 후 최종 신뢰성 챔버 검증 통과까지 전 주기에 걸쳐 끝까지 책임지고 추적 관리하는 애프터케어(Aftercare) 마인드셋을 가집니다.",
-                  en: "Fosters end-to-end engineering ownership by executing continuous quality aftercare loops and validation checking until the final JEDEC reliability chambers are cleared."
-                }
-              }
+              { num: "01", name: "Root Cause Analysis (RCA)", level: 2, desc: "Defect troubleshooting framework (5Why / Fishbone / Pareto)", action: { ko: "공정 결함 발생 시, 5Why 및 피시본 다이어그램을 적용하여 결함 메커니즘의 근본 원인을 과학적으로 추적합니다.", en: "Applies 5Why and Fishbone diagram frameworks to trace root causes of physical defect mechanisms." } },
+              { num: "02", name: "Trouble Shooting", level: 2, desc: "Equipment/process troubleshooting & recovery", action: { ko: "장비 트러블 발생 시, 수율 분석 데이터를 기반으로 빠르게 진단하고 복구 프로토콜을 가동합니다.", en: "Traces and restores faulty equipment states by auditing real-time sensor parameters and optimizing recovery protocols." } },
+              { num: "03", name: "Customer Service & Collaboration", level: 3, desc: "Stakeholder communication & active listening", action: { ko: "고객사 및 유관 부서와 깊이 경청하고 적극적인 대응으로 일정을 고수합니다.", en: "Maintains timeline integrity through proactive active listening and meticulous stakeholder follow-through." } },
+              { num: "04", name: "Aftercare & Ownership", level: 3, desc: "Follow-up mindset & end-to-end responsibility", action: { ko: "개별 공정 완료 후에도 최종 신뢰성 검증까지 끝까지 추적하는 애프터케어 마인드셋을 가집니다.", en: "Fosters end-to-end engineering ownership by executing continuous quality aftercare until final reliability chambers are cleared." } }
             ].map((strength) => (
-              <div 
-                key={strength.num}
-                className="skill-card-hover"
-                style={{ 
-                  background: 'var(--surface)', 
-                  border: '1px solid var(--rule)', 
-                  padding: '2.5rem 3rem', 
-                  borderRadius: '4px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  flexWrap: 'wrap',
-                  gap: '2rem'
-                }}
-              >
-                <div style={{ flex: '1 1 500px', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.25rem' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: 'hsl(var(--accent-primary))', fontWeight: 'bold' }}>
-                      {strength.num}
-                    </span>
-                    <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.2rem', fontWeight: '600', color: 'var(--fg)', margin: 0 }}>
-                      {strength.name}
-                    </h3>
+              <div key={strength.num} className="skill-card-hover" style={{ background: 'var(--surface)', border: '1px solid var(--rule)', padding: '2rem 2.5rem', borderRadius: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+                <div style={{ flex: '1 1 400px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                    <span style={{ fontSize: '0.82rem', color: 'var(--accent)', fontWeight: 700 }}>{strength.num}</span>
+                    <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--fg)', margin: 0 }}>{strength.name}</h3>
                   </div>
-                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'hsl(var(--accent-secondary))', margin: 0, textTransform: 'uppercase' }}>
-                    {strength.desc}
-                  </p>
-                  <p style={{ fontSize: '0.94rem', color: 'var(--text-secondary)', lineHeight: '1.6', margin: '0.75rem 0 0 0' }}>
-                    {strength.action[lang]}
-                  </p>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 600, marginBottom: '0.5rem' }}>{strength.desc}</p>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>{strength.action[lang]}</p>
                 </div>
-                
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--bg)', border: '1px solid var(--rule)', padding: '0.75rem 1.25rem', borderRadius: '4px' }}>
-                  {getCircularProgress(strength.level)}
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--fg)', fontWeight: 'bold' }}>
-                    Proficiency Level: P.{strength.level}
-                  </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'var(--bg)', border: '1px solid var(--rule)', padding: '0.5rem 1rem', borderRadius: '100px' }}>
+                  <CircularProgress level={strength.level} />
+                  <span style={{ fontSize: '0.75rem', color: 'var(--fg)', fontWeight: 700 }}>P.{strength.level}</span>
                 </div>
               </div>
             ))}
@@ -1107,191 +559,67 @@ export default function PortfolioClient({ initialItems = [] }) {
         </div>
       </section>
 
-      {/* 07 / Tools & Stack (전문 툴박스 & 인터랙티브 스킬 인벤토리) */}
-      <section id="tools" className="rule-t" style={{ padding: '6rem 2rem' }}>
+      {/* ━━━ 07 / Tools & Skills ━━━ */}
+      <section id="tools" style={{ padding: '5rem 2rem' }}>
         <div className="frame">
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', letterSpacing: '2px', display: 'block', marginBottom: '0.75rem' }}>
-            {t.tools_sub}
-          </span>
-          <h2 className="section-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', marginBottom: '4rem' }}>
-            {t.tools_title}
-          </h2>
-          
-          {/* Quick View: Core Technical Toolchain (1열 레이아웃 가로 긴 리스트 카드들) */}
-          <div style={{ marginBottom: '5rem' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--muted)', marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              {t.quick_view_label}
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <h2 className="section-title">{t.tools_title}</h2>
+
+          {/* Quick View Toolchain */}
+          <div style={{ marginBottom: '4rem' }}>
+            <div style={{ fontSize: '0.82rem', color: 'var(--muted)', marginBottom: '1.25rem', fontWeight: 600 }}>{t.quick_view_label}</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {[
-                { cat: 'Data & Analytics', tools: ['TIBCO Spotfire', 'Python', 'Pandas & NumPy', 'Matplotlib (Visualization)', 'SQL Database'] },
-                { cat: 'Standards & Reliability', tools: ['JEDEC Standards (JESD22)', 'HAST / ESD / Temp Cycle Specs', 'FMEA Quality Framework', 'Statistical Process Control (SPC)'] },
-                { cat: 'Circuits & Core Studies', tools: ['Digital Logic Design', 'Analog Circuit Simulation (SPICE)', 'Electrical Material Physics', 'Relevant Lab Equipment Control'] }
+                { cat: 'Data & Analytics', tools: ['TIBCO Spotfire', 'Python', 'Pandas & NumPy', 'Matplotlib', 'SQL'] },
+                { cat: 'Standards & Reliability', tools: ['JEDEC (JESD22)', 'HAST / ESD / TC', 'FMEA Framework', 'SPC'] },
+                { cat: 'Circuits & Core', tools: ['Digital Logic', 'SPICE Simulation', 'Material Physics', 'Lab Equipment'] }
               ].map((box, idx) => (
-                <div key={idx} className="skill-card-hover" style={{ background: 'var(--surface)', border: '1px solid var(--rule)', padding: '2rem 3rem', borderRadius: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
-                  <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.1rem', fontWeight: '600', color: 'var(--fg)', margin: 0, minWidth: '220px' }}>
-                    {box.cat}
-                  </h3>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                    {box.tools.map(tool => (
-                      <span key={tool} style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.75rem',
-                        color: 'hsl(var(--accent-primary))',
-                        background: 'rgba(var(--accent-primary-rgb), 0.04)',
-                        border: '1px solid rgba(var(--accent-primary-rgb), 0.15)',
-                        padding: '0.35rem 0.75rem',
-                        borderRadius: '2px'
-                      }}>{tool}</span>
-                    ))}
+                <div key={idx} className="skill-card-hover" style={{ background: 'var(--surface)', border: '1px solid var(--rule)', padding: '1.5rem 2rem', borderRadius: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--fg)', margin: 0, minWidth: '180px' }}>{box.cat}</h3>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                    {box.tools.map(tool => (<span key={tool} style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--accent)', background: 'rgba(var(--accent-rgb), 0.06)', border: '1px solid rgba(var(--accent-rgb), 0.15)', padding: '0.3rem 0.7rem', borderRadius: '100px' }}>{tool}</span>))}
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Interactive Skills Matrix (Magazin-style 리스트형 카드 구조) */}
-          <div style={{ borderTop: '1px solid var(--rule)', paddingTop: '4rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '2rem', marginBottom: '3rem' }}>
+          {/* Toss Segmented Skills Tab */}
+          <div style={{ borderTop: '1px solid var(--rule)', paddingTop: '3rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '2rem' }}>
               <div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'hsl(var(--accent-primary))', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                  {t.deep_dive_label}
-                </div>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: '400', color: 'var(--fg)', letterSpacing: '-0.5px' }}>
-                  {t.notion_skills_db_title}
-                </h3>
+                <div style={{ fontSize: '0.78rem', color: 'var(--accent)', fontWeight: 700, marginBottom: '0.4rem' }}>{t.deep_dive_label}</div>
+                <h3 style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--fg)', letterSpacing: '-0.3px' }}>{t.notion_skills_db_title}</h3>
               </div>
-
-              {/* Filters and Sorters */}
-              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                {/* Category Toggles (소문자 미니멀 버튼) */}
-                <div style={{ display: 'flex', background: 'var(--surface)', border: '1px solid var(--rule)', borderRadius: '4px', padding: '2px' }}>
-                  {['All', 'Technical', 'Interpersonal'].map(cat => (
-                    <button
-                      key={cat}
-                      onClick={() => setSkillCategoryFilter(cat)}
-                      style={{
-                        padding: '0.5rem 1rem',
-                        border: 'none',
-                        background: skillCategoryFilter === cat ? 'var(--bg)' : 'transparent',
-                        color: skillCategoryFilter === cat ? 'hsl(var(--accent-primary))' : 'var(--muted)',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.75rem',
-                        fontWeight: skillCategoryFilter === cat ? '600' : '400',
-                        cursor: 'pointer',
-                        borderRadius: '2px',
-                        transition: 'all 0.2s ease',
-                        textTransform: 'lowercase'
-                      }}
-                    >
-                      {cat === 'All' ? (lang === 'ko' ? '전체' : 'all') : cat === 'Technical' ? (lang === 'ko' ? '기술' : 'technical') : (lang === 'ko' ? '대인' : 'interpersonal')}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Sort Toggle */}
-                <div style={{ display: 'flex', background: 'var(--surface)', border: '1px solid var(--rule)', borderRadius: '4px', padding: '2px' }}>
-                  {[
-                    { id: 'Proficiency', label: '📊 P. Level' },
-                    { id: 'Alphabetical', label: '🔤 Name' }
-                  ].map(sortOpt => (
-                    <button
-                      key={sortOpt.id}
-                      onClick={() => setSkillSortOrder(sortOpt.id)}
-                      style={{
-                        padding: '0.5rem 1rem',
-                        border: 'none',
-                        background: skillSortOrder === sortOpt.id ? 'var(--bg)' : 'transparent',
-                        color: skillSortOrder === sortOpt.id ? 'hsl(var(--accent-secondary))' : 'var(--muted)',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.75rem',
-                        fontWeight: skillSortOrder === sortOpt.id ? '600' : '400',
-                        cursor: 'pointer',
-                        borderRadius: '2px',
-                        transition: 'all 0.2s ease'
-                      }}
-                    >
-                      {sortOpt.label}
-                    </button>
-                  ))}
-                </div>
+              <div className="segmented-control">
+                {skillSegments.map(seg => (
+                  <button key={seg.id} className={`segmented-tab ${activeSkillSegment === seg.id ? 'active' : ''}`} onClick={() => setActiveSkillSegment(seg.id)}>
+                    {seg.icon} {seg.label[lang]}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Grid of 28 Skills - 가로배치 와이드 리스트 카드로 리뉴얼 */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {filteredSkills.map(skill => (
-                <div 
-                  key={skill.name}
-                  style={{
-                    background: 'var(--surface)',
-                    border: '1px solid var(--rule)',
-                    padding: '1.5rem 2.5rem',
-                    borderRadius: '4px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexWrap: 'wrap',
-                    gap: '1.5rem',
-                    transition: 'all 0.3s ease',
-                    position: 'relative'
-                  }}
-                  className="skill-card-hover"
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flex: '1 1 350px' }}>
-                    <div style={{ minWidth: '150px' }}>
-                      <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 'bold', color: 'var(--fg)', letterSpacing: '-0.3px', margin: 0 }}>
-                        {skill.name}
-                      </h4>
-                      <span style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.6rem',
-                        color: skill.category === 'Technical' ? 'hsl(var(--accent-primary))' : 'hsl(var(--accent-secondary))',
-                        background: skill.category === 'Technical' ? 'rgba(var(--accent-primary-rgb), 0.04)' : 'rgba(var(--accent-secondary-rgb), 0.04)',
-                        border: skill.category === 'Technical' ? '1px solid rgba(var(--accent-primary-rgb), 0.15)' : '1px solid rgba(var(--accent-secondary-rgb), 0.15)',
-                        padding: '0.1rem 0.35rem',
-                        borderRadius: '2px',
-                        textTransform: 'uppercase',
-                        marginTop: '0.4rem',
-                        display: 'inline-block'
-                      }}>
-                        {skill.category}
-                      </span>
+            {/* Skills List */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', animation: 'fadeInUp 0.3s ease' }}>
+              {sortedSkills.map(skill => (
+                <div key={skill.name} className="skill-card-hover" style={{ background: 'var(--surface)', border: '1px solid var(--rule)', padding: '1.25rem 2rem', borderRadius: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flex: '1 1 350px' }}>
+                    <div style={{ minWidth: '130px' }}>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--fg)', margin: 0 }}>{skill.name}</h4>
+                      <span style={{ fontSize: '0.6rem', fontWeight: 600, color: skill.category === 'Technical' ? 'var(--accent)' : '#8B95A1', background: skill.category === 'Technical' ? 'rgba(var(--accent-rgb), 0.06)' : 'var(--surface-raised)', border: `1px solid ${skill.category === 'Technical' ? 'rgba(var(--accent-rgb), 0.15)' : 'var(--rule)'}`, padding: '0.15rem 0.4rem', borderRadius: '100px', marginTop: '0.3rem', display: 'inline-block' }}>{skill.category}</span>
                     </div>
-                    
-                    <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
-                      {skill.desc?.[lang] || ''}
-                    </p>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>{skill.desc?.[lang] || ''}</p>
                   </div>
-
-                  {/* Right segment: Proficiency Progress + related details */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-                    {/* Related context */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
                     {(skill.cert || skill.project) && (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', alignItems: 'flex-start', minWidth: '180px' }}>
-                        {skill.cert && (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
-                            <span style={{ color: 'hsl(var(--accent-secondary))' }}>🎫</span>
-                            <span>{skill.cert}</span>
-                          </div>
-                        )}
-                        {skill.project && (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
-                            <span style={{ color: 'hsl(var(--accent-primary))' }}>🔗</span>
-                            <span>
-                              {typeof skill.project === 'object' ? skill.project[lang] : skill.project}
-                            </span>
-                          </div>
-                        )}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', minWidth: '160px' }}>
+                        {skill.cert && <div style={{ fontSize: '0.68rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>🎫 {skill.cert}</div>}
+                        {skill.project && <div style={{ fontSize: '0.68rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>🔗 {typeof skill.project === 'object' ? skill.project[lang] : skill.project}</div>}
                       </div>
                     )}
-                    
-                    {/* Proficiency Ring */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--bg)', border: '1px solid var(--rule)', padding: '0.5rem 0.75rem', borderRadius: '4px' }}>
-                      {getCircularProgress(skill.level)}
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--fg)', fontWeight: 'bold' }}>
-                        P.{skill.level}
-                      </span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', background: 'var(--bg)', border: '1px solid var(--rule)', padding: '0.4rem 0.7rem', borderRadius: '100px' }}>
+                      <CircularProgress level={skill.level} />
+                      <span style={{ fontSize: '0.72rem', color: 'var(--fg)', fontWeight: 700 }}>P.{skill.level}</span>
                     </div>
                   </div>
                 </div>
@@ -1301,110 +629,67 @@ export default function PortfolioClient({ initialItems = [] }) {
         </div>
       </section>
 
-      {/* About & Contact Section */}
-      <footer id="contact" className="rule-t" style={{ padding: '8rem 2rem 10rem 2rem', background: 'var(--surface)', marginTop: '6rem' }}>
+      {/* ━━━ Footer ━━━ */}
+      <footer id="contact" style={{ padding: '5rem 2rem 8rem', marginTop: '4rem' }}>
         <div className="footer-container">
-          <h2 className="footer-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', color: 'var(--fg)' }}>
-            {t.footer_title}
-          </h2>
-          <p className="footer-desc" style={{ color: 'var(--text-secondary)', lineHeight: '1.6', fontSize: '1.05rem', marginBottom: '3rem' }}>
-            {t.footer_desc}
-          </p>
-          <a href="mailto:junseo.oh.kr@gmail.com" className="contact-email" style={{ fontFamily: 'var(--font-mono)', color: 'hsl(var(--accent-primary))', fontSize: 'clamp(1.2rem, 3.5vw, 1.8rem)', textDecoration: 'none' }}>
-            junseo.oh.kr@gmail.com
-          </a>
-          <p className="footer-copy" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', marginTop: '4rem' }}>
-            {t.copyright}
-          </p>
+          <h2 className="footer-title">{t.footer_title}</h2>
+          <p className="footer-desc">{t.footer_desc}</p>
+          <a href="mailto:junseo.oh.kr@gmail.com" className="contact-email">junseo.oh.kr@gmail.com</a>
+          <p className="footer-copy">{t.copyright}</p>
         </div>
       </footer>
 
-      {/* Details Modal */}
+      {/* ━━━ Modal ━━━ */}
       {selectedProject && (
         <div className="modal-overlay" onClick={() => setSelectedProject(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setSelectedProject(null)}>
-              &times;
-            </button>
+            <button className="modal-close" onClick={() => setSelectedProject(null)}>&times;</button>
             <span className="modal-category">{selectedProject.category}</span>
-            <h2 className="modal-title" style={{ fontFamily: 'var(--font-display)', fontWeight: '400', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}>
-              {selectedProject.title}
-            </h2>
-            
+            <h2 className="modal-title">{selectedProject.title}</h2>
             <div className="modal-meta-grid">
-              <div className="modal-meta-item">
-                <span>{t.modal_contribution}</span>
-                <p>{selectedProject.role || '소속 정보 없음'}</p>
-              </div>
-              <div className="modal-meta-item">
-                <span>{t.modal_period}</span>
-                <p>{selectedProject.period || '기간 정보 없음'}</p>
-              </div>
+              <div className="modal-meta-item"><span>{t.modal_contribution}</span><p>{selectedProject.role || '-'}</p></div>
+              <div className="modal-meta-item"><span>{t.modal_period}</span><p>{selectedProject.period || '-'}</p></div>
             </div>
-
             <div className="modal-body" style={{ borderTop: '1px solid var(--rule)', paddingTop: '1.5rem' }}>
               {isModalLoading ? (
-                <div style={{ textAlign: 'center', padding: '2rem 0', color: 'hsl(var(--accent-primary))' }}>
-                  <div className="spinner" style={{
-                    display: 'inline-block',
-                    width: '30px',
-                    height: '30px',
-                    border: '3px solid var(--rule)',
-                    borderTopColor: 'hsl(var(--accent-primary))',
-                    borderRadius: '50%'
-                  }}></div>
-                  <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: 'var(--muted)' }}>{t.modal_loading}</p>
+                <div style={{ textAlign: 'center', padding: '2rem 0' }}>
+                  <div className="spinner" style={{ display: 'inline-block', width: '28px', height: '28px', border: '3px solid var(--rule)', borderTopColor: 'var(--accent)', borderRadius: '50%' }} />
+                  <p style={{ marginTop: '0.75rem', fontSize: '0.85rem', color: 'var(--muted)' }}>{t.modal_loading}</p>
                 </div>
               ) : (
                 <div dangerouslySetInnerHTML={{ __html: parseMarkdown(modalContent) }} />
               )}
             </div>
-
-            <div className="modal-body-translated-caution" style={{ display: lang === 'en' ? 'block' : 'none', padding: '1rem', background: 'var(--surface)', border: '1px solid var(--rule)', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '2rem', borderRadius: '4px', fontFamily: 'var(--font-mono)' }}>
-              💡 *This project detail is dynamically localized for English screening.*
-            </div>
-
             <div className="modal-footer">
-              {selectedProject.link && (
-                <a href={selectedProject.link} target="_blank" rel="noreferrer" className="btn-primary" style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem' }}>
-                  {t.modal_github}
-                </a>
-              )}
-              <button className="btn-secondary" onClick={() => setSelectedProject(null)} style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem' }}>
-                {t.modal_close}
-              </button>
+              {selectedProject.link && (<a href={selectedProject.link} target="_blank" rel="noreferrer" className="btn-primary" style={{ fontSize: '0.85rem', padding: '0.6rem 1.25rem' }}>{t.modal_github}</a>)}
+              <button className="btn-secondary" onClick={() => setSelectedProject(null)} style={{ fontSize: '0.85rem', padding: '0.6rem 1.25rem' }}>{t.modal_close}</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Codedgar-style Fixed Bottom Status Bar */}
-      <div className="status-bar hidden sm:block">
+      {/* ━━━ Status Bar — Ultra Minimal ━━━ */}
+      <div className="status-bar">
         <div className="status-bar-inner">
-          <div className="status-bar-segment status-bar-mode">
-            <span className="status-bar-mode-label">mode:</span>
-            <span className="status-bar-mode-value">live_notion</span>
+          <div className="status-bar-segment" style={{ gap: '6px' }}>
+            <span className="pulse-dot" />
+            <span style={{ color: 'var(--accent)', fontWeight: 700 }}>LIVE</span>
           </div>
+          <div style={{ width: '1px', height: '12px', background: 'var(--rule)' }} />
           <div className="status-bar-segment status-bar-path">
-            <span className="status-bar-path-prefix">~/portfolio/</span>
+            <span className="status-bar-path-prefix">~/</span>
             <span>junseo.oh</span>
           </div>
-          <div style={{ width: '1px', height: '14px', background: 'var(--rule)', margin: '0 0.5rem' }}></div>
-          <div className="status-bar-segment status-bar-studying">
-            <span className="status-bar-studying-icon">⚡</span>
-            <span>studying: OSAT packaging &amp; electrical testing (sk hy-po 8th)</span>
+          <div style={{ width: '1px', height: '12px', background: 'var(--rule)' }} />
+          <div className="status-bar-segment">
+            <span>studying: OSAT packaging (sk hy-po 8th)</span>
           </div>
-          
-          {/* 하단에도 미니멀 다국어 스위치 탑재 */}
-          <div style={{ width: '1px', height: '14px', background: 'var(--rule)', margin: '0 0.5rem' }}></div>
+          <div style={{ width: '1px', height: '12px', background: 'var(--rule)', margin: '0 0.25rem' }} />
           <div className="status-bar-segment" style={{ cursor: 'pointer' }} onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')}>
             <span style={{ color: 'var(--muted)' }}>lang:</span>
-            <span style={{ color: 'hsl(var(--accent-secondary))', fontWeight: 'bold' }}>{lang}</span>
+            <span style={{ color: 'var(--accent)', fontWeight: 700 }}>{lang.toUpperCase()}</span>
           </div>
-
-          <div className="status-bar-time">
-            <span>{timeStr}</span>
-          </div>
+          <div className="status-bar-time"><span>{timeStr}</span></div>
         </div>
       </div>
     </div>
