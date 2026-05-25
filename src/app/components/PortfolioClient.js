@@ -28,11 +28,8 @@ function parseMarkdown(markdownText) {
   html = html.replace(/<\/ul>\s*<ul>/g, '');
 
   // 줄바꿈을 문단(<p>) 혹은 <br>로 변경
-  html = html.replace(/
-
-/g, '</p><p style="margin-bottom:1rem; color:var(--text-secondary);">');
-  html = html.replace(/
-/g, '<br />');
+  html = html.replace(/\n\n/g, '</p><p style="margin-bottom:1rem; color:var(--text-secondary);">');
+  html = html.replace(/\n/g, '<br />');
   
   if (!html.startsWith('<h') && !html.startsWith('<u') && !html.startsWith('<l') && !html.startsWith('<b')) {
     html = '<p style="margin-bottom:1rem; color:var(--text-secondary);">' + html + '</p>';
