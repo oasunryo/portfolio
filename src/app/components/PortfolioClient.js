@@ -12,8 +12,8 @@ function parseMarkdown(markdownText) {
     .replace(/>/g, "&gt;");
 
   // 인용구/캘아웃 변환 - 차분한 샌드베이지 및 디지털 블루 테두리 적용
-  html = html.replace(/^>\s+💡\s+(.+)$/gm, '<blockquote style="border-left:4px solid hsl(var(--accent-primary)); background:var(--surface); padding:1rem; border-radius:4px; margin-bottom:1.25rem; font-size:0.92rem;">💡 $1</blockquote>');
-  html = html.replace(/^>\s+(.+)$/gm, '<blockquote style="border-left:4px solid hsl(var(--accent-secondary)); background:var(--surface); padding:1rem; border-radius:4px; margin-bottom:1.25rem; font-size:0.92rem;">$1</blockquote>');
+  html = html.replace(/^>\s+💡\s+(.+)$/gm, '<blockquote style="border-left:4px solid hsl(var(--accent-primary)); background:var(--surface); padding:1.25rem; border-radius:4px; margin-bottom:1.5rem; font-size:0.92rem;">💡 $1</blockquote>');
+  html = html.replace(/^>\s+(.+)$/gm, '<blockquote style="border-left:4px solid hsl(var(--accent-secondary)); background:var(--surface); padding:1.25rem; border-radius:4px; margin-bottom:1.5rem; font-size:0.92rem;">$1</blockquote>');
 
   // 헤더 변환 (h2, h3)
   html = html.replace(/^##\s+(.+)$/gm, '<h2 style="color:var(--fg); font-family:var(--font-display); font-size:1.35rem; font-weight:400; margin-top:2rem; margin-bottom:0.75rem; border-left:3px solid hsl(var(--accent-primary)); padding-left:0.75rem;">$1</h2>');
@@ -27,7 +27,7 @@ function parseMarkdown(markdownText) {
   html = html.replace(/(<li style="margin-bottom:0\.4rem; padding-left:0\.25rem;">.*<\/li>)/gs, '<ul style="padding-left:1.25rem; margin-bottom:1.25rem; list-style-type:square; font-size:0.92rem;">$1</ul>');
   html = html.replace(/<\/ul>\s*<ul>/g, '');
 
-  // 줄바꿈을 문단(<p>) 혹은 <br>로 변경
+  // 줄바꿈을 문단(<p>) 혹은 <br>로 변경 (이스케이프 에러 완전 해결)
   html = html.replace(/\n\n/g, '</p><p style="margin-bottom:1rem; color:var(--text-secondary);">');
   html = html.replace(/\n/g, '<br />');
   
@@ -175,25 +175,25 @@ function getCircularProgress(level) {
 // KO/EN UI 딕셔너리 사전
 const translations = {
   ko: {
-    nav_selected: "selected",
-    nav_roadmap: "roadmap",
-    nav_archive: "archive",
-    nav_skills: "skills",
-    hero_badge: "Notion API 실시간 연동 | 반도체 후공정 포트폴리오",
+    nav_selected: "selected cases",
+    nav_roadmap: "technology",
+    nav_archive: "archives",
+    nav_skills: "skills matrix",
+    hero_badge: "Notion API 실시간 연동 // 반도체 후공정 포트폴리오",
     hero_title_1: "미래 반도체의 완성을 책임지는",
     hero_title_accent: "반도체 후공정 (패키징 & 테스트)",
     hero_title_2: "엔지니어 Junseo Oh 입니다.",
-    hero_subtitle: "본 웹사이트는 노션(Notion) 데이터베이스와 실시간으로 바인딩된 프리미엄 크림 에디토리얼 대시보드입니다. 1티어 OSAT 앰코테크놀로지 연계 실무 지식, SK하이닉스 청년 반도체 인재 양성(SK Hy-Po) 8기 과정 수료 이력 및 Spotfire 기반 수율/공정 결함 통계 R&D 분석 결과물들을 정밀 탐색해 보실 수 있습니다.",
+    hero_subtitle: "노션(Notion) 데이터베이스와 실시간으로 연동된 고품격 크림 에디토리얼 대시보드입니다. 1티어 OSAT 대기업 앰코테크놀로지 연계 실무 지식, SK하이닉스 청년 반도체 인재 양성(SK Hy-Po) 8기 과정 수료 이력 및 Spotfire 기반 수율/공정 결함 통계 R&D 분석 결과물들을 정밀 탐색해 보세요.",
     btn_explore: "포트폴리오 탐색 시작",
     selected_title: "Selected Case Studies.",
-    selected_sub: "02 / SELECT CASES",
+    selected_sub: "// 02 / SELECTED CASES",
     view_details: "→ 자세히 보기",
-    roadmap_title: "Back-end Process Roadmap.",
-    roadmap_sub: "03 / TECHNOLOGY",
+    roadmap_title: "Back-end Technology Flow.",
+    roadmap_sub: "// 03 / TECHNOLOGY",
     roadmap_flow_title: "Process Flow & Engineering Philosophy",
     roadmap_philosophy_label: "엔지니어 품질 철학:",
     archive_title: "Semiconductor Archives.",
-    archive_sub: "04 / ARCHIVES",
+    archive_sub: "// 04 / ARCHIVES",
     archive_search_placeholder: "프로젝트, 툴(Python, JEDEC), 또는 이력으로 검색...",
     tab_projects: "🔬 Projects",
     tab_career: "🏆 Career & Education",
@@ -205,12 +205,12 @@ const translations = {
     th_period: "진행 기간",
     no_results: "검색 조건에 맞는 프로젝트가 존재하지 않습니다.",
     trajectory_title: "Career Trajectory.",
-    trajectory_sub: "05 / TRAJECTORY",
+    trajectory_sub: "// 05 / TRAJECTORY",
     approach_title: "Engineering Approach & Strengths.",
-    approach_sub: "06 / CORE STRENGTHS",
+    approach_sub: "// 06 / CORE STRENGTHS",
     approach_quote: '"반도체 불량은 양산 후에 사후 대응하는 것이 아닙니다. 5Why 및 피시본(Fishbone) 다이어그램 기반의 정밀 분석 프레임워크와 설비 트러블슈팅 역량, 그리고 유관 부서와의 주도적인 협업을 통해 신뢰성을 완성하는 것이 엔지니어로서의 오너십입니다."',
     tools_title: "Tools & Interactive Skills.",
-    tools_sub: "07 / TOOLCHAIN & SKILLS",
+    tools_sub: "// 07 / TOOLCHAIN & SKILLS",
     quick_view_label: "// 요약 뷰: 핵심 기술 툴체인",
     deep_dive_label: "// 상세 분석: 노션 실물 보유 역량 데이터베이스",
     notion_skills_db_title: "Notion Portfolio Skills Database.",
@@ -224,25 +224,25 @@ const translations = {
     modal_loading: "노션 페이지 본문을 불러오는 중입니다..."
   },
   en: {
-    nav_selected: "selected",
-    nav_roadmap: "roadmap",
-    nav_archive: "archive",
-    nav_skills: "skills",
-    hero_badge: "Notion API Live Linked | Semiconductor Backend Portfolio",
+    nav_selected: "selected cases",
+    nav_roadmap: "technology",
+    nav_archive: "archives",
+    nav_skills: "skills matrix",
+    hero_badge: "Notion API Live Linked // Semiconductor Backend Portfolio",
     hero_title_1: "Securing the Future of Microchips,",
     hero_title_accent: "Semiconductor Back-end (Packaging & Test)",
     hero_title_2: "Engineer Junseo Oh.",
     hero_subtitle: "A premium editorial portfolio dashboard live-linked with Notion API. Explore yield analytics with TIBCO Spotfire, SK hynix SK Hy-Po 8th cohort training, and Amkor Technology OSAT engineering insights.",
     btn_explore: "Explore Portfolio",
     selected_title: "Selected Case Studies.",
-    selected_sub: "02 / SELECT CASES",
+    selected_sub: "// 02 / SELECTED CASES",
     view_details: "→ View Details",
-    roadmap_title: "Back-end Process Roadmap.",
-    roadmap_sub: "03 / TECHNOLOGY",
+    roadmap_title: "Back-end Technology Flow.",
+    roadmap_sub: "// 03 / TECHNOLOGY",
     roadmap_flow_title: "Process Flow & Engineering Philosophy",
     roadmap_philosophy_label: "Engineering Philosophy:",
     archive_title: "Semiconductor Archives.",
-    archive_sub: "04 / ARCHIVES",
+    archive_sub: "// 04 / ARCHIVES",
     archive_search_placeholder: "Search projects, tools (Python, JEDEC), or keywords...",
     tab_projects: "🔬 Projects",
     tab_career: "🏆 Career & Education",
@@ -254,12 +254,12 @@ const translations = {
     th_period: "Period",
     no_results: "No projects match your search filters.",
     trajectory_title: "Career Trajectory.",
-    trajectory_sub: "05 / TRAJECTORY",
+    trajectory_sub: "// 05 / TRAJECTORY",
     approach_title: "Engineering Approach & Strengths.",
-    approach_sub: "06 / CORE STRENGTHS",
+    approach_sub: "// 06 / CORE STRENGTHS",
     approach_quote: '"Defect control in semiconductors is not about post-mass-production sorting. True engineering ownership is about proactively preventing failures through physical root-cause analysis, equipment troubleshooting, and collaborative cross-functional alignment."',
     tools_title: "Tools & Interactive Skills.",
-    tools_sub: "07 / TOOLCHAIN & SKILLS",
+    tools_sub: "// 07 / TOOLCHAIN & SKILLS",
     quick_view_label: "// Quick View: Core Technical Toolchain",
     deep_dive_label: "// Deep Dive: Interactive Skills Inventory",
     notion_skills_db_title: "Notion Portfolio Skills Database.",
@@ -367,7 +367,6 @@ export default function PortfolioClient({ initialItems = [] }) {
   const [selectedProject, setSelectedProject] = useState(null);
   const [modalContent, setModalContent] = useState('');
   const [isModalLoading, setIsModalLoading] = useState(false);
-  const [activeSection, setActiveSection] = useState('intro'); // wayfinding nav 활성 섹션
 
   // 후공정 로드맵 선택 상태
   const [selectedRoadmapStep, setSelectedRoadmapStep] = useState(roadmapSteps[0]);
@@ -513,30 +512,6 @@ export default function PortfolioClient({ initialItems = [] }) {
     }
   });
 
-  // ==========================================
-  // [Wayfinding Nav 스크롤 감지 로직]
-  // ==========================================
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['intro', 'selected', 'roadmap', 'archived', 'trajectory', 'approach', 'tools'];
-      const scrollPos = window.scrollY + window.innerHeight / 2.5;
-
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPos >= top && scrollPos < top + height) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   // 모달 열기 핸들러 (실시간 영문 마크다운 본문 스왑 완벽 내장)
   const handleOpenModal = async (project) => {
     setSelectedProject(project);
@@ -563,35 +538,10 @@ export default function PortfolioClient({ initialItems = [] }) {
   };
 
   return (
-    <div className="portfolio-content">
+    <div className="portfolio-content" style={{ paddingBottom: '8rem' }}>
       {/* Ambient backgrounds */}
       <div className="ambient-glow-1"></div>
       <div className="ambient-glow-2"></div>
-
-      {/* 🧭 Wayfinding Navigation 눈금 내비게이터 (Ozgur 스펙 준수) */}
-      <nav className="wayfinding-nav hidden md:block" aria-label="Page sections">
-        <ul className="wayfinding-list">
-          {['intro', 'selected', 'roadmap', 'archived', 'trajectory', 'approach', 'tools'].map((sec) => {
-            const isActive = activeSection === sec;
-            const label = sec.toUpperCase();
-            return (
-              <li key={sec}>
-                <a 
-                  href={`#${sec}`} 
-                  className={`wayfinding-link ${isActive ? 'is-active' : ''}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.getElementById(sec).scrollIntoView({ behavior: 'smooth' });
-                  }}
-                >
-                  <span className="wayfinding-label">{label}</span>
-                  <span className="wayfinding-tick"></span>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
 
       {/* Navigation Header */}
       <header className="rule-b">
@@ -629,67 +579,118 @@ export default function PortfolioClient({ initialItems = [] }) {
       </header>
 
       {/* 01 / Intro Section (히어로) */}
-      <section id="intro" className="hero">
-        <div className="hero-badge">{t.hero_badge}</div>
-        <h1 className="hero-title">
+      <section id="intro" className="hero" style={{ padding: '8rem 2rem 5rem 2rem' }}>
+        <div className="hero-badge" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'hsl(var(--accent-secondary))' }}>
+          {t.hero_badge}
+        </div>
+        <h1 className="hero-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: '400', lineHeight: '1.05', letterSpacing: '-1.5px', marginTop: '1.5rem', marginBottom: '2.5rem' }}>
           {t.hero_title_1}<br />
-          <span>{t.hero_title_accent}</span><br />
+          <span style={{ color: 'hsl(var(--accent-primary))', fontStyle: 'italic' }}>{t.hero_title_accent}</span><br />
           {t.hero_title_2}
         </h1>
-        <p className="hero-subtitle">
+        
+        {/* Codedgar-style wide sand Callout Box for intro details */}
+        <div style={{
+          background: 'var(--surface)',
+          borderLeft: '4px solid hsl(var(--accent-primary))',
+          padding: '2.25rem',
+          borderRadius: '4px',
+          maxWidth: '850px',
+          lineHeight: '1.75',
+          fontSize: '1.05rem',
+          color: 'var(--text-secondary)',
+          marginTop: '1.5rem',
+          marginBottom: '3rem'
+        }}>
           {t.hero_subtitle}
-        </p>
+        </div>
+
         <div className="hero-buttons">
           <button className="btn-primary" onClick={() => document.getElementById('selected').scrollIntoView({ behavior: 'smooth' })}>
             {t.btn_explore}
           </button>
-          <a href="https://github.com" target="_blank" rel="noreferrer" className="btn-secondary">
+          <a href="https://github.com/oasunryo" target="_blank" rel="noreferrer" className="btn-secondary">
             GitHub
           </a>
         </div>
       </section>
 
-      {/* 02 / Selected (핵심 킬러 성과 - 조준선 애니메이션 적용) */}
+      {/* 02 / Selected Cases (완전히 0부터 새로이 디자인된 1열 가로 에디토리얼 레이아웃) */}
       {featuredProjects.length > 0 && (
-        <section id="selected" className="section-indexed rule-t">
+        <section id="selected" className="rule-t" style={{ padding: '6rem 2rem' }}>
           <div className="frame">
-            <span className="section-index-num">{t.selected_sub}</span>
-            <h2 className="section-title">{t.selected_title}</h2>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', letterSpacing: '2px', display: 'block', marginBottom: '0.75rem' }}>
+              {t.selected_sub}
+            </span>
+            <h2 className="section-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', marginBottom: '4rem' }}>
+              {t.selected_title}
+            </h2>
             
-            <div className="grid">
+            {/* 1열 가로배치 와이드 에디토리얼 레이아웃 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
               {featuredProjects.map(p => (
                 <div 
                   key={p.id} 
-                  className="card" 
+                  className="card skill-card-hover" 
                   onClick={() => handleOpenModal(p)}
+                  style={{
+                    background: 'var(--surface)',
+                    border: '1px solid var(--rule)',
+                    padding: '3rem',
+                    borderRadius: '4px',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    minHeight: 'auto',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    gap: '2rem'
+                  }}
                 >
-                  {/* Codedgar-style Top Scanline indicator */}
+                  {/* Top Scanline hover indicator */}
                   <div className="section-scanline"></div>
 
-                  <div className="card-top">
-                    {/* macOS style dots */}
-                    <div className="window-dots">
+                  {/* Header Row: Window Dot Controls + Info Badge */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div className="window-dots" style={{ margin: 0 }}>
                       <span className="window-dot dot-red"></span>
                       <span className="window-dot dot-yellow"></span>
                       <span className="window-dot dot-green"></span>
                     </div>
-
-                    <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                      <span className="card-category">{p.category}</span>
-                      <span className="card-badge" style={{ color: 'hsl(var(--accent-secondary))' }}>{p.badge}</span>
-                    </div>
-                    <h3 className="card-title">{p.title}</h3>
-                    <p className="card-desc">{p.description}</p>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'hsl(var(--accent-secondary))', fontWeight: 'bold', textTransform: 'uppercase', background: 'rgba(var(--accent-secondary-rgb), 0.05)', padding: '0.25rem 0.6rem', borderRadius: '2px', border: '1px solid rgba(var(--accent-secondary-rgb), 0.15)' }}>
+                      {p.badge}
+                    </span>
                   </div>
-                  <div className="card-meta">
-                    <div className="card-tags">
-                      {p.tags.map(t => (
-                        <span key={t} className="tag">{t}</span>
+
+                  {/* Main Editorial Row: Title, Description and Role Info */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.25rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                      <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: '400', margin: 0, color: 'var(--fg)', letterSpacing: '-0.5px', maxWidth: '80%' }}>
+                        {p.title}
+                      </h3>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--muted)', fontStyle: 'italic' }}>
+                        // {p.role}
+                      </span>
+                    </div>
+                    <p style={{ fontSize: '1.02rem', color: 'var(--text-secondary)', lineHeight: '1.65', margin: 0, maxWidth: '800px' }}>
+                      {p.description}
+                    </p>
+                  </div>
+
+                  {/* Footer Row: Tags and Details Trigger */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem', borderTop: '1px solid var(--rule)', paddingTop: '1.5rem' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                      {(p.tags || []).map(t => (
+                        <span key={t} className="tag" style={{ margin: 0 }}>{t}</span>
                       ))}
                     </div>
-                    <div className="card-footer" style={{ borderTop: '1px solid var(--rule)', paddingTop: '1.25rem' }}>
-                      <span>{p.period || '진행 기간 없음'}</span>
-                      <span className="card-arrow" style={{ color: 'hsl(var(--accent-primary))', fontWeight: 'bold' }}>{t.view_details}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)' }}>
+                        {p.period}
+                      </span>
+                      <span style={{ color: 'hsl(var(--accent-primary))', fontFamily: 'var(--font-mono)', fontSize: '0.82rem', fontWeight: 'bold' }}>
+                        {t.view_details}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -700,16 +701,24 @@ export default function PortfolioClient({ initialItems = [] }) {
       )}
 
       {/* 03 / Roadmap (반도체 후공정 5대 로드맵 섹션) */}
-      <section id="roadmap" className="section-indexed rule-t">
+      <section id="roadmap" className="rule-t" style={{ padding: '6rem 2rem' }}>
         <div className="frame">
-          <span className="section-index-num">{t.roadmap_sub}</span>
-          <h2 className="section-title">{t.roadmap_title}</h2>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', letterSpacing: '2px', display: 'block', marginBottom: '0.75rem' }}>
+            {t.roadmap_sub}
+          </span>
+          <h2 className="section-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', marginBottom: '4rem' }}>
+            {t.roadmap_title}
+          </h2>
           
-          <div className="roadmap-container">
-            <div className="roadmap-title">{t.roadmap_flow_title}</div>
+          <div className="roadmap-container" style={{ background: 'var(--surface)', border: '1px solid var(--rule)', padding: '3rem', borderRadius: '4px' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'hsl(var(--accent-primary))', marginBottom: '2rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              {t.roadmap_flow_title}
+            </div>
             
-            <div className="roadmap-flow">
-              <div className="roadmap-line"></div>
+            {/* Horizontal Line flow diagram */}
+            <div className="roadmap-flow" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', marginBottom: '3.5rem', flexWrap: 'wrap', gap: '2rem' }}>
+              <div className="roadmap-line" style={{ display: 'none' }}></div> {/* Obsolete line hidden */}
+              
               {roadmapSteps.map((step) => {
                 const isActive = selectedRoadmapStep.num === step.num;
                 return (
@@ -717,11 +726,51 @@ export default function PortfolioClient({ initialItems = [] }) {
                     key={step.num} 
                     className="roadmap-step" 
                     onClick={() => setSelectedRoadmapStep(step)}
+                    style={{
+                      flex: '1 1 150px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      zIndex: 2,
+                      padding: '1.25rem',
+                      background: isActive ? 'var(--bg)' : 'transparent',
+                      border: isActive ? '1px solid var(--rule)' : '1px solid transparent',
+                      borderRadius: '4px',
+                      transition: 'all 0.3s ease'
+                    }}
                   >
-                    <div className={`roadmap-node ${isActive ? 'roadmap-node-active' : ''}`}>
+                    <div 
+                      className={`roadmap-node ${isActive ? 'roadmap-node-active' : ''}`}
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.82rem',
+                        fontWeight: 'bold',
+                        background: isActive ? 'hsl(var(--accent-primary))' : 'var(--surface-raised)',
+                        color: isActive ? 'var(--bg)' : 'var(--muted)',
+                        border: '1px solid var(--rule)',
+                        transition: 'all 0.3s ease',
+                        marginBottom: '0.75rem'
+                      }}
+                    >
                       {step.num}
                     </div>
-                    <div className={`roadmap-step-name ${isActive ? 'roadmap-step-name-active' : ''}`}>
+                    <div 
+                      className={`roadmap-step-name ${isActive ? 'roadmap-step-name-active' : ''}`}
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.78rem',
+                        fontWeight: isActive ? 'bold' : 'normal',
+                        color: isActive ? 'var(--fg)' : 'var(--muted)',
+                        textAlign: 'center'
+                      }}
+                    >
                       {step.name}
                     </div>
                   </div>
@@ -729,31 +778,37 @@ export default function PortfolioClient({ initialItems = [] }) {
               })}
             </div>
 
-            <div className="roadmap-details-box">
-              <div className="roadmap-details-header">
-                <div className="roadmap-details-step-title">
+            {/* Selected node details editorial box */}
+            <div className="roadmap-details-box" style={{ background: 'var(--bg)', border: '1px solid var(--rule)', padding: '2.5rem', borderRadius: '4px', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <div className="roadmap-details-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid var(--rule)', paddingBottom: '1rem' }}>
+                <div className="roadmap-details-step-title" style={{ fontFamily: 'var(--font-display)', fontSize: '1.45rem', fontWeight: '400', color: 'var(--fg)' }}>
                   {selectedRoadmapStep.num}. {selectedRoadmapStep.name}
                 </div>
-                <div className="roadmap-details-defects-badge">
+                <div className="roadmap-details-defects-badge" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'hsl(var(--accent-secondary))', background: 'rgba(var(--accent-secondary-rgb), 0.04)', border: '1px solid rgba(var(--accent-secondary-rgb), 0.15)', padding: '0.3rem 0.75rem', borderRadius: '2px' }}>
                   Key Defects: {selectedRoadmapStep.defects}
                 </div>
               </div>
-              <div className="roadmap-details-description">
+              <div className="roadmap-details-description" style={{ fontSize: '0.98rem', color: 'var(--text-secondary)', lineHeight: '1.65' }}>
                 {selectedRoadmapStep.desc[lang]}
               </div>
-              <div className="roadmap-details-philosophy">
-                <strong>{t.roadmap_philosophy_label}</strong> {selectedRoadmapStep.philosophy[lang]}
+              <div className="roadmap-details-philosophy" style={{ fontSize: '0.92rem', color: 'var(--fg)', fontFamily: 'var(--font-sans)', borderTop: '1px solid var(--rule)', paddingTop: '1rem', fontStyle: 'italic' }}>
+                <strong style={{ fontFamily: 'var(--font-mono)', color: 'hsl(var(--accent-primary))', notStyle: 'normal', marginRight: '0.5rem' }}>{t.roadmap_philosophy_label}</strong>
+                {selectedRoadmapStep.philosophy[lang]}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 04 / Archived (고효율 탭 분류 아카이브 대시보드) */}
-      <section id="archived" className="section-indexed rule-t">
+      {/* 04 / Archived (고효율 탭 분류 아카이브 대시보드 - 에디토리얼 단색 스타일) */}
+      <section id="archived" className="rule-t" style={{ padding: '6rem 2rem' }}>
         <div className="frame">
-          <span className="section-index-num">{t.archive_sub}</span>
-          <h2 className="section-title">{t.archive_title}</h2>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', letterSpacing: '2px', display: 'block', marginBottom: '0.75rem' }}>
+            {t.archive_sub}
+          </span>
+          <h2 className="section-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', marginBottom: '4rem' }}>
+            {t.archive_title}
+          </h2>
           
           {/* Search Box */}
           <div style={{ maxWidth: '600px', marginBottom: '3.5rem', position: 'relative' }}>
@@ -771,75 +826,79 @@ export default function PortfolioClient({ initialItems = [] }) {
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.85rem',
                 outline: 'none',
+                borderRadius: '4px',
                 transition: 'all 0.3s ease',
               }}
             />
           </div>
 
-          {/* 4대 대분류 정보 탭 필터 */}
-          <div className="filter-container" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
-            <button 
-              className={`filter-btn ${activeTab === 'Projects' ? 'active' : ''}`}
-              onClick={() => { setActiveTab('Projects'); setSearchQuery(''); }}
-            >
-              {t.tab_projects} ({projects.length})
-            </button>
-            <button 
-              className={`filter-btn ${activeTab === 'CareerEdu' ? 'active' : ''}`}
-              onClick={() => { setActiveTab('CareerEdu'); setSearchQuery(''); }}
-            >
-              {t.tab_career} ({careerAndEdu.length})
-            </button>
-            <button 
-              className={`filter-btn ${activeTab === 'Courses' ? 'active' : ''}`}
-              onClick={() => { setActiveTab('Courses'); setSearchQuery(''); }}
-            >
-              {t.tab_courses} ({courses.length})
-            </button>
-            <button 
-              className={`filter-btn ${activeTab === 'Credentials' ? 'active' : ''}`}
-              onClick={() => { setActiveTab('Credentials'); setSearchQuery(''); }}
-            >
-              {t.tab_credentials} ({credentials.length})
-            </button>
+          {/* 4대 대분류 정보 탭 필터 (소문자 미니멀 스타일) */}
+          <div className="filter-container" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
+            {[
+              { id: 'Projects', label: t.tab_projects, count: projects.length },
+              { id: 'CareerEdu', label: t.tab_career, count: careerAndEdu.length },
+              { id: 'Courses', label: t.tab_courses, count: courses.length },
+              { id: 'Credentials', label: t.tab_credentials, count: credentials.length }
+            ].map(tab => (
+              <button 
+                key={tab.id}
+                className={`filter-btn ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={() => { setActiveTab(tab.id); setSearchQuery(''); }}
+                style={{
+                  padding: '0.6rem 1.2rem',
+                  borderRadius: '4px',
+                  border: '1px solid var(--rule)',
+                  background: activeTab === tab.id ? 'var(--fg)' : 'var(--surface)',
+                  color: activeTab === tab.id ? 'var(--bg)' : 'var(--text-secondary)',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.78rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  textTransform: 'lowercase'
+                }}
+              >
+                {tab.label} ({tab.count})
+              </button>
+            ))}
           </div>
 
-          {/* 격자형 슬림 테이블 렌더링 (Ozgur Archived Table 연출) */}
-          <div className="table-container" style={{ overflowX: 'auto' }}>
-            <table className="archive-table">
+          {/* 격자형 슬림 테이블 렌더링 (가로 폭 널찍하고 기품 넘치는 에디토리얼 단색 스타일) */}
+          <div className="table-container" style={{ overflowX: 'auto', background: 'var(--surface)', border: '1px solid var(--rule)', borderRadius: '4px', padding: '1rem 2rem' }}>
+            <table className="archive-table" style={{ width: '100%', borderCollapse: 'collapse', border: 'none' }}>
               <thead>
-                <tr style={{ borderBottom: '2px solid var(--rule-strong)' }}>
-                  <th className="archive-cell label" style={{ width: '20%' }}>{t.th_tag}</th>
-                  <th className="archive-cell label" style={{ width: '45%' }}>{t.th_title}</th>
-                  <th className="archive-cell label" style={{ width: '20%' }}>{t.th_org}</th>
-                  <th className="archive-cell label" style={{ width: '15%', textAlign: 'right' }}>{t.th_period}</th>
+                <tr style={{ borderBottom: '1px solid var(--rule-strong)' }}>
+                  <th style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', padding: '1rem 0.5rem', textAlign: 'left', textTransform: 'lowercase', width: '20%' }}>{t.th_tag}</th>
+                  <th style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', padding: '1rem 0.5rem', textAlign: 'left', textTransform: 'lowercase', width: '45%' }}>{t.th_title}</th>
+                  <th style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', padding: '1rem 0.5rem', textAlign: 'left', textTransform: 'lowercase', width: '20%' }}>{t.th_org}</th>
+                  <th style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', padding: '1rem 0.5rem', textAlign: 'right', textTransform: 'lowercase', width: '15%' }}>{t.th_period}</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredItems.map(item => (
                   <tr 
                     key={item.id} 
-                    className="archive-row"
                     onClick={() => handleOpenModal(item)}
+                    style={{ borderBottom: '1px solid var(--rule)', cursor: 'pointer', transition: 'background 0.2s ease' }}
+                    className="archive-row-hover"
                   >
-                    <td className="archive-cell archive-cell-badge">
+                    <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'hsl(var(--accent-secondary))', padding: '1.25rem 0.5rem' }}>
                       {item.badge || item.category}
                     </td>
-                    <td className="archive-cell archive-cell-title">
+                    <td style={{ fontWeight: '500', color: 'var(--fg)', padding: '1.25rem 0.5rem', fontSize: '0.96rem' }}>
                       {item.title}
                     </td>
-                    <td className="archive-cell" style={{ fontStyle: 'italic' }}>
+                    <td style={{ fontStyle: 'italic', color: 'var(--text-secondary)', padding: '1.25rem 0.5rem', fontSize: '0.88rem' }}>
                       {item.role}
                     </td>
-                    <td className="archive-cell" style={{ textAlign: 'right', color: 'var(--muted)', fontSize: '0.85rem' }}>
-                      {item.period.split(' ~ ')[0] || '진행 완료'}
+                    <td style={{ textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '0.82rem', padding: '1.25rem 0.5rem' }}>
+                      {(item.period || '').split(' ~ ')[0] || 'done'}
                     </td>
                   </tr>
                 ))}
 
                 {filteredItems.length === 0 && (
                   <tr>
-                    <td colSpan="4" style={{ textAlign: 'center', padding: '5rem 0', color: 'var(--muted)' }}>
+                    <td colSpan="4" style={{ textAlign: 'center', padding: '5rem 0', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '0.82rem' }}>
                       {t.no_results}
                     </td>
                   </tr>
@@ -848,13 +907,24 @@ export default function PortfolioClient({ initialItems = [] }) {
             </table>
           </div>
         </div>
+        
+        {/* Local Table Hover style */}
+        <style jsx global>{`
+          .archive-row-hover:hover {
+            background: rgba(25, 24, 24, 0.02) !important;
+          }
+        `}</style>
       </section>
 
       {/* 05 / Trajectory (학술 및 경력 타임라인 연대표) */}
-      <section id="trajectory" className="section-indexed rule-t">
+      <section id="trajectory" className="rule-t" style={{ padding: '6rem 2rem' }}>
         <div className="frame">
-          <span className="section-index-num">{t.trajectory_sub}</span>
-          <h2 className="section-title">{t.trajectory_title}</h2>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', letterSpacing: '2px', display: 'block', marginBottom: '0.75rem' }}>
+            {t.trajectory_sub}
+          </span>
+          <h2 className="section-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', marginBottom: '4rem' }}>
+            {t.trajectory_title}
+          </h2>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem', marginTop: '3rem', position: 'relative' }}>
             <div style={{ position: 'absolute', left: '15px', top: '5px', bottom: '5px', width: '1px', background: 'var(--rule)' }}></div>
@@ -923,19 +993,24 @@ export default function PortfolioClient({ initialItems = [] }) {
         </div>
       </section>
 
-      {/* 06 / Approach (엔지니어 핵심 강점 & 신뢰성 철학) */}
-      <section id="approach" className="section-indexed rule-t">
+      {/* 06 / Core Strengths (엔지니어 핵심 강점 & 신뢰성 철학) */}
+      <section id="approach" className="rule-t" style={{ padding: '6rem 2rem' }}>
         <div className="frame">
-          <span className="section-index-num">{t.approach_sub}</span>
-          <h2 className="section-title">{t.approach_title}</h2>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', letterSpacing: '2px', display: 'block', marginBottom: '0.75rem' }}>
+            {t.approach_sub}
+          </span>
+          <h2 className="section-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', marginBottom: '4rem' }}>
+            {t.approach_title}
+          </h2>
           
           <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2.5rem', marginBottom: '4rem' }}>
             <p style={{
+              fontFamily: 'var(--font-display)',
               fontSize: '1.35rem',
-              fontWeight: 500,
+              fontWeight: 400,
               color: 'var(--fg)',
               lineHeight: '1.6',
-              borderLeft: '3px solid hsl(var(--accent-primary))',
+              borderLeft: '4px solid hsl(var(--accent-primary))',
               paddingLeft: '1.5rem',
               fontStyle: 'italic',
               maxWidth: '850px'
@@ -944,7 +1019,8 @@ export default function PortfolioClient({ initialItems = [] }) {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginTop: '2rem' }}>
+          {/* 1열 가로 배치로 기품을 높인 강점 카드들 */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '2rem' }}>
             {[
               {
                 num: "01",
@@ -989,34 +1065,42 @@ export default function PortfolioClient({ initialItems = [] }) {
             ].map((strength) => (
               <div 
                 key={strength.num}
+                className="skill-card-hover"
                 style={{ 
                   background: 'var(--surface)', 
                   border: '1px solid var(--rule)', 
-                  padding: '2.25rem', 
+                  padding: '2.5rem 3rem', 
                   borderRadius: '4px',
-                  position: 'relative'
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                  gap: '2rem'
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'hsl(var(--accent-primary))', fontWeight: 'bold' }}>
-                    {strength.num}
-                  </span>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {getCircularProgress(strength.level)}
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)' }}>
-                      P.{strength.level}
+                <div style={{ flex: '1 1 500px', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.25rem' }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: 'hsl(var(--accent-primary))', fontWeight: 'bold' }}>
+                      {strength.num}
                     </span>
+                    <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.2rem', fontWeight: '600', color: 'var(--fg)', margin: 0 }}>
+                      {strength.name}
+                    </h3>
                   </div>
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'hsl(var(--accent-secondary))', margin: 0, textTransform: 'uppercase' }}>
+                    {strength.desc}
+                  </p>
+                  <p style={{ fontSize: '0.94rem', color: 'var(--text-secondary)', lineHeight: '1.6', margin: '0.75rem 0 0 0' }}>
+                    {strength.action[lang]}
+                  </p>
                 </div>
-                <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.1rem', fontWeight: '600', color: 'var(--fg)', marginBottom: '0.5rem' }}>
-                  {strength.name}
-                </h3>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'hsl(var(--accent-secondary))', marginBottom: '1rem' }}>
-                  {strength.desc}
-                </p>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
-                  {strength.action[lang]}
-                </p>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--bg)', border: '1px solid var(--rule)', padding: '0.75rem 1.25rem', borderRadius: '4px' }}>
+                  {getCircularProgress(strength.level)}
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--fg)', fontWeight: 'bold' }}>
+                    Proficiency Level: P.{strength.level}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
@@ -1024,24 +1108,28 @@ export default function PortfolioClient({ initialItems = [] }) {
       </section>
 
       {/* 07 / Tools & Stack (전문 툴박스 & 인터랙티브 스킬 인벤토리) */}
-      <section id="tools" className="section-indexed rule-t">
+      <section id="tools" className="rule-t" style={{ padding: '6rem 2rem' }}>
         <div className="frame">
-          <span className="section-index-num">{t.tools_sub}</span>
-          <h2 className="section-title">{t.tools_title}</h2>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', letterSpacing: '2px', display: 'block', marginBottom: '0.75rem' }}>
+            {t.tools_sub}
+          </span>
+          <h2 className="section-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', marginBottom: '4rem' }}>
+            {t.tools_title}
+          </h2>
           
-          {/* Quick View: Core Technical Toolchain (Image 1 replica) */}
+          {/* Quick View: Core Technical Toolchain (1열 레이아웃 가로 긴 리스트 카드들) */}
           <div style={{ marginBottom: '5rem' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--muted)', marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
               {t.quick_view_label}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               {[
                 { cat: 'Data & Analytics', tools: ['TIBCO Spotfire', 'Python', 'Pandas & NumPy', 'Matplotlib (Visualization)', 'SQL Database'] },
                 { cat: 'Standards & Reliability', tools: ['JEDEC Standards (JESD22)', 'HAST / ESD / Temp Cycle Specs', 'FMEA Quality Framework', 'Statistical Process Control (SPC)'] },
                 { cat: 'Circuits & Core Studies', tools: ['Digital Logic Design', 'Analog Circuit Simulation (SPICE)', 'Electrical Material Physics', 'Relevant Lab Equipment Control'] }
               ].map((box, idx) => (
-                <div key={idx} style={{ background: 'var(--surface)', border: '1px solid var(--rule)', padding: '2rem', borderRadius: '4px' }}>
-                  <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.05rem', fontWeight: '600', color: 'var(--fg)', marginBottom: '1.25rem', borderBottom: '1px solid var(--rule)', paddingBottom: '0.75rem' }}>
+                <div key={idx} className="skill-card-hover" style={{ background: 'var(--surface)', border: '1px solid var(--rule)', padding: '2rem 3rem', borderRadius: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+                  <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.1rem', fontWeight: '600', color: 'var(--fg)', margin: 0, minWidth: '220px' }}>
                     {box.cat}
                   </h3>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
@@ -1062,21 +1150,21 @@ export default function PortfolioClient({ initialItems = [] }) {
             </div>
           </div>
 
-          {/* Interactive Skills Matrix (Image 2 replica) */}
+          {/* Interactive Skills Matrix (Magazin-style 리스트형 카드 구조) */}
           <div style={{ borderTop: '1px solid var(--rule)', paddingTop: '4rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '2rem', marginBottom: '3rem' }}>
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'hsl(var(--accent-primary))', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                   {t.deep_dive_label}
                 </div>
-                <h3 style={{ fontSize: '1.75rem', fontWeight: '600', color: 'var(--fg)', letterSpacing: '-0.5px' }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: '400', color: 'var(--fg)', letterSpacing: '-0.5px' }}>
                   {t.notion_skills_db_title}
                 </h3>
               </div>
 
               {/* Filters and Sorters */}
-              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                {/* Category Toggles */}
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                {/* Category Toggles (소문자 미니멀 버튼) */}
                 <div style={{ display: 'flex', background: 'var(--surface)', border: '1px solid var(--rule)', borderRadius: '4px', padding: '2px' }}>
                   {['All', 'Technical', 'Interpersonal'].map(cat => (
                     <button
@@ -1092,10 +1180,11 @@ export default function PortfolioClient({ initialItems = [] }) {
                         fontWeight: skillCategoryFilter === cat ? '600' : '400',
                         cursor: 'pointer',
                         borderRadius: '2px',
-                        transition: 'all 0.2s ease'
+                        transition: 'all 0.2s ease',
+                        textTransform: 'lowercase'
                       }}
                     >
-                      {cat === 'All' ? t.tab_projects.split(' ')[0] + ' ' + (lang === 'ko' ? '전체 스킬' : 'All Skills') : cat === 'Technical' ? (lang === 'ko' ? '🔬 기술' : '🔬 Technical') : (lang === 'ko' ? '🤝 대인' : '🤝 Interpersonal')}
+                      {cat === 'All' ? (lang === 'ko' ? '전체' : 'all') : cat === 'Technical' ? (lang === 'ko' ? '기술' : 'technical') : (lang === 'ko' ? '대인' : 'interpersonal')}
                     </button>
                   ))}
                 </div>
@@ -1129,100 +1218,102 @@ export default function PortfolioClient({ initialItems = [] }) {
               </div>
             </div>
 
-            {/* Grid of 28 Skills */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
+            {/* Grid of 28 Skills - 가로배치 와이드 리스트 카드로 리뉴얼 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {filteredSkills.map(skill => (
                 <div 
                   key={skill.name}
                   style={{
                     background: 'var(--surface)',
                     border: '1px solid var(--rule)',
-                    padding: '1.5rem',
+                    padding: '1.5rem 2.5rem',
                     borderRadius: '4px',
                     display: 'flex',
-                    flexDirection: 'column',
                     justifyContent: 'space-between',
-                    minHeight: '180px',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '1.5rem',
                     transition: 'all 0.3s ease',
                     position: 'relative'
                   }}
                   className="skill-card-hover"
                 >
-                  <div>
-                    {/* Top Row: Name + Category badge + P. Level */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                      <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem', fontWeight: 'bold', color: 'var(--fg)', letterSpacing: '-0.3px', maxWidth: '70%' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flex: '1 1 350px' }}>
+                    <div style={{ minWidth: '150px' }}>
+                      <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 'bold', color: 'var(--fg)', letterSpacing: '-0.3px', margin: 0 }}>
                         {skill.name}
                       </h4>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        {getCircularProgress(skill.level)}
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>
-                          P.{skill.level}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Category Label */}
-                    <div style={{ marginBottom: '1rem' }}>
                       <span style={{
                         fontFamily: 'var(--font-mono)',
-                        fontSize: '0.62rem',
+                        fontSize: '0.6rem',
                         color: skill.category === 'Technical' ? 'hsl(var(--accent-primary))' : 'hsl(var(--accent-secondary))',
                         background: skill.category === 'Technical' ? 'rgba(var(--accent-primary-rgb), 0.04)' : 'rgba(var(--accent-secondary-rgb), 0.04)',
                         border: skill.category === 'Technical' ? '1px solid rgba(var(--accent-primary-rgb), 0.15)' : '1px solid rgba(var(--accent-secondary-rgb), 0.15)',
-                        padding: '0.15rem 0.4rem',
+                        padding: '0.1rem 0.35rem',
                         borderRadius: '2px',
-                        textTransform: 'uppercase'
+                        textTransform: 'uppercase',
+                        marginTop: '0.4rem',
+                        display: 'inline-block'
                       }}>
                         {skill.category}
                       </span>
                     </div>
-
-                    {/* Skill Description */}
-                    <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: '1.5', marginBottom: '1.5rem' }}>
-                      {skill.desc[lang]}
+                    
+                    <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
+                      {skill.desc?.[lang] || ''}
                     </p>
                   </div>
 
-                  {/* Certifications or Related Projects */}
-                  {(skill.cert || skill.project) && (
-                    <div style={{ borderTop: '1px solid var(--rule)', paddingTop: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                      {skill.cert && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
-                          <span style={{ color: 'hsl(var(--accent-secondary))' }}>🎫</span>
-                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{skill.cert}</span>
-                        </div>
-                      )}
-                      {skill.project && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
-                          <span style={{ color: 'hsl(var(--accent-primary))' }}>🔗</span>
-                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {typeof skill.project === 'object' ? skill.project[lang] : skill.project}
-                          </span>
-                        </div>
-                      )}
+                  {/* Right segment: Proficiency Progress + related details */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap' }}>
+                    {/* Related context */}
+                    {(skill.cert || skill.project) && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', alignItems: 'flex-start', minWidth: '180px' }}>
+                        {skill.cert && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+                            <span style={{ color: 'hsl(var(--accent-secondary))' }}>🎫</span>
+                            <span>{skill.cert}</span>
+                          </div>
+                        )}
+                        {skill.project && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+                            <span style={{ color: 'hsl(var(--accent-primary))' }}>🔗</span>
+                            <span>
+                              {typeof skill.project === 'object' ? skill.project[lang] : skill.project}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Proficiency Ring */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--bg)', border: '1px solid var(--rule)', padding: '0.5rem 0.75rem', borderRadius: '4px' }}>
+                      {getCircularProgress(skill.level)}
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--fg)', fontWeight: 'bold' }}>
+                        P.{skill.level}
+                      </span>
                     </div>
-                  )}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
-
-        {/* Local styling for hover scale/glow effect on skill cards moved to globals.css */}
       </section>
 
       {/* About & Contact Section */}
-      <footer id="contact" className="rule-t" style={{ paddingBottom: '6rem' }}>
+      <footer id="contact" className="rule-t" style={{ padding: '8rem 2rem 10rem 2rem', background: 'var(--surface)', marginTop: '6rem' }}>
         <div className="footer-container">
-          <h2 className="footer-title">{t.footer_title}</h2>
-          <p className="footer-desc">
+          <h2 className="footer-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '400', color: 'var(--fg)' }}>
+            {t.footer_title}
+          </h2>
+          <p className="footer-desc" style={{ color: 'var(--text-secondary)', lineHeight: '1.6', fontSize: '1.05rem', marginBottom: '3rem' }}>
             {t.footer_desc}
           </p>
-          <a href="mailto:junseo.oh.kr@gmail.com" className="contact-email">
+          <a href="mailto:junseo.oh.kr@gmail.com" className="contact-email" style={{ fontFamily: 'var(--font-mono)', color: 'hsl(var(--accent-primary))', fontSize: 'clamp(1.2rem, 3.5vw, 1.8rem)', textDecoration: 'none' }}>
             junseo.oh.kr@gmail.com
           </a>
-          <p className="footer-copy">
+          <p className="footer-copy" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', marginTop: '4rem' }}>
             {t.copyright}
           </p>
         </div>
@@ -1236,7 +1327,9 @@ export default function PortfolioClient({ initialItems = [] }) {
               &times;
             </button>
             <span className="modal-category">{selectedProject.category}</span>
-            <h2 className="modal-title">{selectedProject.title}</h2>
+            <h2 className="modal-title" style={{ fontFamily: 'var(--font-display)', fontWeight: '400', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}>
+              {selectedProject.title}
+            </h2>
             
             <div className="modal-meta-grid">
               <div className="modal-meta-item">
@@ -1258,8 +1351,7 @@ export default function PortfolioClient({ initialItems = [] }) {
                     height: '30px',
                     border: '3px solid var(--rule)',
                     borderTopColor: 'hsl(var(--accent-primary))',
-                    borderRadius: '50%',
-                    animation: 'spin 1s infinite linear'
+                    borderRadius: '50%'
                   }}></div>
                   <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: 'var(--muted)' }}>{t.modal_loading}</p>
                 </div>
@@ -1285,8 +1377,6 @@ export default function PortfolioClient({ initialItems = [] }) {
           </div>
         </div>
       )}
-
-      {/* Spinner keyframes moved to globals.css */}
 
       {/* Codedgar-style Fixed Bottom Status Bar */}
       <div className="status-bar hidden sm:block">
