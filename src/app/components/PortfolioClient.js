@@ -159,6 +159,18 @@ export default function PortfolioClient({ initialItems }) {
   const [skillCategoryFilter, setSkillCategoryFilter] = useState('All'); // All, Technical, Interpersonal
   const [skillSortOrder, setSkillSortOrder] = useState('Proficiency'); // Proficiency, Alphabetical
 
+  // VIM 스타일 하단 상태 바를 위한 실시간 로컬 시간 Hook
+  const [timeStr, setTimeStr] = useState('12:00 PM');
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setTimeStr(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
 
   // ==========================================
   // [데이터 레이어 분류 및 스마트 분류 알고리즘]
@@ -300,27 +312,28 @@ export default function PortfolioClient({ initialItems }) {
       {/* Navigation Header */}
       <header className="rule-b">
         <div className="nav-container">
-          <div className="logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            SEMI_<span>BACKEND</span>.
+          <div className="logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-mono)' }}>
+            junseo.oh // <span style={{ color: 'hsl(var(--accent-primary))', fontWeight: 'bold' }}>semi_backend</span>
           </div>
           <nav className="nav-links">
-            <a className="nav-link" onClick={() => document.getElementById('selected').scrollIntoView({ behavior: 'smooth' })}>Selected</a>
-            <a className="nav-link" onClick={() => document.getElementById('roadmap').scrollIntoView({ behavior: 'smooth' })}>Roadmap</a>
-            <a className="nav-link" onClick={() => document.getElementById('archived').scrollIntoView({ behavior: 'smooth' })}>Archive</a>
+            <a className="nav-link" onClick={() => document.getElementById('selected').scrollIntoView({ behavior: 'smooth' })}>selected</a>
+            <a className="nav-link" onClick={() => document.getElementById('roadmap').scrollIntoView({ behavior: 'smooth' })}>roadmap</a>
+            <a className="nav-link" onClick={() => document.getElementById('archived').scrollIntoView({ behavior: 'smooth' })}>archive</a>
+            <a className="nav-link" onClick={() => document.getElementById('tools').scrollIntoView({ behavior: 'smooth' })}>skills</a>
           </nav>
         </div>
       </header>
 
       {/* 01 / Intro Section (히어로) */}
       <section id="intro" className="hero">
-        <div className="hero-badge">Notion API Connected | Backend OSAT Portfolio</div>
+        <div className="hero-badge">Notion API Live Linked | Semiconductor Backend Portfolio</div>
         <h1 className="hero-title">
           미래 반도체의 완성을 책임지는<br />
           <span>반도체 후공정 (패키징 &amp; 테스트)</span><br />
-          엔지니어 oasunryo 입니다.
+          엔지니어 Junseo Oh 입니다.
         </h1>
         <p className="hero-subtitle">
-          본 웹사이트는 노션(Notion) 데이터베이스와 연동된 프리미엄 다크 테마 대시보드입니다. 1티어 OSAT 앰코테크놀로지 직무 지식, SK하이닉스 SK Hy-Po 8기 교육 과정, 그리고 Spotfire를 활용한 공정/결함 통계 분석 리포트를 정밀 탐색하실 수 있습니다.
+          본 웹사이트는 노션(Notion) 데이터베이스와 실시간으로 바인딩된 프리미엄 크림 에디토리얼 대시보드입니다. 1티어 OSAT 앰코테크놀로지 연계 실무 지식, SK하이닉스 청년 반도체 인재 양성(SK Hy-Po) 8기 과정 수료 이력 및 Spotfire 기반 수율/공정 결함 통계 R&D 분석 결과물들을 정밀 탐색해 보실 수 있습니다.
         </p>
         <div className="hero-buttons">
           <button className="btn-primary" onClick={() => document.getElementById('selected').scrollIntoView({ behavior: 'smooth' })}>
@@ -343,21 +356,23 @@ export default function PortfolioClient({ initialItems }) {
               {featuredProjects.map(p => (
                 <div 
                   key={p.id} 
-                  className="card reticule-link" 
+                  className="card" 
                   onClick={() => handleOpenModal(p)}
                 >
-                  {/* 정밀 모서리 조준선 드로잉 마크업 */}
-                  <svg className="reticule-box" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <rect x="0.5" y="0.5" width="99" height="99" pathLength="1" vector-effect="non-scaling-stroke"></rect>
-                  </svg>
-                  <span className="reticule-corners" aria-hidden="true">
-                    <span></span><span></span><span></span><span></span>
-                  </span>
+                  {/* Codedgar-style Top Scanline indicator */}
+                  <div className="section-scanline"></div>
 
                   <div className="card-top">
+                    {/* macOS style dots */}
+                    <div className="window-dots">
+                      <span className="window-dot dot-red"></span>
+                      <span className="window-dot dot-yellow"></span>
+                      <span className="window-dot dot-green"></span>
+                    </div>
+
                     <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                       <span className="card-category">{p.category}</span>
-                      <span className="card-badge">{p.badge}</span>
+                      <span className="card-badge" style={{ color: 'hsl(var(--accent-secondary))' }}>{p.badge}</span>
                     </div>
                     <h3 className="card-title">{p.title}</h3>
                     <p className="card-desc">{p.description}</p>
@@ -368,9 +383,9 @@ export default function PortfolioClient({ initialItems }) {
                         <span key={t} className="tag">{t}</span>
                       ))}
                     </div>
-                    <div className="card-footer">
+                    <div className="card-footer" style={{ borderTop: '1px solid var(--rule)', paddingTop: '1.25rem' }}>
                       <span>{p.period || '진행 기간 없음'}</span>
-                      <span className="card-arrow">&rarr; 자세히 보기</span>
+                      <span className="card-arrow" style={{ color: 'hsl(var(--accent-primary))', fontWeight: 'bold' }}>&rarr; 자세히 보기</span>
                     </div>
                   </div>
                 </div>
@@ -855,17 +870,17 @@ export default function PortfolioClient({ initialItems }) {
       </section>
 
       {/* About & Contact Section */}
-      <footer id="contact" className="rule-t">
+      <footer id="contact" className="rule-t" style={{ paddingBottom: '6rem' }}>
         <div className="footer-container">
           <h2 className="footer-title">Let's Create High-Yield Innovations.</h2>
           <p className="footer-desc">
             가상 시뮬레이션 데이터 및 전공 공학 지식을 결합해 반도체 후공정 수율 극대화를 이끌 준비가 되었습니다. 협업 요청이나 질문이 있으시면 언제든지 편하게 이메일로 연락주세요!
           </p>
-          <a href="mailto:youremail@example.com" className="contact-email">
-            youremail@example.com
+          <a href="mailto:junseo.oh.kr@gmail.com" className="contact-email">
+            junseo.oh.kr@gmail.com
           </a>
           <p className="footer-copy">
-            &copy; 2026. Semiconductor Backend Portfolio. All rights reserved. (Inspired by ozgur.design)
+            &copy; 2026. Junseo Oh. All rights reserved. (Inspired by codedgar.com)
           </p>
         </div>
       </footer>
@@ -930,6 +945,28 @@ export default function PortfolioClient({ initialItems }) {
           to { transform: rotate(360deg); }
         }
       `}</style>
+
+      {/* Codedgar-style Fixed Bottom Status Bar */}
+      <div className="status-bar hidden sm:block">
+        <div className="status-bar-inner">
+          <div className="status-bar-segment status-bar-mode">
+            <span className="status-bar-mode-label">mode:</span>
+            <span className="status-bar-mode-value">live_notion</span>
+          </div>
+          <div className="status-bar-segment status-bar-path">
+            <span className="status-bar-path-prefix">~/portfolio/</span>
+            <span>junseo.oh</span>
+          </div>
+          <div style={{ width: '1px', height: '14px', background: 'var(--rule)', margin: '0 0.5rem' }}></div>
+          <div className="status-bar-segment status-bar-studying">
+            <span className="status-bar-studying-icon">⚡</span>
+            <span>studying: OSAT packaging &amp; electrical testing (sk hy-po 8th)</span>
+          </div>
+          <div className="status-bar-time">
+            <span>{timeStr}</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,34 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root {
-  /* HSL Color System - Ozgur Design Base (Retro-Future Deep Dark) */
-  --bg: #0a0a0a;
-  --fg: #ffffff;
-  --text: #a0a0a0;
-  --text-secondary: #b0b0b0;
-  --muted: #6a6a6a;
-  --surface: #111111;
-  --surface-raised: #151515;
-  --surface-highest: #222222;
-
-  /* Neon Accent Colors (Semiconductor Precise Cyber Theme) */
-  --accent-primary: 188 100% 50%;    /* Cyber Neon Cyan */
-  --accent-secondary: 108 100% 54%;  /* Bio Lime Green */
-  --accent-primary-rgb: 0, 240, 255;
-  --accent-secondary-rgb: 57, 255, 20;
-
-  --color-oz-pink: #ff96ff;
+  /* HSL & Hex Color System - Codedgar Light Cream Terminal Theme */
+  --bg: #F4F4F4;                  /* 따뜻한 연한 크림 화이트 */
+  --fg: #191818;                  /* 고급스러운 소프트 차콜 블랙 */
+  --text: #191818;
+  --text-secondary: rgba(25, 24, 24, 0.7);  /* 가독성 서브 텍스트 */
+  --muted: rgba(25, 24, 24, 0.45);          /* 비활성화/주석용 그레이 */
   
-  /* 얇고 감각적인 실선 격자 (Thin Borders) */
-  --rule: rgba(255, 255, 255, 0.08);
-  --rule-strong: rgba(255, 255, 255, 0.18);
+  --surface: #f0ece4;             /* 샌드 베이지 카드 배경 */
+  --surface-raised: #e8e4db;      /* 조금 더 짙은 머드/샌드 */
+  --surface-highest: #dedad0;
 
-  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Codedgar Accent Colors */
+  --accent-primary: 224 88% 52%;    /* Vibrant Digital Blue (#1b5def) */
+  --accent-secondary: 13 77% 52%;   /* Warm Brick Orange (#e25327) */
+  --accent-primary-rgb: 27, 93, 239;
+  --accent-secondary-rgb: 226, 83, 39;
+  
+  /* 얇고 정교한 실선 격자 (Thin Borders) */
+  --rule: rgba(25, 24, 24, 0.08);
+  --rule-strong: rgba(25, 24, 24, 0.16);
+
+  --font-display: 'Fraunces', serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Monaco, Consolas, monospace;
 
   --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-fast: all 0.2s ease;
+  --transition-fast: all 0.18s ease;
 }
 
 * {
@@ -234,7 +233,7 @@ header {
   width: 100%;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  background: rgba(10, 10, 10, 0.75);
+  background: rgba(244, 244, 244, 0.85);
   border-bottom: 1px solid var(--rule);
   transition: var(--transition-smooth);
 }
@@ -251,7 +250,7 @@ header {
 .logo {
   font-family: var(--font-mono);
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   letter-spacing: -0.5px;
   color: var(--fg);
   cursor: pointer;
@@ -272,9 +271,28 @@ header {
   font-family: var(--font-mono);
   font-size: 0.8rem;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
+  text-transform: lowercase;
   transition: var(--transition-fast);
   cursor: pointer;
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.5px;
+  background: hsl(var(--accent-primary));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
 }
 
 .nav-link:hover {
@@ -299,19 +317,19 @@ header {
   text-transform: uppercase;
   letter-spacing: 2px;
   color: hsl(var(--accent-secondary));
-  background: rgba(57, 255, 20, 0.04);
-  border: 1px solid rgba(57, 255, 20, 0.15);
+  background: rgba(var(--accent-secondary-rgb), 0.04);
+  border: 1px solid rgba(var(--accent-secondary-rgb), 0.15);
   padding: 0.4rem 1.2rem;
   border-radius: 4px;
   margin-bottom: 2rem;
 }
 
 .hero-title {
-  font-family: var(--font-sans);
-  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -2.5px;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5.5vw, 4rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -1px;
   margin-bottom: 2rem;
   color: var(--fg);
 }
@@ -319,14 +337,14 @@ header {
 .hero-title span {
   color: hsl(var(--accent-primary));
   font-style: italic;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .hero-subtitle {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: var(--text-secondary);
   max-width: 700px;
-  line-height: 1.6;
+  line-height: 1.7;
   margin-bottom: 3.5rem;
 }
 
@@ -353,7 +371,7 @@ header {
 .btn-primary:hover {
   background: transparent;
   color: var(--fg);
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-secondary {
@@ -393,12 +411,12 @@ header {
 }
 
 .section-title {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3.25rem);
-  font-weight: 600;
-  letter-spacing: -1.5px;
+  font-weight: 400;
+  letter-spacing: -1px;
   color: var(--fg);
-  line-height: 0.95;
+  line-height: 1.1;
   margin-bottom: 3.5rem;
 }
 
@@ -563,7 +581,7 @@ header {
 }
 
 .card {
-  background: var(--bg);
+  background: var(--surface);
   padding: 3rem 2.5rem;
   position: relative;
   display: flex;
@@ -571,6 +589,12 @@ header {
   justify-content: space-between;
   min-height: 380px;
   transition: var(--transition-smooth);
+}
+
+.card:hover {
+  background: var(--bg);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .card-category {
@@ -590,19 +614,19 @@ header {
 }
 
 .card-title {
-  font-family: var(--font-sans);
-  font-size: 1.6rem;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 400;
   line-height: 1.25;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  letter-spacing: -0.8px;
+  letter-spacing: -0.5px;
   color: var(--fg);
 }
 
 .card-desc {
   font-size: 0.95rem;
-  color: var(--text);
+  color: var(--text-secondary);
   line-height: 1.65;
 }
 
@@ -618,7 +642,7 @@ header {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   color: var(--text-secondary);
-  background: var(--surface-raised);
+  background: var(--bg);
   border: 1px solid var(--rule);
   padding: 0.25rem 0.6rem;
   border-radius: 2px;
@@ -1056,3 +1080,112 @@ footer {
     text-align: left;
   }
 }
+
+/* ==========================================
+   Codedgar Style Fixed Bottom Status Bar
+   ========================================== */
+.status-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  user-select: none;
+  background: #f4f4f4;
+  border-top: 1px solid var(--rule);
+}
+
+.status-bar-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.status-bar-segment {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+}
+
+.status-bar-mode {
+  background: var(--surface);
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--rule);
+}
+
+.status-bar-mode-label {
+  color: var(--muted);
+}
+
+.status-bar-mode-value {
+  color: hsl(var(--accent-primary));
+  font-weight: 600;
+}
+
+.status-bar-path {
+  color: var(--fg);
+}
+
+.status-bar-path-prefix {
+  color: var(--muted);
+}
+
+.status-bar-studying {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-bar-studying-icon {
+  color: hsl(var(--accent-secondary));
+}
+
+.status-bar-time {
+  margin-left: auto;
+  color: var(--text-secondary);
+}
+
+/* scanline overlay for cards */
+.section-scanline {
+  background: linear-gradient(90deg, transparent 0%, hsl(var(--accent-primary)) 20%, hsl(var(--accent-primary)) 80%, transparent 100%);
+  opacity: 0;
+  height: 2px;
+  width: 100%;
+  transition: opacity 0.3s ease, transform 0.5s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: center;
+}
+
+.card:hover .section-scanline {
+  opacity: 0.7;
+  transform: scaleX(1);
+}
+
+/* macOS style dots */
+.window-dots {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.window-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot-red { background: #ff5f57; }
+.dot-yellow { background: #ffbd2e; }
+.dot-green { background: #22c55e; }
+

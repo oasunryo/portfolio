@@ -1,31 +1,17 @@
-import { Outfit, Inter } from 'next/font/google';
 import './globals.css';
-
-// Google Fonts optimized by Next.js
-const outfit = Outfit({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-display',
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-sans',
-});
 
 // SEO Best Practices - Metadata API
 export const metadata = {
-  title: '나만의 독창적인 포트폴리오 | Notion & Next.js Dynamic Website',
-  description: '노션 데이터베이스와 연동하여 자동으로 실시간 업데이트되는 프리미엄 반응형 포트폴리오 웹사이트입니다.',
-  keywords: '포트폴리오, 개발자 포트폴리오, 노션 연동, Next.js, Notion API, 포트폴리오 제작, 반응형 웹',
-  authors: [{ name: 'Antigravity Creator' }],
+  title: 'Junseo Oh | Semiconductor Backend & OSAT Engineer Portfolio',
+  description: '노션 API 실시간 데이터 바인딩 및 크림 에디토리얼 테마 기반의 반도체 후공정(PKG & Test) 엔지니어 오준서(Junseo Oh)의 프리미엄 포트폴리오 대시보드입니다.',
+  keywords: '반도체 후공정, OSAT, 패키징, 테스트, 데이터 분석, TIBCO Spotfire, SK Hy-Po, Amkor, 오준서, Junseo Oh',
+  authors: [{ name: 'Junseo Oh' }],
   viewport: 'width=device-width, initial-scale=1',
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ko" className={`${outfit.variable} ${inter.variable}`}>
+    <html lang="ko">
       <body>
         {children}
       </body>
