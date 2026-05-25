@@ -363,7 +363,7 @@ const projectContentTranslations = {
 `
 };
 
-export default function PortfolioClient({ initialItems }) {
+export default function PortfolioClient({ initialItems = [] }) {
   // 사용자의 노션 데이터를 성격에 맞는 4가지 대분류 탭으로 효율적 매핑
   const [activeTab, setActiveTab] = useState('Projects'); // Projects, CareerEdu, Courses, Credentials
   const [searchQuery, setSearchQuery] = useState('');
@@ -394,7 +394,7 @@ export default function PortfolioClient({ initialItems }) {
   // 다국어 상태 관리 (기본값: 'ko')
   const [lang, setLang] = useState('ko');
 
-  const t = translations[lang];
+  const t = translations[lang] || translations.ko;
 
   // 뱃지 영문 번역 함수
   const translateBadge = (badgeStr) => {
@@ -420,12 +420,14 @@ export default function PortfolioClient({ initialItems }) {
   // ==========================================
   
   // 1. 노션 데이터 다국어 실시간 스왑 로직 적용
-  const localizedItems = initialItems.map(item => {
+  const localizedItems = (initialItems || []).map(item => {
+    if (!item) return null;
     if (lang === 'ko') return item;
     
     // Find matching english translation in dictionary by title prefix
+    const itemTitle = item.title || '';
     const matchingKey = Object.keys(projectTranslations).find(k => 
-      item.title.startsWith(k.substring(0, 15)) || k.startsWith(item.title.substring(0, 15))
+      itemTitle.startsWith(k.substring(0, 15)) || k.startsWith(itemTitle.substring(0, 15))
     );
     
     if (matchingKey && projectTranslations[matchingKey]) {
@@ -443,38 +445,40 @@ export default function PortfolioClient({ initialItems }) {
       ...item,
       badge: item.badge ? translateBadge(item.badge) : ''
     };
-  });
+  }).filter(Boolean);
 
   // 2. 핵심 킬러 성과 Featured 프로젝트 (반도체 연관 프로젝트 및 핵심 경력 우선 배치)
-  const featuredProjects = localizedItems.filter(p => p.featured && p.category !== 'Courses');
+  const featuredProjects = localizedItems.filter(p => p?.featured && p?.category !== 'Courses');
 
   // 3. 탭 A: Projects (실무형 프로젝트 및 부트캠프)
   const projects = localizedItems.filter(p => 
-    p.category === 'Projects' || 
-    (p.rawSemiconductor && p.category !== 'Courses' && p.category !== 'Career' && p.category !== 'Education')
+    p?.category === 'Projects' || 
+    (p?.rawSemiconductor && p?.category !== 'Courses' && p?.category !== 'Career' && p?.category !== 'Education')
   );
 
   // 4. 탭 B: Career & Education (앰코테크놀로지, SK Hy-Po, Schneider 등 대외 실무 및 교육)
-  const careerAndEdu = localizedItems.filter(p => 
-    p.category === 'Career' || 
-    p.category === 'Education' || 
-    p.title.toLowerCase().includes('hy-po') ||
-    p.role.toLowerCase().includes('amkor') ||
-    p.role.toLowerCase().includes('hynix')
-  );
+  const careerAndEdu = localizedItems.filter(p => {
+    const titleVal = (p?.title || '').toLowerCase();
+    const roleVal = (p?.role || '').toLowerCase();
+    return p?.category === 'Career' || 
+      p?.category === 'Education' || 
+      titleVal.includes('hy-po') ||
+      roleVal.includes('amkor') ||
+      roleVal.includes('hynix');
+  });
 
   // 5. 탭 C: Relevant Coursework (학부 이수 과목)
   const courses = localizedItems.filter(p => 
-    p.category === 'Courses' || 
-    p.title.toLowerCase().startsWith('course')
+    p?.category === 'Courses' || 
+    (p?.title || '').toLowerCase().startsWith('course')
   );
 
   // 6. 탭 D: Credentials & Books (자격증, 서적 연구 분석 리뷰)
   const credentials = localizedItems.filter(p => 
-    p.category === 'Licenses' || 
-    p.category === 'Books' || 
-    p.title.toLowerCase().includes('test certificate') ||
-    p.title.toLowerCase().includes('review')
+    p?.category === 'Licenses' || 
+    p?.category === 'Books' || 
+    (p?.title || '').toLowerCase().includes('test certificate') ||
+    (p?.title || '').toLowerCase().includes('review')
   );
 
   // 현재 선택된 탭에 맞춰 활성 데이터 리스트 설정
@@ -486,10 +490,16 @@ export default function PortfolioClient({ initialItems }) {
 
   // 검색 쿼리에 따른 실시간 필터링 로직
   const filteredItems = activeList.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.role.toLowerCase().includes(searchQuery.toLowerCase());
+    if (!item) return false;
+    const titleVal = (item.title || '').toLowerCase();
+    const descVal = (item.description || '').toLowerCase();
+    const roleVal = (item.role || '').toLowerCase();
+    const query = searchQuery.toLowerCase();
+    
+    const matchesSearch = titleVal.includes(query) ||
+      (item.tags || []).some(tag => (tag || '').toLowerCase().includes(query)) ||
+      descVal.includes(query) ||
+      roleVal.includes(query);
     return matchesSearch;
   });
 
