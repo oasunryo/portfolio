@@ -77,6 +77,72 @@ const roadmapSteps = [
   }
 ];
 
+// Notion "Portfolio Skills" 실물 데이터베이스 정밀 이식 (28개)
+const portfolioSkills = [
+  { name: "AI Prompting", category: "Technical", level: 3, desc: "Automation of documentation/analysis workflows", cert: "AIOF No.2 Career-Jump", project: "SK Hy-Po : Cohort 8" },
+  { name: "Figma", category: "Technical", level: 3, desc: "Dashboard UX for monitoring (defect/uptime/KPI)", cert: "", project: "App UX/UI Improvement" },
+  { name: "MATLAB", category: "Technical", level: 3, desc: "Model-based analysis/simulation", cert: "Matlab Onramp", project: "Audio Level Meter Design and..." },
+  { name: "MS Office", category: "Technical", level: 3, desc: "Reporting basics (Excel/PowerPoint)", cert: "Word Processor Certificate", project: "Job Bootcamp : Process Manual..." },
+  { name: "Notion", category: "Technical", level: 3, desc: "Knowledge base / documentation", cert: "Notion Advanced Badge", project: "2001runners, Do Run Seoul..." },
+  { name: "Verilog HDL", category: "Technical", level: 3, desc: "Hardware description & digital logic design", cert: "", project: "Course : Semiconductor Equipment..." },
+  { name: "Active Listening", category: "Interpersonal", level: 3, desc: "Cross-functional communication", cert: "", project: "" },
+  { name: "Aftercare", category: "Interpersonal", level: 3, desc: "Follow-up mindset", cert: "", project: "" },
+  { name: "Customer Service (CS)", category: "Interpersonal", level: 3, desc: "Stakeholder communication & follow-through", cert: "CS Leader Manager", project: "Job Bootcamp : Process Manual..." },
+  { name: "LinkedIn", category: "Interpersonal", level: 3, desc: "Networking/branding", cert: "", project: "" },
+  { name: "ModelSim", category: "Technical", level: 2, desc: "HDL simulation & verification tool (program usage)", cert: "", project: "Course : Semiconductor Equipment..." },
+  { name: "Quartus II", category: "Technical", level: 2, desc: "FPGA design & synthesis tool (program usage)", cert: "", project: "Course : Semiconductor Equipment..." },
+  { name: "Simscape", category: "Technical", level: 2, desc: "Physical modeling (electro-thermal systems)", cert: "Circuit Simulation Onramp", project: "Battery Charger Design and..." },
+  { name: "Simulink", category: "Technical", level: 2, desc: "Control/system simulation (Model-based validation)", cert: "Simulink Onramp, Circuit Simulation...", project: "Audio Level Meter Design and..." },
+  { name: "Spotfire", category: "Technical", level: 2, desc: "Process/Yield/Defect analytics (Visualization/Correlation)", cert: "", project: "Spotfire-Based Analysis of Core..." },
+  { name: "Entrepreneurship", category: "Interpersonal", level: 2, desc: "Ownership/initiative", cert: "1st Asan Doers University", project: "Kazipon : Childcare and house..." },
+  { name: "Root Cause Analysis (RCA)", category: "Interpersonal", level: 2, desc: "Defect troubleshooting framework (5Why/Fishbone/Pareto)", cert: "", project: "SK Hy-Po : Cohort 8" },
+  { name: "Trouble Shooting", category: "Interpersonal", level: 2, desc: "Equipment/process troubleshooting & recovery", cert: "", project: "" },
+  { name: "Battery System", category: "Technical", level: 1, desc: "Hardware systems understanding (measurement mindset)", cert: "", project: "Battery Capacity Tester Design..." },
+  { name: "Circuit Design", category: "Technical", level: 1, desc: "Electronics fundamentals", cert: "", project: "Battery Capacity Tester Design..." },
+  { name: "Github", category: "Technical", level: 1, desc: "Version control / evidence of work", cert: "", project: "Development of a Business Type..." },
+  { name: "Mermaid", category: "Technical", level: 1, desc: "Process flow / logic diagram for SOP & RCA", cert: "", project: "" },
+  { name: "Power System", category: "Technical", level: 1, desc: "Energy/power fundamentals (less direct to OSAT)", cert: "KPX : Electric Power Trans...", project: "ThermOptic : Edge-Based Auto..." },
+  { name: "SQL", category: "Technical", level: 1, desc: "Data querying for test/process datasets", cert: "ADsP : Advanced Data Ana...", project: "Development of a Business Type..." },
+  { name: "Tableau", category: "Technical", level: 1, desc: "KPI dashboarding (SPC-style reporting)", cert: "", project: "" },
+  { name: "B2B", category: "Interpersonal", level: 1, desc: "Professional communication (business)", cert: "B2B Sales Short-term Pro...", project: "AI Solution Sales for Tenants..." },
+  { name: "B2C", category: "Interpersonal", level: 1, desc: "General communication", cert: "", project: "Do Run Seoul, Development..." },
+  { name: "Economics", category: "Interpersonal", level: 1, desc: "Business literacy", cert: "MaeKyung Economic Test...", project: "Techlog." }
+];
+
+// Notion-style P. (Proficiency) 레벨 원형 진행도 표시 컴포넌트
+function getCircularProgress(level) {
+  const radius = 8;
+  const stroke = 2.2;
+  const normalizedRadius = radius - stroke;
+  const circumference = normalizedRadius * 2 * Math.PI;
+  // level 3: 100%, level 2: 66%, level 1: 33%
+  const percentage = level === 3 ? 100 : level === 2 ? 66 : 33;
+  const strokeDashoffset = circumference - (percentage / 100) * circumference;
+
+  return (
+    <svg height={radius * 2} width={radius * 2} style={{ transform: 'rotate(-90deg)', marginRight: '6px' }}>
+      <circle
+        stroke="rgba(255,255,255,0.08)"
+        fill="transparent"
+        strokeWidth={stroke}
+        r={normalizedRadius}
+        cx={radius}
+        cy={radius}
+      />
+      <circle
+        stroke="hsl(var(--accent-secondary))"
+        fill="transparent"
+        strokeWidth={stroke}
+        strokeDasharray={circumference + ' ' + circumference}
+        style={{ strokeDashoffset, transition: 'stroke-dashoffset 0.35s' }}
+        r={normalizedRadius}
+        cx={radius}
+        cy={radius}
+      />
+    </svg>
+  );
+}
+
 export default function PortfolioClient({ initialItems }) {
   // 사용자의 노션 데이터를 성격에 맞는 4가지 대분류 탭으로 효율적 매핑
   const [activeTab, setActiveTab] = useState('Projects'); // Projects, CareerEdu, Courses, Credentials
@@ -88,6 +154,11 @@ export default function PortfolioClient({ initialItems }) {
 
   // 후공정 로드맵 선택 상태
   const [selectedRoadmapStep, setSelectedRoadmapStep] = useState(roadmapSteps[0]);
+
+  // 스킬 인터랙티브 필터 및 정렬 상태
+  const [skillCategoryFilter, setSkillCategoryFilter] = useState('All'); // All, Technical, Interpersonal
+  const [skillSortOrder, setSkillSortOrder] = useState('Proficiency'); // Proficiency, Alphabetical
+
 
   // ==========================================
   // [데이터 레이어 분류 및 스마트 분류 알고리즘]
@@ -139,6 +210,19 @@ export default function PortfolioClient({ initialItems }) {
       item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.role.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesSearch;
+  });
+
+  // 필터링 및 정렬된 실물 스킬 리스트 가공
+  const filteredSkills = portfolioSkills.filter(s => {
+    if (skillCategoryFilter === 'All') return true;
+    return s.category === skillCategoryFilter;
+  }).sort((a, b) => {
+    if (skillSortOrder === 'Proficiency') {
+      if (b.level !== a.level) return b.level - a.level;
+      return a.name.localeCompare(b.name);
+    } else {
+      return a.name.localeCompare(b.name);
+    }
   });
 
   // ==========================================
@@ -488,65 +572,286 @@ export default function PortfolioClient({ initialItems }) {
         </div>
       </section>
 
-      {/* 06 / Approach (엔지니어 신뢰성 철학) */}
+      {/* 06 / Approach (엔지니어 핵심 강점 & 신뢰성 철학) */}
       <section id="approach" className="section-indexed rule-t">
         <div className="frame">
-          <span className="section-index-num">06 / METHOD</span>
-          <h2 className="section-title">Engineering Approach.</h2>
+          <span className="section-index-num">06 / CORE STRENGTHS</span>
+          <h2 className="section-title">Engineering Approach &amp; Strengths.</h2>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '3rem', marginTop: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2.5rem', marginBottom: '4rem' }}>
             <p style={{
-              fontSize: '1.4rem',
+              fontSize: '1.35rem',
               fontWeight: 500,
               color: 'var(--fg)',
-              lineHeight: '1.5',
-              borderLeft: '2px solid hsl(var(--accent-primary))',
+              lineHeight: '1.6',
+              borderLeft: '3px solid hsl(var(--accent-primary))',
               paddingLeft: '1.5rem',
               fontStyle: 'italic',
-              maxWidth: '800px'
+              maxWidth: '850px'
             }}>
-              "반도체 불량은 양산 후에 걸러내는 것이 아니라, 공정 단계별 데이터와 전공 이론의 유기적 정합성으로 사전에 봉쇄하는 것입니다."
-            </p>
-            <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', lineHeight: '1.75', maxWidth: '750px' }}>
-              후공정(OSAT)은 칩의 미세화(Node Scaling) 한계를 돌파할 수 있는 최첨단 하이테크 분야입니다. 저는 데이터 수율 분석과 패키징 신뢰성 이론을 바탕으로 공정 중에 발생 가능한 리플로우 휘어짐(Warpage), 솔더 결함, 와이어 쏠림 등을 예방하는 데 집중합니다. JEDEC 신뢰성 표준 규격을 철저히 준수하여 칩의 신뢰성 가치를 극대화하는 엔지니어가 되겠습니다.
+              "반도체 불량은 양산 후에 사후 대응하는 것이 아닙니다. 5Why 및 피시본(Fishbone) 다이어그램 기반의 정밀 분석 프레임워크와 설비 트러블슈팅 역량, 그리고 유관 부서와의 주도적인 협업을 통해 신뢰성을 완성하는 것이 엔지니어로서의 오너십입니다."
             </p>
           </div>
-        </div>
-      </section>
 
-      {/* 07 / Tools Section (전문 툴박스) */}
-      <section id="tools" className="section-indexed rule-t">
-        <div className="frame">
-          <span className="section-index-num">07 / TOOLCHAIN</span>
-          <h2 className="section-title">Tools &amp; Stack.</h2>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2.5rem', marginTop: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginTop: '2rem' }}>
             {[
-              { cat: 'Data & Analytics', tools: ['TIBCO Spotfire', 'Python', 'Pandas & NumPy', 'Matplotlib (Visualization)', 'SQL Database'] },
-              { cat: 'Standards & Reliability', tools: ['JEDEC Standards (JESD22)', 'HAST / ESD / Temp Cycle Specs', 'FMEA Quality Framework', 'Statistical Process Control (SPC)'] },
-              { cat: 'Circuits & Core Studies', tools: ['Digital Logic Design', 'Analog Circuit Simulation (SPICE)', 'Electrical Material Physics', 'Relevant Lab Equipment Control'] }
-            ].map((box, idx) => (
-              <div key={idx} style={{ background: 'var(--surface-raised)', border: '1px solid var(--rule)', padding: '2rem', borderRadius: '4px' }}>
-                <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.05rem', fontWeight: '600', color: 'var(--fg)', marginBottom: '1.25rem', borderBottom: '1px solid var(--rule)', paddingBottom: '0.75rem' }}>
-                  {box.cat}
-                </h3>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                  {box.tools.map(tool => (
-                    <span key={tool} style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.75rem',
-                      color: 'hsl(var(--accent-primary))',
-                      background: 'rgba(0, 240, 255, 0.04)',
-                      border: '1px solid rgba(0, 240, 255, 0.15)',
-                      padding: '0.35rem 0.75rem',
-                      borderRadius: '2px'
-                    }}>{tool}</span>
-                  ))}
+              {
+                num: "01",
+                name: "Root Cause Analysis (RCA)",
+                level: 2,
+                desc: "Defect troubleshooting framework (5Why / Fishbone / Pareto)",
+                action: "공정 결함 및 수율 저하 발생 시, 단순 현상 기록을 넘어 5Why 및 피시본(Fishbone) 다이어그램 분석법을 적용하여 물리적 결함 유발의 근본적인 메커니즘을 과학적이고 입체적으로 추적합니다."
+              },
+              {
+                num: "02",
+                name: "Trouble Shooting",
+                level: 2,
+                desc: "Equipment/process troubleshooting & recovery",
+                action: "장비 트러블 및 오동작 발생 시, 수율 분석 데이터와 정밀 매뉴얼에 의거하여 문제를 빠르게 진단하고 정형화된 트러블슈팅 프로토콜을 가동해 공정 유실(Loss) 시간을 방지합니다."
+              },
+              {
+                num: "03",
+                name: "Customer Service & Collaboration",
+                level: 3,
+                desc: "Stakeholder communication, follow-through & active listening",
+                action: "1티어 OSAT 대기업 앰코 실무 교육 및 반도체 공정 직무 부트캠프를 거치며, 고객사(Stakeholder) 및 다각적 유관 부서와의 소통 과정에서 깊이 경청하고 적극적인 대응 조치로 일정을 고수합니다."
+              },
+              {
+                num: "04",
+                name: "Aftercare & Ownership",
+                level: 3,
+                desc: "Follow-up mindset & entrepreneurship initiative",
+                action: "단순히 개별 공정을 마치는 것에서 멈추지 않고, 후공정 출하 후 최종 신뢰성 챔버 검증 통과까지 전 주기에 걸쳐 끝까지 책임지고 추적 관리하는 애프터케어(Aftercare) 마인드셋을 가집니다."
+              }
+            ].map((strength) => (
+              <div 
+                key={strength.num}
+                style={{ 
+                  background: 'var(--surface-raised)', 
+                  border: '1px solid var(--rule)', 
+                  padding: '2.25rem', 
+                  borderRadius: '4px',
+                  position: 'relative'
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'hsl(var(--accent-primary))', fontWeight: 'bold' }}>
+                    {strength.num}
+                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {getCircularProgress(strength.level)}
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)' }}>
+                      P.{strength.level}
+                    </span>
+                  </div>
                 </div>
+                <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.1rem', fontWeight: '600', color: '#fff', marginBottom: '0.5rem' }}>
+                  {strength.name}
+                </h3>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'hsl(var(--accent-secondary))', marginBottom: '1rem' }}>
+                  {strength.desc}
+                </p>
+                <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                  {strength.action}
+                </p>
               </div>
             ))}
           </div>
         </div>
+      </section>
+
+      {/* 07 / Tools & Stack (전문 툴박스 & 인터랙티브 스킬 인벤토리) */}
+      <section id="tools" className="section-indexed rule-t">
+        <div className="frame">
+          <span className="section-index-num">07 / TOOLCHAIN &amp; SKILLS</span>
+          <h2 className="section-title">Tools &amp; Interactive Skills.</h2>
+          
+          {/* Quick View: Core Technical Toolchain (Image 1 replica) */}
+          <div style={{ marginBottom: '5rem' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--muted)', marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              // Quick View: Core Technical Toolchain
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2.5rem' }}>
+              {[
+                { cat: 'Data & Analytics', tools: ['TIBCO Spotfire', 'Python', 'Pandas & NumPy', 'Matplotlib (Visualization)', 'SQL Database'] },
+                { cat: 'Standards & Reliability', tools: ['JEDEC Standards (JESD22)', 'HAST / ESD / Temp Cycle Specs', 'FMEA Quality Framework', 'Statistical Process Control (SPC)'] },
+                { cat: 'Circuits & Core Studies', tools: ['Digital Logic Design', 'Analog Circuit Simulation (SPICE)', 'Electrical Material Physics', 'Relevant Lab Equipment Control'] }
+              ].map((box, idx) => (
+                <div key={idx} style={{ background: 'var(--surface-raised)', border: '1px solid var(--rule)', padding: '2rem', borderRadius: '4px' }}>
+                  <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.05rem', fontWeight: '600', color: 'var(--fg)', marginBottom: '1.25rem', borderBottom: '1px solid var(--rule)', paddingBottom: '0.75rem' }}>
+                    {box.cat}
+                  </h3>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    {box.tools.map(tool => (
+                      <span key={tool} style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.75rem',
+                        color: 'hsl(var(--accent-primary))',
+                        background: 'rgba(0, 240, 255, 0.04)',
+                        border: '1px solid rgba(0, 240, 255, 0.15)',
+                        padding: '0.35rem 0.75rem',
+                        borderRadius: '2px'
+                      }}>{tool}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Interactive Skills Matrix (Image 2 replica) */}
+          <div style={{ borderTop: '1px solid var(--rule)', paddingTop: '4rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '2rem', marginBottom: '3rem' }}>
+              <div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'hsl(var(--accent-primary))', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                  // Deep Dive: Interactive Skills Inventory
+                </div>
+                <h3 style={{ fontSize: '1.75rem', fontWeight: '600', color: '#fff', letterSpacing: '-0.5px' }}>
+                  Notion Portfolio Skills Database.
+                </h3>
+              </div>
+
+              {/* Filters and Sorters */}
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                {/* Category Toggles */}
+                <div style={{ display: 'flex', background: 'var(--surface-raised)', border: '1px solid var(--rule)', borderRadius: '4px', padding: '2px' }}>
+                  {['All', 'Technical', 'Interpersonal'].map(cat => (
+                    <button
+                      key={cat}
+                      onClick={() => setSkillCategoryFilter(cat)}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        border: 'none',
+                        background: skillCategoryFilter === cat ? 'var(--bg)' : 'transparent',
+                        color: skillCategoryFilter === cat ? 'hsl(var(--accent-primary))' : 'var(--muted)',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.75rem',
+                        fontWeight: skillCategoryFilter === cat ? '600' : '400',
+                        cursor: 'pointer',
+                        borderRadius: '2px',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {cat === 'All' ? '📂 All Skills' : cat === 'Technical' ? '🔬 Technical' : '🤝 Interpersonal'}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Sort Toggle */}
+                <div style={{ display: 'flex', background: 'var(--surface-raised)', border: '1px solid var(--rule)', borderRadius: '4px', padding: '2px' }}>
+                  {[
+                    { id: 'Proficiency', label: '📊 P. Level' },
+                    { id: 'Alphabetical', label: '🔤 Name' }
+                  ].map(sortOpt => (
+                    <button
+                      key={sortOpt.id}
+                      onClick={() => setSkillSortOrder(sortOpt.id)}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        border: 'none',
+                        background: skillSortOrder === sortOpt.id ? 'var(--bg)' : 'transparent',
+                        color: skillSortOrder === sortOpt.id ? 'hsl(var(--accent-secondary))' : 'var(--muted)',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.75rem',
+                        fontWeight: skillSortOrder === sortOpt.id ? '600' : '400',
+                        cursor: 'pointer',
+                        borderRadius: '2px',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {sortOpt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Grid of 28 Skills */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
+              {filteredSkills.map(skill => (
+                <div 
+                  key={skill.name}
+                  style={{
+                    background: 'var(--surface)',
+                    border: '1px solid var(--rule)',
+                    padding: '1.5rem',
+                    borderRadius: '4px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    minHeight: '180px',
+                    transition: 'all 0.3s ease',
+                    position: 'relative'
+                  }}
+                  className="skill-card-hover"
+                >
+                  <div>
+                    {/* Top Row: Name + Category badge + P. Level */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
+                      <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem', fontWeight: 'bold', color: '#fff', letterSpacing: '-0.3px', maxWidth: '70%' }}>
+                        {skill.name}
+                      </h4>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {getCircularProgress(skill.level)}
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>
+                          P.{skill.level}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Category Label */}
+                    <div style={{ marginBottom: '1rem' }}>
+                      <span style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.62rem',
+                        color: skill.category === 'Technical' ? 'hsl(var(--accent-primary))' : 'hsl(var(--accent-secondary))',
+                        background: skill.category === 'Technical' ? 'rgba(0, 240, 255, 0.04)' : 'rgba(57, 255, 20, 0.04)',
+                        border: skill.category === 'Technical' ? '1px solid rgba(0, 240, 255, 0.15)' : '1px solid rgba(57, 255, 20, 0.15)',
+                        padding: '0.15rem 0.4rem',
+                        borderRadius: '2px',
+                        textTransform: 'uppercase'
+                      }}>
+                        {skill.category}
+                      </span>
+                    </div>
+
+                    {/* Skill Description */}
+                    <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: '1.5', marginBottom: '1.5rem' }}>
+                      {skill.desc}
+                    </p>
+                  </div>
+
+                  {/* Certifications or Related Projects */}
+                  {(skill.cert || skill.project) && (
+                    <div style={{ borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                      {skill.cert && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>
+                          <span style={{ color: 'hsl(var(--accent-secondary))' }}>🎫</span>
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{skill.cert}</span>
+                        </div>
+                      )}
+                      {skill.project && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>
+                          <span style={{ color: 'hsl(var(--accent-primary))' }}>🔗</span>
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{skill.project}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Local styling for hover scale/glow effect on skill cards */}
+        <style jsx>{`
+          .skill-card-hover:hover {
+            border-color: rgba(0, 240, 255, 0.25) !important;
+            box-shadow: 0 4px 20px rgba(0, 240, 255, 0.03);
+            transform: translateY(-2px);
+          }
+        `}</style>
       </section>
 
       {/* About & Contact Section */}
