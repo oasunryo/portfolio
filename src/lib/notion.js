@@ -6,6 +6,7 @@ const databaseId = process.env.NOTION_DATABASE_ID;
 
 const notion = token ? new Client({ auth: token }) : null;
 
+// 노션 API 동적 바인딩 및 정렬 함수
 export async function getPortfolioItems() {
   if (!notion || !databaseId || token.includes('your_') || databaseId.includes('your_')) {
     console.warn("⚠️ Notion API Key 또는 Database ID가 설정되지 않았습니다. 데모 데이터를 표시합니다.");
@@ -15,24 +16,29 @@ export async function getPortfolioItems() {
   try {
     const response = await notion.databases.query({
       database_id: databaseId,
-      sorts: [
-        {
-          timestamp: 'created_time',
-          direction: 'descending',
-        },
-      ],
     });
 
     if (response.results.length === 0) return mockProjects;
 
-    return response.results.map((page) => {
+    const parsedItems = response.results.map((page) => {
       const props = page.properties;
 
-      // 사용자 데이터베이스 스키마 실시간 동적 대조 및 안전한 파싱
+      // 1. 제목 (Title) 파싱
       let title = props.name?.title?.[0]?.plain_text || '제목 없음';
-      const category = props.type?.select?.name || '기타';
+      if (title.endsWith(' :')) title = title.slice(0, -2);
+      if (title.endsWith(' : ')) title = title.slice(0, -3);
+
+      // 2. 카테고리 (Category / Type) 파싱 - 대분류 필터용
+      // 노션 type 속성이 select 타입이므로 이를 기반으로 대분류 맵핑
+      const rawType = props.type?.select?.name || props.Category?.select?.name || '기타';
       
-      // 진행 기간 포맷팅 (시작일 ~ 종료일 + 수식으로 계산된 기간 문자열 조합)
+      // 3. 소속 및 기관 (Organization) 파싱
+      const role = props.organization?.rich_text?.[0]?.plain_text || '소속 정보 없음';
+
+      // 4. 산업군 (Industry) 파싱 - 반도체 판별 핵심 속성
+      const industry = props.industry?.select?.name || '기타';
+
+      // 5. 진행 기간 (Period) 파싱
       const startDate = props['start date']?.date?.start || '';
       const endDate = props['end date']?.date?.start || '';
       const duration = props.period?.formula?.string || '';
@@ -46,78 +52,115 @@ export async function getPortfolioItems() {
         periodVal = duration || '진행 기간 없음';
       }
 
-      const role = props.organization?.rich_text?.[0]?.plain_text || '소속 정보 없음';
-      
-      // 설명 필드가 빈 경우 스마트한 대체 메시지 출력
+      // 6. 설명 (Description) 파싱
       let description = props.description?.rich_text?.[0]?.plain_text || '';
       if (!description) {
-        if (props.organization?.rich_text?.[0]?.plain_text) {
-          description = `${props.organization?.rich_text?.[0]?.plain_text} 에서 진행한 활동입니다.`;
+        if (role !== '소속 정보 없음') {
+          description = `${role}에서 진행한 반도체 공학 및 전문 역량 관련 활동입니다.`;
         } else {
-          description = '상세 정보는 본문에서 확인하실 수 있습니다.';
+          description = '자세한 연구 및 분석 상세 정보는 시뮬레이션 본문에서 확인하실 수 있습니다.';
         }
       }
 
-      // 태그 컬렉션 동적 생성 (분류 유형 + 산업 분야 조합)
-      const tags = [];
-      if (props.type?.select?.name) tags.push(props.type.select.name);
-      if (props.industry?.select?.name) tags.push(props.industry.select.name);
-
+      // 7. 관련 링크 (URL) 파싱
       const link = props.url?.url || '';
 
-      // 🏆 킬러 성과(Featured) 자동 판별 알고리즘
+      // 8. 뱃지(Badge) 및 킬러 성과(Featured) 자동 판별 & 네온 배지 매핑 알고리즘
       let featured = false;
       let badge = '';
       const titleLower = title.toLowerCase();
-      
-      if (
-        titleLower.includes('grand prize') || 
-        titleLower.includes('대상') || 
+      const roleLower = role.toLowerCase();
+
+      // 반도체 PKG/Test/Process 산업군이거나 주요 키워드를 포함한 경우
+      const isSemiconductor = 
+        industry.includes('Semiconductor') || 
+        titleLower.includes('semiconductor') || 
         titleLower.includes('spotfire') || 
-        titleLower.includes('thermoptic') || 
-        titleLower.includes('hackerthon') || 
-        titleLower.includes('해커톤') || 
-        titleLower.includes('battery capacity tester') || 
-        titleLower.includes('bima') ||
+        titleLower.includes('wafer') ||
+        titleLower.includes('dicing') || 
+        titleLower.includes('molding') ||
+        titleLower.includes('hynix') ||
         titleLower.includes('hy-po') ||
-        titleLower.includes('irex')
-      ) {
+        titleLower.includes('amkor') ||
+        titleLower.includes('euv');
+
+      if (isSemiconductor) {
+        // 반도체 연관 핵심 킬러 성과 Featured로 분류 및 최우선 순위화
         featured = true;
-        
-        // 커스텀 네온 엠블럼 매핑
-        if (titleLower.includes('grand prize') || titleLower.includes('대상') || titleLower.includes('bima')) {
-          badge = '🏆 GRAND PRIZE';
-        } else if (titleLower.includes('spotfire') || titleLower.includes('thermoptic') || titleLower.includes('battery')) {
-          badge = '💻 CORE TECH';
-        } else if (titleLower.includes('hackerthon') || titleLower.includes('해커톤') || titleLower.includes('hy-po')) {
-          badge = '🔥 FELLOWSHIP';
+
+        if (roleLower.includes('amkor') || titleLower.includes('amkor') || titleLower.includes('osat')) {
+          badge = '🏆 OSAT 실무';
+        } else if (titleLower.includes('spotfire') || titleLower.includes('defect')) {
+          badge = '📊 YIELD DATA';
+        } else if (titleLower.includes('hy-po') || roleLower.includes('hynix')) {
+          badge = '🔥 SK HY-PO';
+        } else if (titleLower.includes('euv') || titleLower.includes('resist') || titleLower.includes('review')) {
+          badge = '🔬 RESEARCH';
+        } else if (titleLower.includes('tester') || titleLower.includes('battery')) {
+          badge = '⚡ TESTER DESIGN';
+        } else if (titleLower.includes('bootcamp') || titleLower.includes('comento')) {
+          badge = '💻 SILICON CAMP';
+        } else if (rawType === 'Courses') {
+          badge = '📚 COURSEWORK';
+          featured = false; // 이수 과목은 Featured에서 제외하여 하단에 전공 기초로 깔끔하게 정리
         } else {
-          badge = '⭐ KEY ARCHIVE';
+          badge = '⭐ CORE SEMI';
+        }
+      } else {
+        // 비반도체 프로젝트 배지 부여
+        if (rawType === 'Licenses') {
+          badge = '🎫 LICENSE';
+        } else if (rawType === 'Books') {
+          badge = '📖 STUDY';
+        } else {
+          badge = '💡 GENERAL';
         }
       }
 
-      // 제목 특수 기호 정리
-      if (title.endsWith(' :')) {
-        title = title.slice(0, -2);
-      } else if (title.endsWith(' : ')) {
-        title = title.slice(0, -3);
-      } else if (title.endsWith(' (')) {
-        title = title.slice(0, -2);
+      // 9. 기술 스택 (Tags) 동적 생성 및 최적화
+      // type(분류)과 industry(산업군) 및 타이틀에서 분석한 키워드를 동적 태그로 맵핑하여 면접관의 필터링 편의성 제공
+      const tags = [];
+      if (rawType && rawType !== '기타') tags.push(rawType);
+      if (industry && industry !== '기타') {
+        // 'Semiconductor (PKG/Test/Process)' -> 'Semiconductor'로 가독성 있게 최적화
+        const cleanIndustry = industry.includes('Semiconductor') ? 'Semiconductor' : industry;
+        tags.push(cleanIndustry);
       }
+      
+      // 타이틀 내 주요 분석 도구 추출
+      if (titleLower.includes('spotfire')) tags.push('Spotfire');
+      if (titleLower.includes('python')) tags.push('Python');
+      if (titleLower.includes('euv')) tags.push('EUV Lithography');
+      if (titleLower.includes('tester')) tags.push('Hardware Design');
 
       return {
         id: page.id,
         title,
-        category,
+        category: rawType, // 노션의 type 대분류 (Projects, Career, Education, Courses, Licenses, Books)
+        industry,
         period: periodVal,
         role,
         tags,
         description,
         link,
         badge,
-        featured
+        featured,
+        rawSemiconductor: isSemiconductor // 반도체 후공정 연관성 체크 플래그
       };
     });
+
+    // 10. 효율적인 데이터 정렬 및 우선순위 필터링
+    // - 정렬 우선순위:
+    //   1. 반도체 후공정 핵심 프로젝트 (rawSemiconductor === true) 및 Featured 요소 최상단
+    //   2. 최신순 정렬 (기본 노션 쿼리 순서 유지)
+    return parsedItems.sort((a, b) => {
+      if (a.rawSemiconductor && !b.rawSemiconductor) return -1;
+      if (!a.rawSemiconductor && b.rawSemiconductor) return 1;
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+      return 0;
+    });
+
   } catch (error) {
     console.error("❌ Notion API 호출 중 오류가 발생했습니다. 데모 데이터로 대체합니다:", error.message);
     return mockProjects;
