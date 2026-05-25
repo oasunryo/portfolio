@@ -1,0 +1,983 @@
+SUCCESS! Fetched items: 98
+[
+  {
+    "id": "36afbe0a-b290-80ee-8f60-eabe105350e6",
+    "title": "COSS PB Ground : Contents Hackerthon",
+    "category": "Education",
+    "organization": "National Research Foundation of Korea",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2026-05-21",
+    "endDate": "2026-05-23",
+    "description": ""
+  },
+  {
+    "id": "364fbe0a-b290-8090-849f-c1e657c972ae",
+    "title": "Research Paper review : ",
+    "category": "Projects",
+    "organization": "Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2026-05-01",
+    "endDate": "2026-05-18",
+    "description": ""
+  },
+  {
+    "id": "35ffbe0a-b290-8039-8952-ed727a8c179b",
+    "title": "Campus Ambassador : COSS (",
+    "category": "Projects",
+    "organization": "National Research Foundation of Korea",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-04-01",
+    "endDate": "2026-06-30",
+    "description": "Led SNS content planning and team management as the head ambassador of Kwangwoon University’s COSS (Advanced Innovation Convergence College Project) official PR team"
+  },
+  {
+    "id": "35cfbe0a-b290-8046-93de-e9beebd9c814",
+    "title": "Booth Staff : Stair Crusher Club × ERT Member’s Day",
+    "category": "Volunteer",
+    "organization": "Stair Crusher Club (계단뿌셔클럽)",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-02-11",
+    "endDate": "2025-02-11",
+    "description": "Guided 500+ corporate professionals in hands-on accessibility mapping at Korea’s largest entrepreneurship forum hosted by the Korea Chamber of Commerce and Industry."
+  },
+  {
+    "id": "349fbe0a-b290-80bd-98d9-f00c7af47480",
+    "title": "Class 1 Ordinary Driver's License",
+    "category": "Licenses",
+    "organization": "Korean National Police Agency (KNPA)",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2020-12-29",
+    "endDate": "2030-12-31",
+    "description": ""
+  },
+  {
+    "id": "335fbe0a-b290-80df-9a80-f511372a196b",
+    "title": "Book review : Packages and tests that increase the added value of semiconductors",
+    "category": "Books",
+    "organization": "서민석",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2026-04-01",
+    "endDate": "",
+    "description": ""
+  },
+  {
+    "id": "32cfbe0a-b290-80a0-afd1-f423d4012df3",
+    "title": "과학혁명의 구조",
+    "category": "Books",
+    "organization": "토머스 S.쿤",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2026-03-24",
+    "endDate": "",
+    "description": ""
+  },
+  {
+    "id": "31efbe0a-b290-801a-b62b-d4b28b2b44d5",
+    "title": "삼성 전자 시그널 : 2025년 삼성의 운명이 결정된다",
+    "category": "Books",
+    "organization": "서영민",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2026-03-07",
+    "endDate": "",
+    "description": ""
+  },
+  {
+    "id": "31efbe0a-b290-8048-92c9-ee949c935e33",
+    "title": "TSMC : 세계 1위의 비밀",
+    "category": "Books",
+    "organization": "림굉문(林宏文)",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2026-03-03",
+    "endDate": "",
+    "description": ""
+  },
+  {
+    "id": "31efbe0a-b290-806e-96e1-ed3b6e350c02",
+    "title": "슈퍼 모멘텀 : SK하이닉스의 언더독 스토리 = Super momentum",
+    "category": "Books",
+    "organization": "이인숙",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2026-03-06",
+    "endDate": "2026-03-08",
+    "description": ""
+  },
+  {
+    "id": "31afbe0a-b290-8064-8cc3-f6cdd44eb51c",
+    "title": "Course : Semiconductor Equipment Board Design",
+    "category": "Courses",
+    "organization": "Department of Electronic Materials Engineering of Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2026-03-01",
+    "endDate": "2026-06-30",
+    "description": "7000-3-J519-01 : PCB and board-level hardware design experience."
+  },
+  {
+    "id": "31afbe0a-b290-8046-9d19-e8c4409538e3",
+    "title": "Course : Semiconductor Equipment Main Mechanical Design",
+    "category": "Courses",
+    "organization": "Department of Physics of Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2026-03-01",
+    "endDate": "2026-06-30",
+    "description": "7000-3-9374-01 : Industry-linked mechanical design for semiconductor equipment."
+  },
+  {
+    "id": "31afbe0a-b290-805b-b1c5-eb1f4a22c021",
+    "title": "Course : Semiconductor Equipment System Software",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2026-03-01",
+    "endDate": "2026-06-30",
+    "description": "7000-3-J520-01 : Experience in control/software for semiconductor equipment."
+  },
+  {
+    "id": "31afbe0a-b290-8080-975a-c3fbb65f6355",
+    "title": "Course : Machine Learning Practice in Electrical Engineering",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-03-01",
+    "endDate": "2025-06-30",
+    "description": "7320-3-4023-02 : Applying ML to engineering data such as process or equipment data."
+  },
+  {
+    "id": "31afbe0a-b290-80d6-bc17-d5e9954275ce",
+    "title": "Course : Electromagnetics 2",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2024-09-01",
+    "endDate": "2024-12-31",
+    "description": "7320-2-1412-01 : Advanced topics such as propagation and high‑frequency structures."
+  },
+  {
+    "id": "31afbe0a-b290-8088-9f58-c2bae903fefb",
+    "title": "Course : Electromagnetics 1",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2024-03-01",
+    "endDate": "2024-06-30",
+    "description": "7320-2-1411-01 : Basics of electromagnetic fields, waves, and transmission lines."
+  },
+  {
+    "id": "31afbe0a-b290-80bc-a67f-d162e083146f",
+    "title": "Course : Engineering Mathematics 2",
+    "category": "Courses",
+    "organization": "Department of Mathematics of Kwangwoon University",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2024-09-01",
+    "endDate": "2024-12-31",
+    "description": "0000-2-4970-02 : Advanced topics such as complex analysis and linear systems."
+  },
+  {
+    "id": "31afbe0a-b290-806f-b98a-e392c19b56bf",
+    "title": "Course : Engineering Mathematics 1",
+    "category": "Courses",
+    "organization": "Department of Mathematics of Kwangwoon University",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2024-03-01",
+    "endDate": "2024-06-30",
+    "description": "0000-2-4969-01 : Core engineering math, including differential equations."
+  },
+  {
+    "id": "31afbe0a-b290-80b3-957b-f034d657f4cf",
+    "title": "Course : Digital Logic Circuit Design",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2024-03-01",
+    "endDate": "2024-06-30",
+    "description": "7320-2-2111-01 : Fundamentals of logic circuits and digital systems."
+  },
+  {
+    "id": "31afbe0a-b290-801f-bd93-ef08d34f6e28",
+    "title": "Course : Electrical and Digital Circuit Laboratory",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2024-03-01",
+    "endDate": "2024-06-30",
+    "description": "7320-2-6900-02 : Mixed analog–digital circuit laboratory experience."
+  },
+  {
+    "id": "31afbe0a-b290-80a9-8b1b-e063ba859a87",
+    "title": "Course : AC and Electronic Circuit Laboratory",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2024-09-01",
+    "endDate": "2024-12-31",
+    "description": "7320-2-6901-03 : Verification of circuits through measurement and experiments."
+  },
+  {
+    "id": "31afbe0a-b290-8002-907b-c9c6bb94500b",
+    "title": "Course : Applied Electronic Circuits",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2025-03-01",
+    "endDate": "2025-06-30",
+    "description": "7320-3-1474-01 : Design of amplifiers and application circuits."
+  },
+  {
+    "id": "31afbe0a-b290-8049-b2ec-e1417d3df3ff",
+    "title": "Course : Basic Electronic Circuits",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2024-09-01",
+    "endDate": "2024-12-31",
+    "description": "7320-2-6234-01 : Diode, BJT, and MOSFET circuit analysis."
+  },
+  {
+    "id": "31afbe0a-b290-806c-a19f-c7b26f67e5e1",
+    "title": "Course : Circuit Theory 2",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2024-09-01",
+    "endDate": "2024-12-31",
+    "description": "7320-2-1996-01 : Advanced circuit analysis, including frequency response."
+  },
+  {
+    "id": "31afbe0a-b290-80bf-ac3a-ff4296a696b2",
+    "title": "Course : Circuit Theory 1",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2024-03-01",
+    "endDate": "2024-06-30",
+    "description": "7320-2-1995-01 : Fundamental analog circuit analysis."
+  },
+  {
+    "id": "31afbe0a-b290-80e6-90d3-f3f21784a0d8",
+    "title": "Course : Power Equipment Laboratory",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2025-09-01",
+    "endDate": "2025-12-31",
+    "description": "7320-3-4053-01 : Hands-on experience with power systems and equipment."
+  },
+  {
+    "id": "31afbe0a-b290-807b-8426-df36d5921a4c",
+    "title": "Course : Power Electronics",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2025-09-01",
+    "endDate": "2025-12-31",
+    "description": "7320-3-1360-01 : Power conversion circuits, applications of power semiconductors."
+  },
+  {
+    "id": "31afbe0a-b290-808f-bf94-cd7baae4b73c",
+    "title": "Course : Electrical and Electronic Material Properties",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2024-09-01",
+    "endDate": "2024-12-31",
+    "description": "7320-2-6146-01 : Materials and electronic properties that underpin semiconductor devices."
+  },
+  {
+    "id": "31afbe0a-b290-807e-9b82-c97c442e7620",
+    "title": "Course : Semiconductor Device Engineering",
+    "category": "Courses",
+    "organization": "Department of Electrical Engineering of Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2025-03-01",
+    "endDate": "2025-06-30",
+    "description": "7320-3-3101-01 : Core for understanding device structure and operation."
+  },
+  {
+    "id": "31afbe0a-b290-80d0-88f8-f3fea43729e5",
+    "title": "Accelerated Innovation: AI-Ready Data Center Solutions",
+    "category": "Education",
+    "organization": "Schneider Electric",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2026-03-05",
+    "endDate": "2026-03-05",
+    "description": "Join Schneider Electric for an exclusive virtual event where we will unveil our bold vision for the data centers of today and tomorrow. Discover our latest AI-ready innovations and energy solutions, as we continue to be your trusted partner. In addition to diving into the energy consumption challenges facing data centers amid the AI revolution, you’ll be the first to hear more about our large-scale investment in AI solutions, latest innovative products, end-to-end solutions and strategic partnerships—all designed to tackle energy hurdles head-on—in just 30 minutes. Course Code: ENGPRDBS1001000"
+  },
+  {
+    "id": "2e7fbe0a-b290-8097-a58d-c011619e7312",
+    "title": "SK Hy-Po : Cohort 8",
+    "category": "Education",
+    "organization": "SK hynix",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2025-12-22",
+    "endDate": "2026-02-27",
+    "description": ""
+  },
+  {
+    "id": "2e7fbe0a-b290-8062-8a9e-f1085035447d",
+    "title": "2025-2 Nationwide Energy Joint Credit Program (Final) - Class 01",
+    "category": "Education",
+    "organization": "Korea Power Exchange",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2026-01-06",
+    "endDate": "2026-01-08",
+    "description": ""
+  },
+  {
+    "id": "2d9fbe0a-b290-8055-9e62-fff10779b098",
+    "title": "OSAT Enigneer",
+    "category": "Career",
+    "organization": "Amkor Technology",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2026-08-01",
+    "endDate": "",
+    "description": "Incoming OSAT Engineer (AUG 2026) | Semiconductor PKG & Test"
+  },
+  {
+    "id": "2d9fbe0a-b290-80fd-9971-c48bc5dd6791",
+    "title": "2025 Outstanding Dormitory Student, $100",
+    "category": "Scholarships",
+    "organization": "Gyeonggi Provincial Scholarship Foundation",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-01-01",
+    "endDate": "2025-12-30",
+    "description": "$100"
+  },
+  {
+    "id": "2c3fbe0a-b290-8048-a374-c7e61bf31394",
+    "title": "Research Paper review : High NA-EUV Photo Resist",
+    "category": "Projects",
+    "organization": "Kwangwoon University",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2025-11-17",
+    "endDate": "2025-12-04",
+    "description": ""
+  },
+  {
+    "id": "2c3fbe0a-b290-806e-bd09-f10dfc73fc71",
+    "title": "iREX 2025 Global Program",
+    "category": "Education",
+    "organization": "Mitsubishi Electric Factory Automation",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2025-12-04",
+    "endDate": "2025-12-06",
+    "description": ""
+  },
+  {
+    "id": "2b9fbe0a-b290-8084-b070-e7b6bbfb10f2",
+    "title": "2025-2 Nationwide Energy Joint Credit Program (First Training) - Class 01",
+    "category": "Education",
+    "organization": "Korea Power Exchange",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2025-10-20",
+    "endDate": "2025-12-12",
+    "description": ""
+  },
+  {
+    "id": "2b5fbe0a-b290-80ad-846b-d2b2708186d3",
+    "title": "Semiconductor Process Project Engineering Bootcamp",
+    "category": "Education",
+    "organization": "comento (코멘토)",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2025-10-23",
+    "endDate": "2025-11-20",
+    "description": ""
+  },
+  {
+    "id": "2a8fbe0a-b290-802d-aed0-db107a8ee6ef",
+    "title": "Intelligent Robot Consortium 4Univ. Speech Contest, “Grand Prize”, $500",
+    "category": "Scholarships",
+    "organization": "Hanyang University ERICA Campus Innovation Center for Engineering Education",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-11-07",
+    "endDate": "2025-11-07",
+    "description": "$500"
+  },
+  {
+    "id": "2a3fbe0a-b290-80e2-b0c2-f82652c70f7d",
+    "title": "OpenLAB Tour : Kwangwoon University",
+    "category": "Education",
+    "organization": "Kwangwoon University",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-10-31",
+    "endDate": "2025-10-31",
+    "description": ""
+  },
+  {
+    "id": "29cfbe0a-b290-80d5-8cce-ee1a400d5838",
+    "title": "Spotfire-Based Analysis of Correlation Between Semiconductor Process & Defects",
+    "category": "Projects",
+    "organization": "Letuin Edu",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2025-10-20",
+    "endDate": "2025-11-09",
+    "description": "A data analysis project using Spotfire to statistically identify correlations between key process factors—such as sensors, recipes, and paths—and resulting chip defects and wafer yield.\n\nSpotfire를 사용하여 센서, 레시피, 공정 경로 등 주요 공정 인자와 칩 결함 및 Wafer 수율 간의 상관관계를 통계적으로 규명한 데이터 분석 프로젝트입니다."
+  },
+  {
+    "id": "29cfbe0a-b290-8064-bc18-eb231d6f16ae",
+    "title": "Job Bootcamp : Process Manufacturing - Semiconductor",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2025-10-23",
+    "endDate": "2025-11-20",
+    "description": ""
+  },
+  {
+    "id": "28efbe0a-b290-80ec-96f7-d8cba5360478",
+    "title": "Power Electronics Simulation Onramp",
+    "category": "Education",
+    "organization": "MathWorks",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2025-10-16",
+    "endDate": "2025-10-16",
+    "description": ""
+  },
+  {
+    "id": "28cfbe0a-b290-8013-be88-ec6aa37d16eb",
+    "title": "KPX : Electric Power Trading course",
+    "category": "Education",
+    "organization": "Korea Power Exchange",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2025-10-14",
+    "endDate": "2025-10-14",
+    "description": ""
+  },
+  {
+    "id": "28cfbe0a-b290-80d1-8f85-f01276334691",
+    "title": "KPX : Power Exchange Basic course",
+    "category": "Education",
+    "organization": "Korea Power Exchange",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2025-10-14",
+    "endDate": "2025-10-14",
+    "description": ""
+  },
+  {
+    "id": "282fbe0a-b290-8046-a5ef-d7bd62208472",
+    "title": "Review Paper review : Machine Vision at Milling",
+    "category": "Projects",
+    "organization": "Kwangwoon University",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-09-01",
+    "endDate": "2025-11-10",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-8026-adb0-d2d3fb36f5ad",
+    "title": "Kwangwoon University, “BIMA”, $1,500",
+    "category": "Scholarships",
+    "organization": "Kwangwoon University",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2024-03-01",
+    "endDate": "2024-06-30",
+    "description": "$1,500"
+  },
+  {
+    "id": "281fbe0a-b290-8028-9dbd-e03e7aff4254",
+    "title": "Gunpo Love Scholarship Association, “University Student”, $2,000",
+    "category": "Scholarships",
+    "organization": "Gyeonggi Provincial Government",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2024-01-01",
+    "endDate": "2024-12-31",
+    "description": "$2,000"
+  },
+  {
+    "id": "281fbe0a-b290-80e7-90a7-e7402511cbc0",
+    "title": "Outstanding Volunteer Citizen : Gunposi 2024",
+    "category": "Volunteer",
+    "organization": "Gyeonggi Provincial Government",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2024-01-01",
+    "endDate": "2024-12-31",
+    "description": "I have been selected as an outstanding volunteer among citizens who have performed over 50 hours of community service annually, and will receive various benefits from 2025 to 2026."
+  },
+  {
+    "id": "281fbe0a-b290-80a6-9642-cf5de9f8d87b",
+    "title": "Outstanding Volunteer Citizen : Gyeonggido 2024",
+    "category": "Volunteer",
+    "organization": "Gyeonggi Provincial Government",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2024-01-01",
+    "endDate": "2024-12-31",
+    "description": "I have been selected as an outstanding volunteer among citizens who have performed over 100 hours of community service annually, and will receive various benefits from 2025 to 2026."
+  },
+  {
+    "id": "281fbe0a-b290-80e3-bd24-cd3f756c6d82",
+    "title": "Overseas Volunteer & Cultural Exchange Program : Mongolia 2025",
+    "category": "Volunteer",
+    "organization": "Gyeonggi Provincial Scholarship Foundation",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-07-14",
+    "endDate": "2025-07-18",
+    "description": "In July 2025, I was selected as an outstanding resident at a public dormitory operated by the Gyeonggi Provincial Scholarship Foundation and participated in an overseas volunteer service and cultural exploration program in Mongolia.\n\nVolunteer activities were conducted at 'Lotus Orphanage' and the 'Korea-Mongolia mixed farming and forestry project site'."
+  },
+  {
+    "id": "281fbe0a-b290-804d-a2b7-f11b02af3cdb",
+    "title": "Stair Crusher Club : ",
+    "category": "Volunteer",
+    "organization": "Stair Crusher Club (계단뿌셔클럽)",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2024-04-13",
+    "endDate": "2025-12-13",
+    "description": "The Stair Crusher Club's <Crusher Club> is a problem-solving community that makes mobility easier for people with mobility challenges and their friends. People with and without mobility challenges are working together to solve ‘mobility problems’."
+  },
+  {
+    "id": "281fbe0a-b290-804c-ab95-d8ce9da5e054",
+    "title": "Culture Traveler",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2023-12-01",
+    "endDate": "2024-04-30",
+    "description": "- Introducing the Museum of Modern Art's Senior Curator Program\n- Organized a special exhibition at the OO Museum of Art in OO-gu, Seoul\n- Increased visitation rate by 27% among local residents\n- 40+ job inquiries and consultations"
+  },
+  {
+    "id": "281fbe0a-b290-80df-b904-cccd23627140",
+    "title": "Sosam : O2O services for fashion retailers",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2024-03-01",
+    "endDate": "2024-08-15",
+    "description": "- O2O services for fashion retailers in Dongdaemun\n- 30+ post-sales contracts in progress\n- 500+ new signups"
+  },
+  {
+    "id": "281fbe0a-b290-8055-95a5-c26013ca2178",
+    "title": "Battery Capacity Tester Design and Development",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2024-03-01",
+    "endDate": "2024-06-30",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-8089-a0c9-ddc0a70320c1",
+    "title": "Battery Charger Design and Development",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2024-09-01",
+    "endDate": "2024-12-31",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-80f8-b2de-f261fa25b6e7",
+    "title": "Do Run Seoul",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2024-02-01",
+    "endDate": "2025-02-28",
+    "description": "1 year-long local content development project that collaborated with 10 businesses in Huam-dong to discover regional charm and revitalize the community. (Sponsered by 서울시자원봉사센터)\n\n- A one-year collaboration with 10 stores in the Huam-dong shopping district in 2024- Achieved 34% local revisit rate\n- Local self-content promotion rate up to 2860% compared to the previous one."
+  },
+  {
+    "id": "281fbe0a-b290-80d6-9678-eabc6b9b27b8",
+    "title": "Kazipon : Childcare and household task management services",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-01-08",
+    "endDate": "2025-02-28",
+    "description": "2025 Global College Startup Camp (GCSC)\n\n- Childcare and household task management services\n- Ongoing as a project of the Japan-Korea Alliance.\n- 50+ doors after MVP development"
+  },
+  {
+    "id": "281fbe0a-b290-8081-b239-ddfc15053471",
+    "title": "AI Solution Sales for Tenants in Knowledge Industry Centers: B2B Sales",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-04-06",
+    "endDate": "2025-05-04",
+    "description": "This is a 5-week Internship project where new applicants for the Knowledge Industry Center tenant recruitment will sell three types of LG U+ AI solutions. \n\nWeek 1: Analyze existing clients and prepare product proposals\nWeek 2: Identify order opportunities with existing clients and make proposals\nWeek 3: Categorize new clients and draft OB scripts\nWeek 4: Prepare quotes for new clients and create KPI sales plans\nWeek 5: Establish contact points and initiate outreach"
+  },
+  {
+    "id": "281fbe0a-b290-809d-a50e-ead296383d7e",
+    "title": "App UX/UI Improvement",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-03-01",
+    "endDate": "2025-06-30",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-8041-a517-e18f43a78f7c",
+    "title": "Audio Level Meter Design and Development",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2025-03-01",
+    "endDate": "2025-06-30",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-805f-a4ba-f784deb4bcd3",
+    "title": "Development of a Business Type Recommendation Algorithm for University District Commercial Areas",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-03-01",
+    "endDate": "2025-06-30",
+    "description": "Starting from the Kwangun University commercial district in Nowon-gu, Seoul, we developed a business recommendation system optimized for university districts using data from commercial areas like Sinchon, Daehak-ro, and Hoegi.\n\nThe system leveraged data integration and machine learning models, utilizing logistic regression and XGBoost models to achieve an 85% recommendation accuracy rate.\n\nIt recommends business types based on sales scores and competitiveness scores. Future plans include expanding social media data integration and further model refinement."
+  },
+  {
+    "id": "281fbe0a-b290-8080-8344-f41c0b7e981e",
+    "title": "SYNEX : BCI sensor that attaches directly to the ear",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-03-01",
+    "endDate": "2025-06-30",
+    "description": "* ALL IMAGINATION\n\nThis project aims to make an unreal product using High-Tech such as BCI, Newralink, and so on. And the target year is 2070.\n\nSynnex is a wearable device attached to the brain that stores and reproduces external visual and sensory information based on brainwaves, enabling real-time sharing of memories and emotions with other users."
+  },
+  {
+    "id": "281fbe0a-b290-8085-be1f-e68d8f371602",
+    "title": "Onepeace : The Bridge Between County Hospitals and Hypertension Patients",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-09-12",
+    "endDate": "2025-09-23",
+    "description": "Onepeace is a value-based digital bridge that connects Community Health Workers (CHWs), hospital EMR systems, and predictive AI in real time.\n\nIt bridges the 20.33% rural healthcare access gap, reduces hypertension complication rates from 76.19% to 31.71% (a 44.48 percentage point improvement), and generates annual healthcare cost savings of $71.65 million.\n\nThis model reduces 10 unnecessary visits per patient annually through early diagnosis and continuous management, saving approximately $4,765 (77% of local annual income).\n\nIt also integrates hidden patients into the healthcare system, simultaneously achieving public health outcomes and fiscal sustainability."
+  },
+  {
+    "id": "281fbe0a-b290-8067-b63a-dea4ba377b7d",
+    "title": "ThermOptic : Edge-Based Autonomous Control Platform for AI-Era Data Center Energy Optimization",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-09-01",
+    "endDate": "2025-09-30",
+    "description": "Edge-Based Autonomous Control Platform for AI-Era Data Center Energy Optimization\n\nDesigned an innovative platform leveraging edge NPU gateways and multi-agentic frameworks to autonomously control data center power/cooling infrastructure in real-time.\n\nThe solution targets PUE improvement of 0.02p+, 3-5% power reduction, and 5-10% cooling efficiency gains, achieving 20% reduction in unplanned downtime through ultra-low latency control (<50ms) and predictive maintenance."
+  },
+  {
+    "id": "281fbe0a-b290-8048-af30-ed5132019fb1",
+    "title": "2001runners",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2024-05-31",
+    "endDate": "",
+    "description": "A running community for runners who are born in 2001, based in Seoul. We collaborate with various companies including domestic sports shops(NIKE Gangnam, Onyourmark, etc.), brands(Yohemite, Plcoup, etc.), and lifestyle brands."
+  },
+  {
+    "id": "281fbe0a-b290-8083-b0d3-cbbb97369a00",
+    "title": "Techlog.",
+    "category": "Projects",
+    "organization": "No Org",
+    "industry": "Semiconductor (PKG/Test/Process)",
+    "startDate": "2025-08-01",
+    "endDate": "",
+    "description": "Techlog. is a blog documenting the experience of trying to sell everything that exists in this world. From technology (products) like secondary batteries, automobiles, beds, and shoes, to companies like Amazon and Apple. Evaluations are primarily based on technological factors, with supplementary consideration given to economic, cultural, regional, and political factors."
+  },
+  {
+    "id": "281fbe0a-b290-8062-82e3-d495b3c9c233",
+    "title": "MaeKyung Economic Test Certificate – Level 2",
+    "category": "Licenses",
+    "organization": "Maeil Business Newspaper (Maekyung, MK)",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2023-04-07",
+    "endDate": "2023-04-07",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-80f6-90a7-ea3569a61987",
+    "title": "Word Processor Certificate",
+    "category": "Licenses",
+    "organization": "Korea Chamber of Commerce and Industry",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2021-05-07",
+    "endDate": "2021-05-07",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-801f-a7a0-ff602663acc6",
+    "title": "Computer Application Proficiency Certificate (Level 2)",
+    "category": "Licenses",
+    "organization": "Korea Chamber of Commerce and Industry",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2021-04-23",
+    "endDate": "2021-04-23",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-809a-93cb-f5ffd2dc77c3",
+    "title": "CS Leader Manager",
+    "category": "Licenses",
+    "organization": "korea information evaluation association",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2023-07-21",
+    "endDate": "2023-07-21",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-8049-b735-ee28423e9c8c",
+    "title": "CS Designer",
+    "category": "Licenses",
+    "organization": "korea information evaluation association",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2023-09-15",
+    "endDate": "2023-09-15",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-80eb-9405-d889e96f1127",
+    "title": "1st Asan Doers University Student Startup Bootcamp - Outstanding Graduate",
+    "category": "Education",
+    "organization": "Asan Nanum Foundation",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2024-01-01",
+    "endDate": "2024-01-19",
+    "description": "I has successfully completed the 1st Asan Doers University Student Startup Bootcamp, organized by the Asan Nanum Foundation, with excellent attitude and performance, and has been recognized as an Outstanding Graduate.\n\nOut of 100 participants, 5 were selected as Outstanding Graduates through evaluation."
+  },
+  {
+    "id": "281fbe0a-b290-80bd-b729-f1f7d8876a73",
+    "title": "1st Asan Doers University Student Startup Bootcamp",
+    "category": "Education",
+    "organization": "Asan Nanum Foundation",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2024-01-01",
+    "endDate": "2024-01-19",
+    "description": "I have completed the 1st Asan Doers University Student Startup Bootcamp, organized by the Asan Nanum Foundation."
+  },
+  {
+    "id": "281fbe0a-b290-80ef-b708-dc57c666c20b",
+    "title": "Matlab Onramp",
+    "category": "Education",
+    "organization": "MathWorks",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2024-02-27",
+    "endDate": "2024-02-27",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-808b-ae49-e66ae7bfe8b4",
+    "title": "ADsP : Advanced Data Analytics Semi-Professional",
+    "category": "Licenses",
+    "organization": "Korea Data Agency (K-DATA)",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2024-09-06",
+    "endDate": "2024-09-06",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-806d-a5a5-e200400829cc",
+    "title": "Certificate of Participation – Seoul Youth Planning Volunteer Corps, 2024-1",
+    "category": "Volunteer",
+    "organization": "Seoul Volunteer Center",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2024-03-01",
+    "endDate": "2024-06-30",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-8080-a677-faa81a55e401",
+    "title": "Certificate of Completion – Introductory Intelligent Robotics (STEM) Regular Major Module",
+    "category": "Education",
+    "organization": "Kwangwoon University",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2024-09-01",
+    "endDate": "2024-12-31",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-80b9-86fc-dba03d90e45a",
+    "title": "Certificate of Participation – Seoul Youth Planning Volunteer Corps, 2024-2",
+    "category": "Volunteer",
+    "organization": "Seoul Volunteer Center",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2024-09-01",
+    "endDate": "2024-12-31",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-80ac-b8c3-fccb0404e958",
+    "title": "2025 GCSC(Global College Startup Camp) Certificate of Completion",
+    "category": "Education",
+    "organization": "Gachon University",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-01-08",
+    "endDate": "2025-01-13",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-8055-975a-fdb284968664",
+    "title": "AI-Robotics Education of Kwangwoon University, “S”, $600",
+    "category": "Scholarships",
+    "organization": "Kwangwoon University",
+    "industry": "Energy & Electricity (Power Systems)",
+    "startDate": "2024-09-01",
+    "endDate": "2024-12-31",
+    "description": "$600"
+  },
+  {
+    "id": "281fbe0a-b290-80f6-8ac7-d2762adc437d",
+    "title": "Energy Economics, Environment, and Policy",
+    "category": "Education",
+    "organization": "Asian Development Bank Institute",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-04-05",
+    "endDate": "2025-04-05",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-804e-a1f3-d6746838fe2d",
+    "title": "Seoul Scholarship Foundation, “Public Interest Talent”, $4,000",
+    "category": "Scholarships",
+    "organization": "Seoul Scholarship Foundation",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2024-01-01",
+    "endDate": "2025-04-26",
+    "description": "$4,000"
+  },
+  {
+    "id": "281fbe0a-b290-8042-9218-e86502bb8a3d",
+    "title": "Data Innovation for Development: Civic Participation for Social Good and Well-Being",
+    "category": "Education",
+    "organization": "Asian Development Bank Institute",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-04-01",
+    "endDate": "2025-04-01",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-807c-9f03-ecf0b075149e",
+    "title": "Leveraging Services for Development: Prospects and Policies",
+    "category": "Education",
+    "organization": "Asian Development Bank Institute",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-04-05",
+    "endDate": "2025-04-05",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-8085-81c3-c8a79d9d0c17",
+    "title": "B2B Sales Short-term Project Bootcamp",
+    "category": "Education",
+    "organization": "(주)코멘토",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-04-06",
+    "endDate": "2025-05-04",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-8063-9e33-f2cf51d21d71",
+    "title": "CO-WEEK ACADEMY 2025 Certification",
+    "category": "Education",
+    "organization": "National Research Foundation of Korea",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-06-30",
+    "endDate": "2025-07-04",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-800f-98d8-d185aded8989",
+    "title": "Customer Experience (CX) for Business Success",
+    "category": "Education",
+    "organization": "HP LIFE",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-07-11",
+    "endDate": "2025-07-11",
+    "description": "Customer Experience (CX) for Business SuccessLearn how customer-centric businesses listen to the voice of the customer to inform their strategies for growth, innovation, and development."
+  },
+  {
+    "id": "281fbe0a-b290-809a-9315-d4b155de0620",
+    "title": "Fundamental Skills in Engineering Design — University of Leeds, Click Start and Institute of Coding",
+    "category": "Education",
+    "organization": "FutureLearn",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-08-08",
+    "endDate": "2025-08-22",
+    "description": "This online course explored the engineering design process, including requirement gathering, problemsolving, and project management. Learners considered the full product life cycle and different types of engineering design."
+  },
+  {
+    "id": "281fbe0a-b290-80f8-b5ef-c9725aea4b66",
+    "title": "AN INTRODUCTION TO ELECTRONIC ENGINEERING",
+    "category": "Education",
+    "organization": "FutureLearn",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-08-01",
+    "endDate": "2025-08-22",
+    "description": "This online course introduced Electronic Engineering. It covered basic electronics theory and key concepts in both analogue and digital electronics. The course was partly based on first year Electronic Engineering modules at the University of Birmingham School of Engineering."
+  },
+  {
+    "id": "281fbe0a-b290-80f3-955b-d240cdf42b70",
+    "title": "Simulink Onramp",
+    "category": "Education",
+    "organization": "MathWorks",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-09-29",
+    "endDate": "2025-09-29",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-8039-be1f-c818345d5229",
+    "title": "Notion Workflows Badge",
+    "category": "Education",
+    "organization": "Notion",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-09-17",
+    "endDate": "2025-09-17",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-80ed-8d27-d9a13dd6c5fb",
+    "title": "Notion Essentials Badge",
+    "category": "Education",
+    "organization": "Notion",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-09-17",
+    "endDate": "2025-09-17",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-80a4-ad96-c73c708c67ab",
+    "title": "Notion Advanced Badge",
+    "category": "Education",
+    "organization": "Notion",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-09-17",
+    "endDate": "2025-09-17",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-8059-b49a-c8b235b6a183",
+    "title": "Circuit Simulation Onramp",
+    "category": "Education",
+    "organization": "MathWorks",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-09-30",
+    "endDate": "2025-09-30",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-80ab-90ec-e158e0be89d4",
+    "title": "AIOF No.2 Career-Jump bootcamp",
+    "category": "Education",
+    "organization": "지니파이 주식회사",
+    "industry": "Data/AI & Software (Analytics/Product)",
+    "startDate": "2025-09-01",
+    "endDate": "2025-09-28",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-8040-a11e-ccf466d3128c",
+    "title": "2025 UN SDGs IDEATHON",
+    "category": "Education",
+    "organization": "World Federation of United Nations Associations (WFUNA)",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2025-09-12",
+    "endDate": "2025-09-23",
+    "description": ""
+  },
+  {
+    "id": "281fbe0a-b290-806d-b62f-c10bcf785a66",
+    "title": "Military Life Counseling : Leturer",
+    "category": "Projects",
+    "organization": "육군공병학교 (ROK Army Engineer School)",
+    "industry": "Leadership/Community & Business",
+    "startDate": "2023-09-01",
+    "endDate": "2025-04-30",
+    "description": "- Military Life Counseling for Service Members\n- Reached 50 clients\n- 54% re-enrollment rate"
+  }
+]

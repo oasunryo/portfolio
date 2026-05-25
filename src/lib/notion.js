@@ -41,15 +41,22 @@ export async function getPortfolioItems() {
       // 5. 진행 기간 (Period) 파싱
       const startDate = props['start date']?.date?.start || '';
       const endDate = props['end date']?.date?.start || '';
-      const duration = props.period?.formula?.string || '';
       
       let periodVal = '';
       if (startDate) {
-        periodVal = startDate;
-        if (endDate) periodVal += ` ~ ${endDate}`;
-        if (duration) periodVal += ` (${duration})`;
+        const startFormatted = startDate.replace(/-/g, '.');
+        if (endDate) {
+          const endFormatted = endDate.replace(/-/g, '.');
+          const start = new Date(startDate);
+          const end = new Date(endDate);
+          const diffTime = end - start;
+          const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+          periodVal = `${startFormatted} ~ ${endFormatted} (${diffDays}일)`;
+        } else {
+          periodVal = `${startFormatted} ~ 현재 진행 중`;
+        }
       } else {
-        periodVal = duration || '진행 기간 없음';
+        periodVal = '현재 진행 중';
       }
 
       // 6. 설명 (Description) 파싱
@@ -84,45 +91,35 @@ export async function getPortfolioItems() {
         titleLower.includes('amkor') ||
         titleLower.includes('euv');
 
-      if (isSemiconductor) {
-        // 반도체 연관 핵심 킬러 성과 Featured로 분류 및 최우선 순위화
-        featured = true;
+      if (!isSemiconductor) {
+        return null; // 비반도체 프로젝트 전면 제외
+      }
 
-        if (roleLower.includes('amkor') || titleLower.includes('amkor') || titleLower.includes('osat')) {
-          badge = '🏆 OSAT 실무';
-        } else if (titleLower.includes('spotfire') || titleLower.includes('defect')) {
-          badge = '📊 YIELD DATA';
-        } else if (titleLower.includes('hy-po') || roleLower.includes('hynix')) {
-          badge = '🔥 SK HY-PO';
-        } else if (titleLower.includes('euv') || titleLower.includes('resist') || titleLower.includes('review')) {
-          badge = '🔬 RESEARCH';
-        } else if (titleLower.includes('tester') || titleLower.includes('battery')) {
-          badge = '⚡ TESTER DESIGN';
-        } else if (titleLower.includes('bootcamp') || titleLower.includes('comento')) {
-          badge = '💻 SILICON CAMP';
-        } else if (rawType === 'Courses') {
-          badge = '📚 COURSEWORK';
-          featured = false; // 이수 과목은 Featured에서 제외하여 하단에 전공 기초로 깔끔하게 정리
-        } else {
-          badge = '⭐ CORE SEMI';
-        }
+      featured = true;
+
+      if (roleLower.includes('amkor') || titleLower.includes('amkor') || titleLower.includes('osat')) {
+        badge = '🏆 OSAT 실무';
+      } else if (titleLower.includes('spotfire') || titleLower.includes('defect')) {
+        badge = '📊 YIELD DATA';
+      } else if (titleLower.includes('hy-po') || roleLower.includes('hynix')) {
+        badge = '🔥 SK HY-PO';
+      } else if (titleLower.includes('euv') || titleLower.includes('resist') || titleLower.includes('review')) {
+        badge = '🔬 RESEARCH';
+      } else if (titleLower.includes('tester') || titleLower.includes('battery')) {
+        badge = '⚡ TESTER DESIGN';
+      } else if (titleLower.includes('bootcamp') || titleLower.includes('comento')) {
+        badge = '💻 SILICON CAMP';
+      } else if (rawType === 'Courses') {
+        badge = '📚 COURSEWORK';
+        featured = false; // 이수 과목은 Featured에서 제외하여 하단에 전공 기초로 깔끔하게 정리
       } else {
-        // 비반도체 프로젝트 배지 부여
-        if (rawType === 'Licenses') {
-          badge = '🎫 LICENSE';
-        } else if (rawType === 'Books') {
-          badge = '📖 STUDY';
-        } else {
-          badge = '💡 GENERAL';
-        }
+        badge = '⭐ CORE SEMI';
       }
 
       // 9. 기술 스택 (Tags) 동적 생성 및 최적화
-      // type(분류)과 industry(산업군) 및 타이틀에서 분석한 키워드를 동적 태그로 맵핑하여 면접관의 필터링 편의성 제공
       const tags = [];
       if (rawType && rawType !== '기타') tags.push(rawType);
       if (industry && industry !== '기타') {
-        // 'Semiconductor (PKG/Test/Process)' -> 'Semiconductor'로 가독성 있게 최적화
         const cleanIndustry = industry.includes('Semiconductor') ? 'Semiconductor' : industry;
         tags.push(cleanIndustry);
       }
@@ -147,7 +144,7 @@ export async function getPortfolioItems() {
         featured,
         rawSemiconductor: isSemiconductor // 반도체 후공정 연관성 체크 플래그
       };
-    });
+    }).filter(Boolean);
 
     // 10. 효율적인 데이터 정렬 및 우선순위 필터링
     // - 정렬 우선순위:
