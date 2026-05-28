@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semiconductor Engineering Odyssey | 오준서 포트폴리오 빌더</title>
+  <!-- Google Fonts Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- MathJax for rendering LaTeX equations -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- 1. LEFT SIDEBAR (Web Editor Style) -->
+    <aside class="editor-sidebar" id="sidebar">
+      
+      <!-- Top Language Toggle -->
+      <div class="sidebar-header">
+        <div class="lang-toggle-container">
+          <button class="lang-btn active" id="btn-ko">KO</button>
+          <button class="lang-btn" id="btn-en">EN</button>
+        </div>
+        <div class="editor-badge">
+          <span class="dot-indicator pulsing"></span>
+          <span class="badge-text" id="badge-title">동적 포트폴리오</span>
+        </div>
+      </div>
+
+      <!-- Editor Inputs Form (Hug Content Layout / Resizable wrapper) -->
+      <div class="editor-scroll-area">
+        
+        <!-- Name Field -->
+        <div class="form-group">
+          <label for="input-name" class="field-label">이름</label>
+          <div class="input-wrapper">
+            <i data-lucide="user" class="input-icon"></i>
+            <input type="text" id="input-name" class="editor-input" value="오준서" placeholder="이름을 입력하세요" readonly>
+          </div>
+        </div>
+
+        <!-- Role Field -->
+        <div class="form-group">
+          <label for="input-role" class="field-label">직무</label>
+          <div class="input-wrapper">
+            <i data-lucide="cpu" class="input-icon"></i>
+            <input type="text" id="input-role" class="editor-input" value="후공정 엔지니어" placeholder="직무를 입력하세요" readonly>
+          </div>
+        </div>
+
+        <!-- Introduction Field -->
+        <div class="form-group">
+          <label for="input-intro" class="field-label">소개</label>
+          <div class="textarea-wrapper">
+            <textarea id="input-intro" class="editor-textarea auto-grow" placeholder="자기소개를 입력하세요" readonly>안녕하세요. 광운대학교에서 전기공학을 전공하고 있으며, 반도체 전/후공정 이론 및 회로 설계에 깊은 관심을 가진 학부생 오준서입니다. 2026년 7월, 글로벌 OSAT 기업인 앰코테크놀로지(Amkor Technology)의 후공정(Packaging & Test) 분야 엔지니어로 합류할 예정입니다. 본 포트폴리오는 학부생 오준서가 실무 현장의 주니어 엔지니어로 성장하기까지 수행한 9대 프로젝트와 기술적 여정을 담고 있습니다.</textarea>
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+          <label for="input-email" class="field-label">이메일</label>
+          <div class="input-wrapper email-copy-wrapper" id="email-copy-wrapper" title="클릭하면 이메일 주소가 복사됩니다" style="cursor:pointer;">
+            <i data-lucide="mail" class="input-icon"></i>
+            <input type="email" id="input-email" class="editor-input" value="junseo.oh.kr@gmail.com" placeholder="이메일 주소" readonly style="cursor:pointer;pointer-events:none;">
+            <span class="copy-toast" id="copy-toast">✓ 복사됨</span>
+          </div>
+        </div>
+
+        <!-- LinkedIn Field -->
+        <div class="form-group">
+          <label for="input-linkedin" class="field-label">링크드인</label>
+          <div class="input-wrapper linkedin-link-wrapper" id="linkedin-link-wrapper" title="LinkedIn 프로필 보기" style="cursor:pointer;">
+            <svg class="input-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            <input type="text" id="input-linkedin" class="editor-input" value="linkedin.com/in/junseokorea" placeholder="링크드인 주소" readonly style="cursor:pointer;pointer-events:none;">
+            <i data-lucide="external-link" class="input-icon" style="width:12px;height:12px;opacity:0.4;flex-shrink:0;"></i>
+          </div>
+        </div>
+
+        <!-- Divider line -->
+        <hr class="sidebar-divider">
+
+        <!-- List View Section -->
+        <div class="list-view-section">
+          <span class="section-title">리스트 뷰</span>
+          
+          <!-- Tabs -->
+          <div class="tab-container">
+            <button class="tab-btn active" data-tab="projects" id="tab-projects" onclick="window.switchTab('projects')">프로젝트</button>
+            <button class="tab-btn" data-tab="skills" id="tab-skills" onclick="window.switchTab('skills')">스킬</button>
+          </div>
+
+          <!-- Tab Content Area -->
+          <div class="tab-content" id="tab-content-area">
+            
+            <!-- 1) Projects Tab Content -->
+            <div class="tab-pane active" id="pane-projects">
+              <div class="tree-container">
+                <ul>
+                  <li class="tree-item">
+                    <input type="checkbox" id="fold-root" class="tree-toggle" checked>
+                    <label for="fold-root" class="tree-label">
+                      <i data-lucide="folder" class="icon folder-closed-icon"></i>
+                      <i data-lucide="folder-open" class="icon folder-open-icon"></i>
+                      <span>projects</span>
+                    </label>
+                    <div class="tree-children-wrapper">
+                      <ul class="tree-children">
+                        
+                        <!-- 1. Process & Analysis -->
+                        <li class="tree-item">
+                          <input type="checkbox" id="fold-process" class="tree-toggle" checked>
+                          <label for="fold-process" class="tree-label">
+                            <i data-lucide="folder" class="icon folder-closed-icon"></i>
+                            <i data-lucide="folder-open" class="icon folder-open-icon"></i>
+                            <span>process-analysis</span>
+                          </label>
+                          <div class="tree-children-wrapper">
+                            <ul class="tree-children">
+                              <li class="tree-item">
+                                <div class="file-item list-item" data-target-proj="1">
+                                  <i data-lucide="file-text" class="icon"></i>
+                                  <span class="item-text" id="txt-proj-1">와이어 본딩 캐필러리 신뢰성</span>
+                                </div>
+                              </li>
+                              <li class="tree-item">
+                                <div class="file-item list-item" data-target-proj="4">
+                                  <i data-lucide="file-text" class="icon"></i>
+                                  <span class="item-text" id="txt-proj-4">EUV 무기 포토레지스트 공정</span>
+                                </div>
+                              </li>
+                              <li class="tree-item">
+                                <div class="file-item list-item" data-target-proj="5">
+                                  <i data-lucide="file-text" class="icon"></i>
+                                  <span class="item-text" id="txt-proj-5">Spotfire 기반 반도체 수율 분석</span>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </li>
+
+                        <!-- 2. Digital Systems -->
+                        <li class="tree-item">
+                          <input type="checkbox" id="fold-digital" class="tree-toggle" checked>
+                          <label for="fold-digital" class="tree-label">
+                            <i data-lucide="folder" class="icon folder-closed-icon"></i>
+                            <i data-lucide="folder-open" class="icon folder-open-icon"></i>
+                            <span>digital-systems</span>
+                          </label>
+                          <div class="tree-children-wrapper">
+                            <ul class="tree-children">
+                              <li class="tree-item">
+                                <div class="file-item list-item" data-target-proj="3">
+                                  <i data-lucide="file-text" class="icon"></i>
+                                  <span class="item-text" id="txt-proj-3">FPGA 및 Verilog HDL 시스템</span>
+                                </div>
+                              </li>
+                              <li class="tree-item">
+                                <div class="file-item list-item" data-target-proj="6">
+                                  <i data-lucide="file-text" class="icon"></i>
+                                  <span class="item-text" id="txt-proj-6">MCU 기반 AC 전력계 설계</span>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </li>
+
+                        <!-- 3. Analog & Power -->
+                        <li class="tree-item">
+                          <input type="checkbox" id="fold-analog" class="tree-toggle" checked>
+                          <label for="fold-analog" class="tree-label">
+                            <i data-lucide="folder" class="icon folder-closed-icon"></i>
+                            <i data-lucide="folder-open" class="icon folder-open-icon"></i>
+                            <span>circuits-power</span>
+                          </label>
+                          <div class="tree-children-wrapper">
+                            <ul class="tree-children">
+                              <li class="tree-item">
+                                <div class="file-item list-item" data-target-proj="7">
+                                  <i data-lucide="file-text" class="icon"></i>
+                                  <span class="item-text" id="txt-proj-7">능동 필터 오디오 레벨 미터</span>
+                                </div>
+                              </li>
+                              <li class="tree-item">
+                                <div class="file-item list-item" data-target-proj="8">
+                                  <i data-lucide="file-text" class="icon"></i>
+                                  <span class="item-text" id="txt-proj-8">스마트 리튬이온 차저 설계</span>
+                                </div>
+                              </li>
+                              <li class="tree-item">
+                                <div class="file-item list-item" data-target-proj="9">
+                                  <i data-lucide="file-text" class="icon"></i>
+                                  <span class="item-text" id="txt-proj-9">배터리 잔량 테스터 설계</span>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </li>
+
+                        <!-- 4. Flat File at projects root level -->
+                        <li class="tree-item">
+                          <div class="file-item list-item" data-target-proj="2">
+                            <i data-lucide="file-text" class="icon"></i>
+                            <span class="item-text" id="txt-proj-2">후공정 패키지 및 테스트 종합 이론</span>
+                          </div>
+                        </li>
+
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 2) Skills Tab Content -->
+            <div class="tab-pane" id="pane-skills">
+              <div class="tree-container">
+                <ul>
+                  <!-- root folder: skills -->
+                  <li class="tree-item">
+                    <input type="checkbox" id="fold-skills-root" class="tree-toggle" checked>
+                    <label for="fold-skills-root" class="tree-label">
+                      <i data-lucide="folder" class="icon folder-closed-icon"></i>
+                      <i data-lucide="folder-open" class="icon folder-open-icon"></i>
+                      <span>skills</span>
+                    </label>
+                    <div class="tree-children-wrapper">
+                      <ul class="tree-children">
+
+                        <!-- 대분류 1: Technical Skills -->
+                        <li class="tree-item">
+                          <input type="checkbox" id="fold-tech-skills" class="tree-toggle" checked>
+                          <label for="fold-tech-skills" class="tree-label">
+                            <i data-lucide="folder" class="icon folder-closed-icon"></i>
+                            <i data-lucide="folder-open" class="icon folder-open-icon"></i>
+                            <span data-ko="⚙️ 하드웨어 &amp; 엔지니어링 역량" data-en="⚙️ Technical Skills">⚙️ 하드웨어 &amp; 엔지니어링 역량</span>
+                          </label>
+                          <div class="tree-children-wrapper">
+                            <ul class="tree-children">
+
+                              <!-- Level 3 -->
+                              <li class="tree-item">
+                                <input type="checkbox" id="fold-tech-l3" class="tree-toggle" checked>
+                                <label for="fold-tech-l3" class="tree-label">
+                                  <i data-lucide="folder" class="icon folder-closed-icon"></i>
+                                  <i data-lucide="folder-open" class="icon folder-open-icon"></i>
+                                  <span data-ko="우수함 (Level 3)" data-en="Advanced (Level 3)">우수함 (Level 3)</span>
+                                </label>
+                                <div class="tree-children-wrapper">
+                                  <ul class="tree-children">
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="notion">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Notion (문서화)" data-en="Notion (Documentation)">Notion (문서화)</span>
+                                        <div class="skill-mini-slider" data-pct="100%">
+                                          <div class="skill-mini-fill" style="--target-pct: 100%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="matlab">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="MATLAB (수치 해석)" data-en="MATLAB (Numerical Analysis)">MATLAB (수치 해석)</span>
+                                        <div class="skill-mini-slider" data-pct="100%">
+                                          <div class="skill-mini-fill" style="--target-pct: 100%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="verilog-hdl">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Verilog HDL (논리 설계)" data-en="Verilog HDL (Logic Design)">Verilog HDL (논리 설계)</span>
+                                        <div class="skill-mini-slider" data-pct="100%">
+                                          <div class="skill-mini-fill" style="--target-pct: 100%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="ai-prompting">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="AI Prompting (자동화)" data-en="AI Prompting (Automation)">AI Prompting (자동화)</span>
+                                        <div class="skill-mini-slider" data-pct="100%">
+                                          <div class="skill-mini-fill" style="--target-pct: 100%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="figma">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Figma (UI 설계)" data-en="Figma (UI Design)">Figma (UI 설계)</span>
+                                        <div class="skill-mini-slider" data-pct="100%">
+                                          <div class="skill-mini-fill" style="--target-pct: 100%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="ms-office">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="MS Office (보고 역량)" data-en="MS Office (Reporting)">MS Office (보고 역량)</span>
+                                        <div class="skill-mini-slider" data-pct="100%">
+                                          <div class="skill-mini-fill" style="--target-pct: 100%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </li>
+
+                              <!-- Level 2 -->
+                              <li class="tree-item">
+                                <input type="checkbox" id="fold-tech-l2" class="tree-toggle" checked>
+                                <label for="fold-tech-l2" class="tree-label">
+                                  <i data-lucide="folder" class="icon folder-closed-icon"></i>
+                                  <i data-lucide="folder-open" class="icon folder-open-icon"></i>
+                                  <span data-ko="준비됨 (Level 2)" data-en="Intermediate (Level 2)">준비됨 (Level 2)</span>
+                                </label>
+                                <div class="tree-children-wrapper">
+                                  <ul class="tree-children">
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="simulink">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Simulink (모델 기반 검증)" data-en="Simulink (Model-based Verification)">Simulink (모델 기반 검증)</span>
+                                        <div class="skill-mini-slider" data-pct="50%">
+                                          <div class="skill-mini-fill" style="--target-pct: 50%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="simscape">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Simscape (물리 모델링)" data-en="Simscape (Physical Modeling)">Simscape (물리 모델링)</span>
+                                        <div class="skill-mini-slider" data-pct="50%">
+                                          <div class="skill-mini-fill" style="--target-pct: 50%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="quartus-ii">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Quartus II (FPGA 합성)" data-en="Quartus II (FPGA Synthesis)">Quartus II (FPGA 합성)</span>
+                                        <div class="skill-mini-slider" data-pct="50%">
+                                          <div class="skill-mini-fill" style="--target-pct: 50%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="modelsim">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="ModelSim (HDL 검증)" data-en="ModelSim (HDL Verification)">ModelSim (HDL 검증)</span>
+                                        <div class="skill-mini-slider" data-pct="50%">
+                                          <div class="skill-mini-fill" style="--target-pct: 50%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="spotfire">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Spotfire (수율 시각화)" data-en="Spotfire (Yield Visualization)">Spotfire (수율 시각화)</span>
+                                        <div class="skill-mini-slider" data-pct="50%">
+                                          <div class="skill-mini-fill" style="--target-pct: 50%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </li>
+
+                              <!-- Level 1 -->
+                              <li class="tree-item">
+                                <input type="checkbox" id="fold-tech-l1" class="tree-toggle" checked>
+                                <label for="fold-tech-l1" class="tree-label">
+                                  <i data-lucide="folder" class="icon folder-closed-icon"></i>
+                                  <i data-lucide="folder-open" class="icon folder-open-icon"></i>
+                                  <span data-ko="기초 (Level 1)" data-en="Basic (Level 1)">기초 (Level 1)</span>
+                                </label>
+                                <div class="tree-children-wrapper">
+                                  <ul class="tree-children">
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="circuit-design">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Circuit Design (기초 회로)" data-en="Circuit Design (Basic Circuits)">Circuit Design (기초 회로)</span>
+                                        <div class="skill-mini-slider" data-pct="0%">
+                                          <div class="skill-mini-fill" style="--target-pct: 0%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="github">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Github (버전 제어)" data-en="Github (Version Control)">Github (버전 제어)</span>
+                                        <div class="skill-mini-slider" data-pct="0%">
+                                          <div class="skill-mini-fill" style="--target-pct: 0%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="mermaid">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Mermaid (다이어그램)" data-en="Mermaid (Diagramming)">Mermaid (다이어그램)</span>
+                                        <div class="skill-mini-slider" data-pct="0%">
+                                          <div class="skill-mini-fill" style="--target-pct: 0%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="battery-system">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Battery System (배터리 시스템)" data-en="Battery System (Battery Systems)">Battery System (배터리 시스템)</span>
+                                        <div class="skill-mini-slider" data-pct="0%">
+                                          <div class="skill-mini-fill" style="--target-pct: 0%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="power-system">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Power System (전력공학)" data-en="Power System (Power Systems)">Power System (전력공학)</span>
+                                        <div class="skill-mini-slider" data-pct="0%">
+                                          <div class="skill-mini-fill" style="--target-pct: 0%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="sql">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="SQL (데이터 쿼리)" data-en="SQL (Data Querying)">SQL (데이터 쿼리)</span>
+                                        <div class="skill-mini-slider" data-pct="0%">
+                                          <div class="skill-mini-fill" style="--target-pct: 0%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="tableau">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Tableau (SPC 시각화)" data-en="Tableau (SPC Visualization)">Tableau (SPC 시각화)</span>
+                                        <div class="skill-mini-slider" data-pct="0%">
+                                          <div class="skill-mini-fill" style="--target-pct: 0%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </li>
+
+                            </ul>
+                          </div>
+                        </li>
+
+                        <!-- 대분류 2: Interpersonal Skills -->
+                        <li class="tree-item">
+                          <input type="checkbox" id="fold-inter-skills" class="tree-toggle" checked>
+                          <label for="fold-inter-skills" class="tree-label">
+                            <i data-lucide="folder" class="icon folder-closed-icon"></i>
+                            <i data-lucide="folder-open" class="icon folder-open-icon"></i>
+                            <span data-ko="🤝 대인 역량 &amp; 소통" data-en="🤝 Interpersonal Skills">🤝 대인 역량 &amp; 소통</span>
+                          </label>
+                          <div class="tree-children-wrapper">
+                            <ul class="tree-children">
+
+                              <!-- Level 3 -->
+                              <li class="tree-item">
+                                <input type="checkbox" id="fold-inter-l3" class="tree-toggle" checked>
+                                <label for="fold-inter-l3" class="tree-label">
+                                  <i data-lucide="folder" class="icon folder-closed-icon"></i>
+                                  <i data-lucide="folder-open" class="icon folder-open-icon"></i>
+                                  <span data-ko="우수함 (Level 3)" data-en="Advanced (Level 3)">우수함 (Level 3)</span>
+                                </label>
+                                <div class="tree-children-wrapper">
+                                  <ul class="tree-children">
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="active-listening">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Active Listening (협업 경청)" data-en="Active Listening (Collaboration)">Active Listening (협업 경청)</span>
+                                        <div class="skill-mini-slider" data-pct="100%">
+                                          <div class="skill-mini-fill" style="--target-pct: 100%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="aftercare">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Aftercare (완벽한 사후관리)" data-en="Aftercare (Follow-up Mindset)">Aftercare (완벽한 사후관리)</span>
+                                        <div class="skill-mini-slider" data-pct="100%">
+                                          <div class="skill-mini-fill" style="--target-pct: 100%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="customer-service">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Customer Service (고객 대응)" data-en="Customer Service (Client Relations)">Customer Service (고객 대응)</span>
+                                        <div class="skill-mini-slider" data-pct="100%">
+                                          <div class="skill-mini-fill" style="--target-pct: 100%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="linkedin">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="LinkedIn (기술 브랜딩)" data-en="LinkedIn (Tech Branding)">LinkedIn (기술 브랜딩)</span>
+                                        <div class="skill-mini-slider" data-pct="100%">
+                                          <div class="skill-mini-fill" style="--target-pct: 100%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </li>
+
+                              <!-- Level 2 -->
+                              <li class="tree-item">
+                                <input type="checkbox" id="fold-inter-l2" class="tree-toggle" checked>
+                                <label for="fold-inter-l2" class="tree-label">
+                                  <i data-lucide="folder" class="icon folder-closed-icon"></i>
+                                  <i data-lucide="folder-open" class="icon folder-open-icon"></i>
+                                  <span data-ko="준비됨 (Level 2)" data-en="Intermediate (Level 2)">준비됨 (Level 2)</span>
+                                </label>
+                                <div class="tree-children-wrapper">
+                                  <ul class="tree-children">
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="entrepreneurship">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Entrepreneurship (주인의식)" data-en="Entrepreneurship (Ownership)">Entrepreneurship (주인의식)</span>
+                                        <div class="skill-mini-slider" data-pct="50%">
+                                          <div class="skill-mini-fill" style="--target-pct: 50%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="rca">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="RCA (5Why 분석)" data-en="RCA (5Why Analysis)">RCA (5Why 분석)</span>
+                                        <div class="skill-mini-slider" data-pct="50%">
+                                          <div class="skill-mini-fill" style="--target-pct: 50%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="troubleshooting">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Troubleshooting (이상 복구)" data-en="Troubleshooting (Issue Recovery)">Troubleshooting (이상 복구)</span>
+                                        <div class="skill-mini-slider" data-pct="50%">
+                                          <div class="skill-mini-fill" style="--target-pct: 50%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </li>
+
+                              <!-- Level 1 -->
+                              <li class="tree-item">
+                                <input type="checkbox" id="fold-inter-l1" class="tree-toggle" checked>
+                                <label for="fold-inter-l1" class="tree-label">
+                                  <i data-lucide="folder" class="icon folder-closed-icon"></i>
+                                  <i data-lucide="folder-open" class="icon folder-open-icon"></i>
+                                  <span data-ko="기초 (Level 1)" data-en="Basic (Level 1)">기초 (Level 1)</span>
+                                </label>
+                                <div class="tree-children-wrapper">
+                                  <ul class="tree-children">
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="b2b">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="B2B (고객 소통)" data-en="B2B (Client Communication)">B2B (고객 소통)</span>
+                                        <div class="skill-mini-slider" data-pct="0%">
+                                          <div class="skill-mini-fill" style="--target-pct: 0%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="b2c">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="B2C (대중 소통)" data-en="B2C (Public Relations)">B2C (대중 소통)</span>
+                                        <div class="skill-mini-slider" data-pct="0%">
+                                          <div class="skill-mini-fill" style="--target-pct: 0%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                    <li class="tree-item">
+                                      <div class="file-item list-item skill-tree-item" data-skill-id="economics">
+                                        <i data-lucide="file-text" class="icon"></i>
+                                        <span class="item-text" data-ko="Economics (비즈니스 소양)" data-en="Economics (Business Literacy)">Economics (비즈니스 소양)</span>
+                                        <div class="skill-mini-slider" data-pct="0%">
+                                          <div class="skill-mini-fill" style="--target-pct: 0%"></div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </li>
+
+                            </ul>
+                          </div>
+                        </li>
+
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- 2. RIGHT CANVAS AREA (Designer Canvas Style) -->
+    <main class="designer-canvas">
+      
+      <!-- Canvas Canvas Grid Background Pattern -->
+      <div class="canvas-grid-bg"></div>
+
+      <!-- Top Utility bar of Canvas -->
+      <div class="canvas-top-bar">
+        <div class="canvas-title">
+          <i data-lucide="layout-template" class="canvas-icon"></i>
+          <span>캔버스</span>
+        </div>
+      </div>
+
+      <!-- Centered Interactive Preview Card Container (Miro/Figma Board Scattered style) -->
+      <div class="preview-card-container" id="canvas-card-holder">
+        
+        <!-- 9 PROJECT BLOCKS (Twitter-style compact blocks) -->
+        
+        <!-- Project 1 -->
+        <div class="project-block-card draggable-block" id="proj-card-1" data-skills="matlab ms-office mermaid rca troubleshooting notion github b2b" data-proj-title="와이어 본딩 캐필러리 신뢰성">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="wrench"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-1">와이어 본딩 캐필러리 신뢰성</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #1e1b4b, #311042);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">PROCESS ANALYSIS</span>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-1">시작일</span><span class="date-val">2026.05.01</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-1">종료일</span><span class="date-val">2026.05.18</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-1">기간</span><span class="date-val">26.05 ~ 26.05</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="1">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-block-card draggable-block" id="proj-card-2" data-skills="notion ms-office mermaid rca troubleshooting github economics active-listening linkedin b2b" data-proj-title="후공정 패키지 및 테스트 종합 이론">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="layers"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-2">후공정 패키지 및 테스트 종합 이론</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #0f172a, #1e293b);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">THEORY INTEGRATION</span>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-2">시작일</span><span class="date-val">2026.01.10</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-2">종료일</span><span class="date-val">2026.02.28</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-2">기간</span><span class="date-val">26.04 ~ 진행 중</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="2">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="project-block-card draggable-block" id="proj-card-3" data-skills="verilog-hdl quartus-ii modelsim circuit-design github notion troubleshooting rca" data-proj-title="FPGA 및 Verilog HDL 시스템">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="binary"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-3">FPGA 및 Verilog HDL 시스템</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #022c22, #064e3b);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">DIGITAL DESIGN</span>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-3">시작일</span><span class="date-val">2025.10.12</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-3">종료일</span><span class="date-val">2025.12.18</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-3">기간</span><span class="date-val">26.03 ~ 26.06</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="3">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="project-block-card draggable-block" id="proj-card-4" data-skills="notion ms-office mermaid rca troubleshooting github economics" data-proj-title="EUV 무기 포토레지스트 공정">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="sun"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-4">EUV 무기 포토레지스트 공정</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #4c0519, #881337);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">LITHOGRAPHY</span>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-4">시작일</span><span class="date-val">2025.07.01</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-4">종료일</span><span class="date-val">2025.08.20</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-4">기간</span><span class="date-val">25.11 ~ 25.12</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="4">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+
+        <!-- Project 5 -->
+        <div class="project-block-card draggable-block" id="proj-card-5" data-skills="spotfire sql tableau matlab notion ms-office rca troubleshooting github active-listening customer-service" data-proj-title="Spotfire 기반 반도체 수율 분석">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="line-chart"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-5">Spotfire 기반 반도체 수율 분석</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #172554, #1e3a8a);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">BIG DATA & YIELD</span>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-5">시작일</span><span class="date-val">2025.04.05</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-5">종료일</span><span class="date-val">2025.06.10</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-5">기간</span><span class="date-val">25.10 ~ 25.11</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="5">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+
+        <!-- Project 6 -->
+        <div class="project-block-card draggable-block" id="proj-card-6" data-skills="circuit-design power-system github troubleshooting rca notion ms-office aftercare b2c" data-proj-title="MCU 기반 AC 전력계 설계">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="activity"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-6">MCU 기반 AC 전력계 설계</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #312e81, #3730a3);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">EMBEDDED HARDWARE</span>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-6">시작일</span><span class="date-val">2025.02.01</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-6">종료일</span><span class="date-val">2025.03.28</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-6">기간</span><span class="date-val">25.09 ~ 25.12</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="6">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+
+        <!-- Project 7 -->
+        <div class="project-block-card draggable-block" id="proj-card-7" data-skills="circuit-design matlab simulink simscape troubleshooting rca notion" data-proj-title="능동 필터 오디오 레벨 미터">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="sliders"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-7">능동 필터 오디오 레벨 미터</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #030712, #111827);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">ANALOG CIRCUIT</span>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-7">시작일</span><span class="date-val">2024.10.05</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-7">종료일</span><span class="date-val">2024.12.05</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-7">기간</span><span class="date-val">25.03 ~ 25.06</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="7">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+
+        <!-- Project 8 -->
+        <div class="project-block-card draggable-block" id="proj-card-8" data-skills="battery-system power-system circuit-design simulink simscape matlab troubleshooting rca notion entrepreneurship aftercare" data-proj-title="스마트 리튬이온 차저 설계">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="zap"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-8">스마트 리튬이온 차저 설계</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #451a03, #78350f);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">POWER CONVERSION</span>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-8">시작일</span><span class="date-val">2024.08.01</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-8">종료일</span><span class="date-val">2024.09.15</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-8">기간</span><span class="date-val">24.09 ~ 24.12</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="8">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+
+        <!-- Project 9 -->
+        <div class="project-block-card draggable-block" id="proj-card-9" data-skills="battery-system circuit-design matlab simulink simscape github troubleshooting rca notion customer-service entrepreneurship b2c" data-proj-title="배터리 잔량 테스터 설계">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="battery-charging"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-9">배터리 잔량 테스터 설계</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #14532d, #166534);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">LOGIC IC DESIGN</span>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-9">시작일</span><span class="date-val">2024.05.02</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-9">종료일</span><span class="date-val">2024.06.28</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-9">기간</span><span class="date-val">24.03 ~ 24.06</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="9">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Blocks end -->
+
+    </main>
+
+  </div>
+
+  <!-- NOTION-STYLE SIDE PEEK PANEL (Slides in from the right!) -->
+  <div class="side-peek-overlay" id="side-peek-overlay"></div>
+  <aside class="side-peek-panel" id="side-peek-panel">
+    <header class="side-peek-header">
+      <div class="modal-badge-wrapper">
+        <div class="modal-badge-icon"><i data-lucide="user"></i></div>
+        <span class="modal-badge-text">Junseo Oh Portfolio</span>
+      </div>
+      <button class="side-peek-close-btn" id="btn-close-peek"><i data-lucide="x"></i></button>
+    </header>
+    <!-- Rich Substack-style Editorial Container -->
+    <div class="side-peek-body" id="peek-markdown-body">
+      <!-- Injected Dynamically by JS -->
+    </div>
+  </aside>
+
+  <script src="projectsData.js"></script>
+  <script src="main.js"></script>
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>
