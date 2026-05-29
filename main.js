@@ -1299,19 +1299,219 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function updateMinimapDotsRealtime(cardId, x, y) {
-    const dot = document.getElementById(`mini-dot-${cardId}`);
-    if (dot) {
-      dot.style.left = `${(x / BOARD_WIDTH) * 100}%`;
-      dot.style.top = `${(y / BOARD_HEIGHT) * 100}%`;
-    }
   }
 
-  // Old viewport, minimap, and zoom engine calculations have been completely cleared to prevent DOM ReferenceErrors.
+  // ==========================================================================
+  // 14. INTEGRATED HIGH-FIDELITY BACKGROUND MUSIC STREAMING SYSTEM
+  // ==========================================================================
+  // Premium royalty-free ambient audio tracks perfectly curated for programming focus
+  const playlistTracks = [
+    {
+      titleKo: "1. 실리콘 오디세이 (Silicon Odyssey)",
+      titleEn: "1. Silicon Odyssey Ambient",
+      commentKo: "하드웨어 설계를 돕는 아날로그 신디사이저",
+      commentEn: "Analog synth focus wave",
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+    },
+    {
+      titleKo: "2. 청정실 로파이 비트 (Cleanroom Lofi)",
+      titleEn: "2. Cleanroom Lofi Beats",
+      commentKo: "반도체 패키징 공정 연구용 백그라운드 Lofi",
+      commentEn: "OSAT study lofi beats",
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+    },
+    {
+      titleKo: "3. 아날로그 오실로스코프 (Oscilloscope)",
+      titleEn: "3. Oscilloscope Flow",
+      commentKo: "뇌파를 정돈하는 전자 펄스 앰비언스",
+      commentEn: "Brainwave ordering pulse",
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+    },
+    {
+      titleKo: "4. 논리 게이트 설계 (Logic Gates)",
+      titleEn: "4. Logic Gates Rhythm",
+      commentKo: "Verilog 논리회로 코딩용 활력 비트",
+      commentEn: "Active logic gate beats",
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"
+    },
+    {
+      titleKo: "5. 캐필러리 접합 플로우 (Capillary Wave)",
+      titleEn: "5. Capillary Bonding Wave",
+      commentKo: "초음파 열압착 geometry 설계용 평온 피아노",
+      commentEn: "Geometry design calm wave",
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3"
+    }
+  ];
 
-  // Re-organize cards in a neat structured grid upon window resize
-  window.addEventListener('resize', () => {
-    scatterCardsRandomly();
+  // State Management
+  let currentTrackIdx = Math.floor(Math.random() * playlistTracks.length); // Auto-Shuffle on load!
+  let isPlaying = false;
+  let isLoop = false;
+  let isShuffle = true; // Enabled by default as requested!
+  
+  // HTML5 Audio Engine & DOM Nodes
+  const bgAudio = new Audio();
+  bgAudio.loop = false; // Custom logic handles looping perfectly
+
+  const playerContainer = document.getElementById('canvas-music-player');
+  const songTitleEl = document.getElementById('music-song-title');
+  const artistCommentEl = document.getElementById('music-artist-comment');
+  
+  const btnPlay = document.getElementById('btn-music-play');
+  const btnPrev = document.getElementById('btn-music-prev');
+  const btnNext = document.getElementById('btn-music-next');
+  const btnLoop = document.getElementById('btn-music-loop');
+  const btnShuffle = document.getElementById('btn-music-shuffle');
+
+  // Synchronize dynamic active shuffle & loop button styling states
+  const syncPlayerUIControls = () => {
+    if (btnLoop) {
+      if (isLoop) btnLoop.classList.add('active');
+      else btnLoop.classList.remove('active');
+    }
+    if (btnShuffle) {
+      if (isShuffle) btnShuffle.classList.add('active');
+      else btnShuffle.classList.remove('active');
+    }
+  };
+
+  // Set selected song details matching current language
+  const loadTrack = (index) => {
+    try {
+      currentTrackIdx = index;
+      const track = playlistTracks[currentTrackIdx];
+      if (!track) return;
+
+      bgAudio.src = track.url;
+      bgAudio.load();
+
+      // Render Title & Commentary matching language state
+      if (currentLang === 'ko') {
+        if (songTitleEl) songTitleEl.textContent = track.titleKo;
+        if (artistCommentEl) artistCommentEl.textContent = track.commentKo;
+      } else {
+        if (songTitleEl) songTitleEl.textContent = track.titleEn;
+        if (artistCommentEl) artistCommentEl.textContent = track.commentEn;
+      }
+    } catch(e) {
+      console.error("Audio Load Error:", e);
+    }
+  };
+
+  // Play / Pause toggler action
+  const togglePlay = () => {
+    try {
+      if (isPlaying) {
+        bgAudio.pause();
+        isPlaying = false;
+        if (playerContainer) playerContainer.classList.remove('playing');
+        
+        // Turn off sound waves inside preview cards too
+        document.querySelectorAll('.project-block-card').forEach(card => {
+          card.classList.remove('playing');
+        });
+      } else {
+        // Enforce audio hardware wakeup securely
+        bgAudio.play().then(() => {
+          isPlaying = true;
+          if (playerContainer) playerContainer.classList.add('playing');
+          
+          // Re-trigger active card visual waves
+          const sidePeekOpen = sidePeekPanel && sidePeekPanel.classList.contains('open');
+          if (sidePeekOpen) {
+            // Find which project is currently active in peek view to sync spectrum!
+            const peekTitle = document.querySelector('.newsletter-title')?.textContent;
+            if (peekTitle) {
+              document.querySelectorAll('.project-block-card').forEach(card => {
+                const title = card.getAttribute('data-proj-title');
+                if (title && peekTitle.includes(title)) {
+                  card.classList.add('playing');
+                }
+              });
+            }
+          }
+        }).catch(err => {
+          console.warn("Audio hardware play triggered blocked by browser user interaction policy:", err);
+        });
+      }
+    } catch(e) {
+      console.error("Play Toggle Failure:", e);
+    }
+  };
+
+  const nextTrack = () => {
+    let targetIdx = currentTrackIdx;
+    if (isShuffle) {
+      // Pick random index that is different from current if possible
+      if (playlistTracks.length > 1) {
+        while (targetIdx === currentTrackIdx) {
+          targetIdx = Math.floor(Math.random() * playlistTracks.length);
+        }
+      } else {
+        targetIdx = 0;
+      }
+    } else {
+      targetIdx = (currentTrackIdx + 1) % playlistTracks.length;
+    }
+    
+    loadTrack(targetIdx);
+    if (isPlaying) {
+      bgAudio.play().then(() => {
+        if (playerContainer) playerContainer.classList.add('playing');
+      }).catch(err => console.log(err));
+    }
+  };
+
+  const prevTrack = () => {
+    let targetIdx = currentTrackIdx;
+    if (isShuffle) {
+      if (playlistTracks.length > 1) {
+        while (targetIdx === currentTrackIdx) {
+          targetIdx = Math.floor(Math.random() * playlistTracks.length);
+        }
+      } else {
+        targetIdx = 0;
+      }
+    } else {
+      targetIdx = (currentTrackIdx - 1 + playlistTracks.length) % playlistTracks.length;
+    }
+
+    loadTrack(targetIdx);
+    if (isPlaying) {
+      bgAudio.play().then(() => {
+        if (playerContainer) playerContainer.classList.add('playing');
+      }).catch(err => console.log(err));
+    }
+  };
+
+  // Event bindings
+  if (btnPlay) btnPlay.addEventListener('click', togglePlay);
+  if (btnNext) btnNext.addEventListener('click', nextTrack);
+  if (btnPrev) btnPrev.addEventListener('click', prevTrack);
+
+  if (btnLoop) {
+    btnLoop.addEventListener('click', () => {
+      isLoop = !isLoop;
+      syncPlayerUIControls();
+    });
+  }
+
+  if (btnShuffle) {
+    btnShuffle.addEventListener('click', () => {
+      isShuffle = !isShuffle;
+      syncPlayerUIControls();
+    });
+  }
+
+  // Handle automatic progression when track ends
+  bgAudio.addEventListener('ended', () => {
+    if (isLoop) {
+      // Restart current song
+      bgAudio.currentTime = 0;
+      bgAudio.play().catch(e => console.log(e));
+    } else {
+      nextTrack();
+    }
   });
 
   // ==========================================================================
@@ -1320,6 +1520,10 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     // 1st: Scatter cards randomly inside visible screen space on load
     scatterCardsRandomly();
+
+    // 2nd: Mount audio engine default track securely
+    loadTrack(currentTrackIdx);
+    syncPlayerUIControls();
 
     // Initialize default language and dates formatting
     setLanguage('ko');

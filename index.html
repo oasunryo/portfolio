@@ -435,6 +435,228 @@
     .chevron-icon {
       flex-shrink: 0 !important;
     }
+
+    /* ==========================================================================
+       12. FLOATING PREMIUM BACKGROUND MUSIC PLAYER (Spotify-style mini layout)
+       ========================================================================== */
+    .canvas-music-player {
+      position: fixed !important;
+      bottom: 24px !important;
+      right: 24px !important;
+      z-index: 999999 !important; /* Always sits on top */
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border: 1px solid rgba(228, 228, 231, 0.7) !important;
+      border-radius: 16px !important;
+      padding: 10px 14px !important;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+      width: 360px !important;
+      height: 60px !important;
+      display: flex !important;
+      align-items: center !important;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+
+    .canvas-music-player:hover {
+      border-color: rgba(37, 99, 235, 0.3) !important;
+      box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    .music-player-main {
+      display: flex !important;
+      align-items: center !important;
+      width: 100% !important;
+      gap: 12px !important;
+    }
+
+    /* 1. Left: Album Cover & Spectrum Visualizer */
+    .music-album-cover {
+      width: 40px !important;
+      height: 40px !important;
+      border-radius: 10px !important;
+      background: linear-gradient(135deg, #18181B, #3F3F46) !important;
+      position: relative !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow: hidden !important;
+      flex-shrink: 0 !important;
+    }
+
+    .album-record-disc {
+      color: rgba(255, 255, 255, 0.45) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: transform 0.3s ease !important;
+    }
+
+    .album-record-disc svg {
+      width: 18px !important;
+      height: 18px !important;
+    }
+
+    .canvas-music-player.playing .album-record-disc {
+      animation: spin-record 8s linear infinite !important;
+    }
+
+    @keyframes spin-record {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Animated Spectrum Wave from Uiverse.io */
+    .music-loading-spectrum {
+      position: absolute !important;
+      inset: 0 !important;
+      background: rgba(24, 24, 27, 0.85) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 2.5px !important;
+      opacity: 0 !important;
+      transition: opacity 0.3s ease !important;
+      pointer-events: none !important;
+      padding-top: 2px !important;
+    }
+
+    .canvas-music-player.playing .music-loading-spectrum {
+      opacity: 1 !important;
+    }
+
+    .music-spectrum-bar {
+      width: 2px !important;
+      height: 20px !important;
+      background-color: #22C55E !important; /* Premium Limegreen spectrum matching Uiverse.io */
+      border-radius: 4px !important;
+      animation: bounce-spectrum 0.8s ease-in-out infinite alternate !important;
+      transform-origin: center !important;
+    }
+
+    .music-spectrum-bar:nth-child(1) { animation-delay: 0.15s !important; }
+    .music-spectrum-bar:nth-child(2) { animation-delay: 0.3s !important; }
+    .music-spectrum-bar:nth-child(3) { animation-delay: 0.45s !important; }
+    .music-spectrum-bar:nth-child(4) { animation-delay: 0.1s !important; }
+
+    @keyframes bounce-spectrum {
+      0% { transform: scaleY(0.2); }
+      100% { transform: scaleY(1); }
+    }
+
+    /* 2. Middle: Track Info Metadata */
+    .music-song-meta {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      flex-grow: 1 !important;
+      overflow: hidden !important;
+      min-width: 0 !important;
+    }
+
+    .music-song-title {
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      color: #18181B !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      line-height: 1.3 !important;
+    }
+
+    .music-artist-comment {
+      font-size: 9px !important;
+      font-weight: 500 !important;
+      color: #71717A !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      line-height: 1.2 !important;
+      margin-top: 1px !important;
+    }
+
+    /* 3. Right: Micro Control Buttons Suite */
+    .music-controls {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      flex-shrink: 0 !important;
+    }
+
+    .music-ctrl-btn {
+      background: transparent !important;
+      border: none !important;
+      width: 24px !important;
+      height: 24px !important;
+      border-radius: 6px !important;
+      color: #71717A !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+    }
+
+    .music-ctrl-btn svg {
+      width: 14px !important;
+      height: 14px !important;
+      transition: transform 0.15s ease !important;
+    }
+
+    .music-ctrl-btn:hover {
+      background: rgba(244, 244, 245, 0.9) !important;
+      color: #18181B !important;
+    }
+
+    .music-ctrl-btn:active svg {
+      transform: scale(0.9) !important;
+    }
+
+    /* Play/Pause custom big trigger */
+    .music-ctrl-btn.play-pause-trigger {
+      background: #18181B !important;
+      color: #FFFFFF !important;
+      width: 28px !important;
+      height: 28px !important;
+      border-radius: 50% !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .music-ctrl-btn.play-pause-trigger:hover {
+      background: rgba(37, 99, 235, 0.95) !important; /* Subtle blue on play hover */
+      color: #FFFFFF !important;
+      transform: scale(1.05) !important;
+    }
+
+    /* Dynamic Play/Pause state toggles */
+    .music-ctrl-btn.play-pause-trigger .icon-pause-state {
+      display: none !important;
+    }
+
+    .canvas-music-player.playing .music-ctrl-btn.play-pause-trigger .icon-play-state {
+      display: none !important;
+    }
+
+    .canvas-music-player.playing .music-ctrl-btn.play-pause-trigger .icon-pause-state {
+      display: flex !important;
+    }
+
+    /* Loop and Shuffle Active Indicator classes */
+    .music-ctrl-btn.active {
+      color: #2563EB !important; /* Royal Blue */
+      background: rgba(37, 99, 235, 0.08) !important;
+    }
+
+    .music-ctrl-btn.active:hover {
+      background: rgba(37, 99, 235, 0.12) !important;
+    }
+
+    /* Responsive hidden player state for mobile device viewport */
+    @media (max-width: 1024px) {
+      .canvas-music-player {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1403,6 +1625,63 @@
       <!-- Injected Dynamically by JS -->
     </div>
   </aside>
+
+  <!-- Floating Spotify-Style Single Line Background Music Player -->
+  <div class="canvas-music-player" id="canvas-music-player">
+    <div class="music-player-main">
+      
+      <!-- 1. Left: Album Cover Art & Equalizer -->
+      <div class="music-album-cover">
+        <div class="album-record-disc"><i data-lucide="music"></i></div>
+        
+        <!-- Animated visualizer bars from Uiverse.io -->
+        <div class="music-loading-spectrum" id="music-spectrum">
+          <div class="music-spectrum-bar"></div>
+          <div class="music-spectrum-bar"></div>
+          <div class="music-spectrum-bar"></div>
+          <div class="music-spectrum-bar"></div>
+        </div>
+      </div>
+
+      <!-- 2. Middle: Current Track Meta (Translates automatically) -->
+      <div class="music-song-meta">
+        <span class="music-song-title" id="music-song-title">Semiconductor Lofi Beats</span>
+        <span class="music-artist-comment" id="music-artist-comment">Focused Cleanroom Ambience</span>
+      </div>
+
+      <!-- 3. Right: Control buttons (Previous, Play/Pause, Next, Loop, Shuffle) -->
+      <div class="music-controls">
+        
+        <!-- Loop Toggle -->
+        <button class="music-ctrl-btn" id="btn-music-loop" title="Repeat Track">
+          <i data-lucide="repeat"></i>
+        </button>
+
+        <!-- Previous Track -->
+        <button class="music-ctrl-btn" id="btn-music-prev" title="Previous Track">
+          <i data-lucide="skip-back"></i>
+        </button>
+
+        <!-- Play/Pause Button (Dynamic toggle clip-path/icon) -->
+        <button class="music-ctrl-btn play-pause-trigger" id="btn-music-play" title="Play">
+          <i data-lucide="play" class="icon-play-state"></i>
+          <i data-lucide="pause" class="icon-pause-state"></i>
+        </button>
+
+        <!-- Next Track -->
+        <button class="music-ctrl-btn" id="btn-music-next" title="Next Track">
+          <i data-lucide="skip-forward"></i>
+        </button>
+
+        <!-- Shuffle Toggle -->
+        <button class="music-ctrl-btn" id="btn-music-shuffle" title="Shuffle Playlist">
+          <i data-lucide="shuffle"></i>
+        </button>
+        
+      </div>
+
+    </div>
+  </div>
 
   <script src="projectsData.js"></script>
   <script src="main.js"></script>
