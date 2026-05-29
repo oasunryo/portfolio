@@ -1319,39 +1319,39 @@ document.addEventListener('DOMContentLoaded', () => {
   // Premium royalty-free ambient audio tracks perfectly curated for programming focus
   const playlistTracks = [
     {
-      titleKo: "Litho Waves",
-      titleEn: "Litho Waves",
-      commentKo: "반도체 포토공정용 차분한 Lofi 비트",
-      commentEn: "Calm semiconductor photo-process lofi",
-      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+      titleKo: "Late Cleanroom",
+      titleEn: "Late Cleanroom",
+      commentKo: "심야 클린룸 감성의 따뜻한 LP 노이즈 Lofi",
+      commentEn: "Rainy lofi beat with warm analog vinyl crackle",
+      url: "https://assets.mixkit.co/music/preview/mixkit-lofi-study-481.mp3"
     },
     {
-      titleKo: "Silicon Dream",
-      titleEn: "Silicon Dream",
-      commentKo: "깊고 감성적인 아날로그 신디사이저",
-      commentEn: "Deep analog synthesis flow",
-      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+      titleKo: "Silicon Breeze",
+      titleEn: "Silicon Breeze",
+      commentKo: "귀가 편안해지는 재즈 기타 리프 Lofi 백그라운드",
+      commentEn: "Super gentle jazzy guitar lofi study focus",
+      url: "https://assets.mixkit.co/music/preview/mixkit-dreaming-big-31.mp3"
     },
     {
-      titleKo: "Logic Loop",
-      titleEn: "Logic Loop",
-      commentKo: "하드웨어 설계를 돕는 활력 코딩 리듬",
-      commentEn: "Active logic coding rhythm",
-      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+      titleKo: "Wafer Glow",
+      titleEn: "Wafer Glow",
+      commentKo: "마음을 안정시켜 주는 로즈 피아노 코드 Lofi",
+      commentEn: "Calming Rhodes piano chords chill study wave",
+      url: "https://assets.mixkit.co/music/preview/mixkit-sleepy-cat-135.mp3"
     },
     {
-      titleKo: "Pulse Flow",
-      titleEn: "Pulse Flow",
-      commentKo: "오실로스코프 파형을 닮은 아날로그 펄스",
-      commentEn: "Aesthetic oscilloscope analog pulse",
-      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"
+      titleKo: "Quantum Sleep",
+      titleEn: "Quantum Sleep",
+      commentKo: "잡념을 없애고 뇌파를 조율하는 미니멀 진정 Lofi",
+      commentEn: "Cozy minimal vinyl lounge lofi for pure study",
+      url: "https://assets.mixkit.co/music/preview/mixkit-ambient-lounge-16.mp3"
     },
     {
-      titleKo: "Bonding Point",
-      titleEn: "Bonding Point",
-      commentKo: "캐필러리 와이어 접합부의 미세 평온",
-      commentEn: "Capillary micro-geometry chill sound",
-      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3"
+      titleKo: "Capillary Flow",
+      titleEn: "Capillary Flow",
+      commentKo: "영감을 주는 지극히 고요하고 시적인 피아노 Lofi",
+      commentEn: "Extremely quiet poetic acoustic piano study beat",
+      url: "https://assets.mixkit.co/music/preview/mixkit-forest-trail-1200.mp3"
     }
   ];
 
@@ -1364,6 +1364,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // HTML5 Audio Engine & DOM Nodes
   const bgAudio = new Audio();
   bgAudio.loop = false; // Custom logic handles looping perfectly
+  bgAudio.volume = 0.35; // Calibrate default starting volume to 35% for ultra-chill low volume!
 
   const playerContainer = document.getElementById('canvas-music-player');
   const songTitleEl = document.getElementById('music-song-title');
