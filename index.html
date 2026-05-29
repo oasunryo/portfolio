@@ -395,6 +395,43 @@
     .tree-toggle:checked ~ .tree-label .closed-chevron {
       display: none !important;
     }
+
+    /* Calibrate tree list items layout to strictly contain elements within container bounds and overflow neatly */
+    .tree-container, 
+    .tree-container ul {
+      box-sizing: border-box !important;
+      max-width: 100% !important;
+    }
+
+    /* Set maximum width and layout properties on tree items, text and sliders */
+    .tree-container .file-item.list-item.skill-tree-item {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      box-sizing: border-box !important;
+      max-width: 100% !important;
+      gap: 8px !important;
+      width: 100% !important;
+    }
+
+    .tree-container .file-item.list-item.skill-tree-item .item-text {
+      flex: 1 1 0% !important; /* Allows flexible shrinking first */
+      min-width: 0 !important;   /* Crucial flexbox property to trigger ellipsis wrapping */
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      font-size: 13px !important;
+    }
+
+    .skill-mini-slider {
+      flex-shrink: 0 !important; /* Forces slider bar to never shrink or break row */
+      margin-left: auto !important;
+    }
+
+    /* Keep chevrons elegant and strictly inside folder row bounds */
+    .chevron-icon {
+      flex-shrink: 0 !important;
+    }
   </style>
 </head>
 <body>
