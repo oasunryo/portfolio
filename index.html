@@ -234,6 +234,45 @@
       display: none !important;
     }
 
+    /* Premium Modern Glassmorphic Tooltip */
+    .skill-tree-item {
+      position: relative !important;
+    }
+
+    .skill-tree-item::after {
+      content: attr(data-tooltip) !important;
+      position: absolute !important;
+      bottom: 125% !important;
+      left: 50% !important;
+      transform: translateX(-50%) translateY(4px) !important;
+      background: rgba(24, 24, 27, 0.95) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      color: #FFFFFF !important;
+      padding: 6px 10px !important;
+      border-radius: 6px !important;
+      font-size: 11px !important;
+      font-weight: 500 !important;
+      white-space: nowrap !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      z-index: 999999 !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .skill-tree-item:hover::after {
+      opacity: 1 !important;
+      transform: translateX(-50%) translateY(0) !important;
+    }
+
+    /* Prevent skill tooltips from being clipped inside open folder tree-children rows */
+    .tree-toggle:checked ~ .tree-children-wrapper,
+    .tree-toggle:checked ~ .tree-children-wrapper .tree-children {
+      overflow: visible !important;
+    }
+
     /* Tree Folder Chevron Icons */
     .tree-label {
       justify-content: flex-start !important;
@@ -490,7 +529,7 @@
                           <label for="fold-tech-skills" class="tree-label">
                             <i data-lucide="folder" class="icon folder-closed-icon"></i>
                             <i data-lucide="folder-open" class="icon folder-open-icon"></i>
-                            <span data-ko="⚙️ 하드웨어 &amp; 엔지니어링 역량" data-en="⚙️ Technical Skills">⚙️ 하드웨어 &amp; 엔지니어링 역량</span>
+                            <span data-ko="하드웨어 &amp; 엔지니어링 역량" data-en="Technical Skills">하드웨어 &amp; 엔지니어링 역량</span>
                           </label>
                           <div class="tree-children-wrapper">
                             <ul class="tree-children">
@@ -709,7 +748,7 @@
                           <label for="fold-inter-skills" class="tree-label">
                             <i data-lucide="folder" class="icon folder-closed-icon"></i>
                             <i data-lucide="folder-open" class="icon folder-open-icon"></i>
-                            <span data-ko="🤝 대인 역량 &amp; 소통" data-en="🤝 Interpersonal Skills">🤝 대인 역량 &amp; 소통</span>
+                            <span data-ko="대인 역량 &amp; 소통" data-en="Interpersonal Skills">대인 역량 &amp; 소통</span>
                           </label>
                           <div class="tree-children-wrapper">
                             <ul class="tree-children">
@@ -862,9 +901,7 @@
 
       </div>
     </aside>
-    
-    <!-- Sidebar mobile overlay -->
-    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
 
     <!-- 2. RIGHT CANVAS AREA (Designer Canvas Style) -->
     <main class="designer-canvas">
@@ -1153,6 +1190,9 @@
     </main>
 
   </div>
+
+  <!-- Sidebar mobile overlay -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
   <!-- NOTION-STYLE SIDE PEEK PANEL (Slides in from the right!) -->
   <div class="side-peek-overlay" id="side-peek-overlay"></div>

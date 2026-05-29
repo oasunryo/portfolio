@@ -801,6 +801,81 @@ document.addEventListener('DOMContentLoaded', () => {
         copyToast.textContent = lang === 'ko' ? '✓ 복사됨' : '✓ Copied';
       }
 
+      // ==========================================================================
+      // 6.5 SKILLS TREE MAPPING TOOLTIPS (Max 20 chars, dynamic translation)
+      // ==========================================================================
+      const skillTooltips = {
+        ko: {
+          notion: "노션 문서화 포트폴리오",
+          matlab: "매틀랩 수치해석 시뮬",
+          "verilog-hdl": "Verilog HDL 설계",
+          "ai-prompting": "AI 프롬프팅 업무 자동화",
+          figma: "피그마 UI 프로토타이핑",
+          "ms-office": "MS오피스 보고서 작성",
+          simulink: "시뮬링크 모델 기반 검증",
+          simscape: "심스케이프 물리 모형",
+          "quartus-ii": "쿼터스 FPGA 회로 합성",
+          modelsim: "모델심 HDL 파형 검증",
+          spotfire: "스팟파이어 수율 시각화",
+          "circuit-design": "아날로그 회로 설계 분석",
+          github: "깃허브 버전 관리 협업",
+          mermaid: "머메이드 다이어그램",
+          "battery-system": "배터리 충방전 모니터링",
+          "power-system": "전력 회로 고효율 변환",
+          sql: "SQL 데이터베이스 쿼리",
+          tableau: "태블로 데이터 대시보드",
+          "active-listening": "적극적 경청 협력 소통",
+          aftercare: "고객 사후 관리 조율",
+          "customer-service": "고객 맞춤 대응 서비스",
+          linkedin: "링크드인 프로 네트워킹",
+          entrepreneurship: "기업가 정신 창의 도전",
+          rca: "근본 원인 분석 문제해결",
+          troubleshooting: "시스템 트러블슈팅 해결",
+          b2b: "B2B 기업 비즈니스",
+          b2c: "B2C 일반 소비자 판매",
+          economics: "시장 경제 효율 분석"
+        },
+        en: {
+          notion: "Notion Documentation",
+          matlab: "MATLAB Simulation",
+          "verilog-hdl": "Verilog HDL Design",
+          "ai-prompting": "AI Prompt Automation",
+          figma: "Figma UI Prototyping",
+          "ms-office": "MS Office Reporting",
+          simulink: "Simulink Verification",
+          simscape: "Simscape Modeling",
+          "quartus-ii": "Quartus Synthesis",
+          modelsim: "ModelSim Verification",
+          spotfire: "Spotfire Analytics",
+          "circuit-design": "Analog Circuit Design",
+          github: "GitHub Git Control",
+          mermaid: "Mermaid Diagramming",
+          "battery-system": "Battery System Design",
+          "power-system": "Power Conversion Design",
+          sql: "SQL DB Querying",
+          tableau: "Tableau Dashboards",
+          "active-listening": "Active Listening",
+          aftercare: "Aftercare Support",
+          "customer-service": "Customer Relations",
+          linkedin: "Professional Network",
+          entrepreneurship: "Entrepreneurship Spirit",
+          rca: "Root Cause Analysis",
+          troubleshooting: "System Debugging",
+          b2b: "B2B Relations",
+          b2c: "B2C Consumer Sales",
+          economics: "Market Analysis"
+        }
+      };
+
+      // Update Skill Tree Item Tooltips
+      const skillTreeItems = document.querySelectorAll('.skill-tree-item');
+      skillTreeItems.forEach(item => {
+        const id = item.getAttribute('data-skill-id');
+        if (id && skillTooltips[lang][id]) {
+          item.setAttribute('data-tooltip', skillTooltips[lang][id]);
+        }
+      });
+
       // 3. Update UI Labels (Sidebar labels & descriptions)
       const lblName = document.querySelector('label[for="input-name"]');
       if (lblName) lblName.textContent = data.labels.name;
