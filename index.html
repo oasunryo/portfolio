@@ -115,24 +115,22 @@
     }
 
     .project-card-header .header-left {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: flex-start !important;
-      gap: 2px !important;
-      overflow: hidden !important;
-      max-width: 100% !important;
+      display: block !important;
     }
 
     .project-card-title {
       font-size: 13px !important;
       font-weight: 600 !important;
       color: #18181B !important;
-      line-height: 1.3 !important;
+      line-height: 1.2 !important;
       margin: 0 !important;
       white-space: nowrap !important;
       overflow: hidden !important;
       text-overflow: ellipsis !important;
       max-width: 185px !important;
+      position: absolute !important;
+      left: 68px !important; /* Spaced perfectly next to the cover */
+      top: 16px !important; /* Mathematically centered top boundary */
     }
 
     /* Right/Bottom Side: Metadata, hidden footer structure, and compact floating expand button */
@@ -155,17 +153,36 @@
       display: none !important;
     }
 
-    /* Minimalist Date text right below the title */
+    /* Dynamic engineering ID badges displayed in the header next to the cover */
+    .project-card-header::after {
+      font-size: 10px !important; /* Updated to 10px for unified meta size */
+      color: #71717A !important;
+      font-weight: 600 !important;
+      font-family: var(--font-mono), monospace !important;
+      background-color: #F4F4F5 !important;
+      padding: 1.5px 5px !important;
+      border-radius: 4px !important;
+      position: absolute !important;
+      left: 68px !important; /* Positioned below title, next to cover */
+      top: 34px !important;
+      flex-shrink: 0 !important;
+      line-height: 1.2 !important;
+      pointer-events: none !important;
+    }
+
+    /* Minimalist Date text right below the title, tabbed to the right of the gray ID box */
     .project-dates .date-row:nth-child(3) {
-      display: block !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 4px !important;
       font-size: 10px !important;
       font-weight: 400 !important;
       color: #71717A !important;
       margin: 0 !important;
       padding: 0 !important;
       position: absolute !important;
-      left: 68px !important; /* Positioned below title */
-      top: 36px !important;
+      left: 128px !important; /* Tabbed next to the ID badge, no overlap! */
+      top: 35px !important;
       white-space: nowrap !important;
       pointer-events: none !important;
     }
