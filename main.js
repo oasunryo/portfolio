@@ -606,6 +606,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Audio context cache for elegant micro web audio click sound
+  let audioCtx = null;
+  const playMinimalistSound = (type = 'click') => {
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      if (type === 'click') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+      } else if (type === 'open') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.15);
+      }
+    } catch(e) {
+      console.warn("AudioContext block/not supported:", e);
+    }
+  };
+
   const openSidePeek = (projId) => {
     try {
       const id = parseInt(projId);
@@ -614,11 +648,28 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       
+      playMinimalistSound('open');
+
       const langData = projectProseData[currentLang];
       const data = langData ? (langData[id] || langData[String(id)]) : null;
       if (!data) {
         console.warn(`[SidePeek] No data found for lang="${currentLang}", id=${id}`);
         return;
+      }
+
+      // Automatically add glass magnifier HTML structure to images inside prose
+      let modifiedProse = data.prose;
+      // Search for img tags in prose and wrap them with side-peek-image-container
+      const imgRegex = /<img([^>]+)src="([^"]+)"([^>]*)>/g;
+      if (imgRegex.test(modifiedProse)) {
+        modifiedProse = modifiedProse.replace(imgRegex, (match, p1, src, p3) => {
+          return `
+            <div class="side-peek-image-container">
+              <img${p1}src="${src}"${p3}>
+              <div class="image-magnifier-glass"></div>
+            </div>
+          `;
+        });
       }
 
       const contentHtml = `
@@ -635,7 +686,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
 
           <div class="newsletter-prose">
-            ${data.prose}
+            ${modifiedProse}
           </div>
         </article>
       `;
@@ -651,6 +702,50 @@ document.addEventListener('DOMContentLoaded', () => {
         window.lucide.createIcons();
       }
 
+      // Initialize side-peek image zoom magnifier glass mechanics dynamically
+      const containers = peekMarkdownBody.querySelectorAll('.side-peek-image-container');
+      containers.forEach(container => {
+        const img = container.querySelector('img');
+        const glass = container.querySelector('.image-magnifier-glass');
+        if (!img || !glass) return;
+
+        container.addEventListener('mouseenter', () => {
+          glass.style.display = 'block';
+          glass.style.backgroundImage = `url('${img.src}')`;
+          // Retrieve natural image dimensions vs screen layout dimensions
+          const zoomRatio = 2.5; // 2.5x Zoom Magnifier
+          glass.style.backgroundSize = `${img.width * zoomRatio}px ${img.height * zoomRatio}px`;
+        });
+
+        container.addEventListener('mousemove', (e) => {
+          const rect = container.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          // Prevent glass border overflowing containers
+          glass.style.left = `${x - 60}px`;
+          glass.style.top = `${y - 60}px`;
+
+          const zoomRatio = 2.5;
+          const bgX = (x * zoomRatio) - 60;
+          const bgY = (y * zoomRatio) - 60;
+          glass.style.backgroundPosition = `-${bgX}px -${bgY}px`;
+        });
+
+        container.addEventListener('mouseleave', () => {
+          glass.style.display = 'none';
+        });
+      });
+
+      // Update Sound Spectrum visual wave state inside cards thumbnail
+      document.querySelectorAll('.project-block-card').forEach(card => {
+        card.classList.remove('playing');
+      });
+      const activeCard = document.getElementById(`proj-card-${id}`);
+      if (activeCard) {
+        activeCard.classList.add('playing');
+      }
+
       // Slide-in panel classes toggle
       if (sidePeekPanel) sidePeekPanel.classList.add('open');
       if (sidePeekOverlay) sidePeekOverlay.classList.add('open');
@@ -661,6 +756,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const closeSidePeek = () => {
     try {
+      playMinimalistSound('click');
+      document.querySelectorAll('.project-block-card').forEach(card => {
+        card.classList.remove('playing');
+      });
       if (sidePeekPanel) sidePeekPanel.classList.remove('open');
       if (sidePeekOverlay) sidePeekOverlay.classList.remove('open');
     } catch (err) {
@@ -1084,6 +1183,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   skillBtns.forEach(btn => {
+    // Click behavior (Persistent Toggle Filter)
     btn.addEventListener('click', () => {
       const targetSkill = btn.getAttribute('data-skill-id');
 
@@ -1095,6 +1195,32 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.classList.add('active');
         applySkillFilter(targetSkill);
       }
+    });
+
+    // Hover Highlight Connection (Real-time micro interaction)
+    btn.addEventListener('mouseenter', () => {
+      const targetSkill = btn.getAttribute('data-skill-id');
+      if (!targetSkill) return;
+
+      // Enable visual highlight mode container class
+      if (cardContainer) cardContainer.classList.add('skills-filtering');
+
+      allCards.forEach(c => {
+        const associatedSkills = c.getAttribute('data-skills');
+        if (associatedSkills && associatedSkills.includes(targetSkill)) {
+          c.classList.add('skill-matched');
+        } else {
+          c.classList.remove('skill-matched');
+        }
+      });
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      // Restore normal view styles when mouse leaves
+      if (cardContainer) cardContainer.classList.remove('skills-filtering');
+      allCards.forEach(c => {
+        c.classList.remove('skill-matched');
+      });
     });
   });
 

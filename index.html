@@ -234,6 +234,97 @@
       display: none !important;
     }
 
+    /* 1. Real-time Sound Wave Equalizer inside card thumbnail */
+    .project-thumbnail .sound-wave-eq {
+      position: absolute !important;
+      bottom: 4px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      display: flex !important;
+      align-items: flex-end !important;
+      gap: 2px !important;
+      height: 12px !important;
+      z-index: 4 !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: opacity 0.3s ease !important;
+    }
+
+    .project-block-card.playing .project-thumbnail .sound-wave-eq {
+      opacity: 1 !important;
+    }
+
+    .sound-wave-bar {
+      width: 2px !important;
+      height: 100% !important;
+      background-color: rgba(255, 255, 255, 0.95) !important;
+      border-radius: 1px !important;
+      animation: eq-bounce 0.8s ease-in-out infinite alternate !important;
+      transform-origin: bottom !important;
+    }
+
+    .sound-wave-bar:nth-child(2) { animation-delay: -0.2s !important; }
+    .sound-wave-bar:nth-child(3) { animation-delay: -0.4s !important; }
+    .sound-wave-bar:nth-child(4) { animation-delay: -0.1s !important; }
+
+    @keyframes eq-bounce {
+      0% { transform: scaleY(0.2); }
+      100% { transform: scaleY(1); }
+    }
+
+    /* 2. Side-peek Interactive Image Magnifier */
+    .side-peek-image-container {
+      position: relative !important;
+      overflow: hidden !important;
+      cursor: crosshair !important;
+      border-radius: 8px !important;
+      border: 1px solid #E4E4E7 !important;
+    }
+
+    .side-peek-image-container img {
+      width: 100% !important;
+      display: block !important;
+    }
+
+    .image-magnifier-glass {
+      position: absolute !important;
+      border: 3px solid #18181B !important;
+      border-radius: 50% !important;
+      cursor: crosshair !important;
+      width: 120px !important;
+      height: 120px !important;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
+      display: none !important;
+      pointer-events: none !important;
+      z-index: 9999 !important;
+      background-repeat: no-repeat !important;
+    }
+
+    /* 3. Skill & Project Highlight Connections styling */
+    .project-block-card {
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, transform 0.3s ease !important;
+    }
+
+    /* Dim non-matching cards when a skill item is active */
+    .preview-card-container.skills-filtering .project-block-card:not(.skill-matched) {
+      opacity: 0.25 !important;
+      transform: scale(0.96) !important;
+      filter: blur(1px) !important;
+      border-color: #E4E4E7 !important;
+    }
+
+    /* Highlight matching cards brilliantly */
+    .project-block-card.skill-matched {
+      border-color: #2563EB !important;
+      box-shadow: 0 0 16px rgba(37, 99, 235, 0.45) !important;
+      transform: translateY(-2px) scale(1.02) !important;
+      z-index: 10 !important;
+    }
+
+    .project-block-card.skill-matched .project-thumbnail {
+      box-shadow: 0 0 8px rgba(37, 99, 235, 0.3) !important;
+    }
+
     /* Premium Modern Glassmorphic Tooltip */
     .skill-tree-item {
       position: relative !important;
@@ -942,6 +1033,13 @@
             <div class="thumbnail-text-overlay">
               <span class="thumbnail-badge">PROCESS ANALYSIS</span>
             </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+            </div>
           </div>
           <div class="project-card-footer">
             <div class="project-dates">
@@ -970,6 +1068,13 @@
             <div class="thumbnail-text-overlay">
               <span class="thumbnail-badge">THEORY INTEGRATION</span>
             </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+            </div>
           </div>
           <div class="project-card-footer">
             <div class="project-dates">
@@ -988,7 +1093,7 @@
           </div>
           <div class="project-card-header">
             <div class="header-left">
-              <div class="project-icon-box"><i data-lucide="binary"></i></div>
+              <div class="project-icon-box"><i data-lucide="cpu"></i></div>
               <h3 class="project-card-title" id="lbl-proj-title-3">FPGA 및 Verilog HDL 시스템</h3>
             </div>
           </div>
@@ -996,49 +1101,63 @@
             <div class="thumbnail-gradient-overlay"></div>
             <div class="thumbnail-chip-pattern"></div>
             <div class="thumbnail-text-overlay">
-              <span class="thumbnail-badge">DIGITAL DESIGN</span>
+              <span class="thumbnail-badge">FPGA LOGIC DESIGN</span>
+            </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
             </div>
           </div>
           <div class="project-card-footer">
             <div class="project-dates">
-              <div class="date-row"><span class="date-lbl" id="lbl-start-3">시작일</span><span class="date-val">2025.10.12</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-start-3">시작일</span><span class="date-val">2025.11.01</span></div>
               <div class="date-row"><span class="date-lbl" id="lbl-end-3">종료일</span><span class="date-val">2025.12.18</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-dur-3">기간</span><span class="date-val">26.03 ~ 26.06</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-3">기간</span><span class="date-val">25.09 ~ 25.12</span></div>
             </div>
             <button class="expand-btn" data-project-id="3">더 보기 <i data-lucide="maximize-2"></i></button>
           </div>
         </div>
 
         <!-- Project 4 -->
-        <div class="project-block-card draggable-block" id="proj-card-4" data-skills="notion ms-office mermaid rca troubleshooting github economics" data-proj-title="EUV 무기 포토레지스트 공정">
+        <div class="project-block-card draggable-block" id="proj-card-4" data-skills="rca troubleshooting figma ms-office notion economics github active-listening linkedin" data-proj-title="EUV 무기 포토레지스트 공정">
           <div class="card-dots">
             <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
           </div>
           <div class="project-card-header">
             <div class="header-left">
-              <div class="project-icon-box"><i data-lucide="sun"></i></div>
+              <div class="project-icon-box"><i data-lucide="atom"></i></div>
               <h3 class="project-card-title" id="lbl-proj-title-4">EUV 무기 포토레지스트 공정</h3>
             </div>
           </div>
-          <div class="project-thumbnail" style="background: linear-gradient(135deg, #4c0519, #881337);">
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #311042, #4c1d95);">
             <div class="thumbnail-gradient-overlay"></div>
             <div class="thumbnail-chip-pattern"></div>
             <div class="thumbnail-text-overlay">
-              <span class="thumbnail-badge">LITHOGRAPHY</span>
+              <span class="thumbnail-badge">CHEMISTRY ANALYSIS</span>
+            </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
             </div>
           </div>
           <div class="project-card-footer">
             <div class="project-dates">
-              <div class="date-row"><span class="date-lbl" id="lbl-start-4">시작일</span><span class="date-val">2025.07.01</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-end-4">종료일</span><span class="date-val">2025.08.20</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-dur-4">기간</span><span class="date-val">25.11 ~ 25.12</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-start-4">시작일</span><span class="date-val">2025.09.01</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-4">종료일</span><span class="date-val">2025.10.15</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-4">기간</span><span class="date-val">25.09 ~ 25.12</span></div>
             </div>
             <button class="expand-btn" data-project-id="4">더 보기 <i data-lucide="maximize-2"></i></button>
           </div>
         </div>
 
         <!-- Project 5 -->
-        <div class="project-block-card draggable-block" id="proj-card-5" data-skills="spotfire sql tableau matlab notion ms-office rca troubleshooting github active-listening customer-service" data-proj-title="Spotfire 기반 반도체 수율 분석">
+        <div class="project-block-card draggable-block" id="proj-card-5" data-skills="spotfire sql tableau active-listening customer-service aftercare troubleshooting rca economics" data-proj-title="Spotfire 기반 반도체 수율 분석">
           <div class="card-dots">
             <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
           </div>
@@ -1048,31 +1167,38 @@
               <h3 class="project-card-title" id="lbl-proj-title-5">Spotfire 기반 반도체 수율 분석</h3>
             </div>
           </div>
-          <div class="project-thumbnail" style="background: linear-gradient(135deg, #172554, #1e3a8a);">
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #022c22, #0f172a);">
             <div class="thumbnail-gradient-overlay"></div>
             <div class="thumbnail-chip-pattern"></div>
             <div class="thumbnail-text-overlay">
-              <span class="thumbnail-badge">BIG DATA & YIELD</span>
+              <span class="thumbnail-badge">YIELD ANALYSIS</span>
+            </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
             </div>
           </div>
           <div class="project-card-footer">
             <div class="project-dates">
-              <div class="date-row"><span class="date-lbl" id="lbl-start-5">시작일</span><span class="date-val">2025.04.05</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-end-5">종료일</span><span class="date-val">2025.06.10</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-dur-5">기간</span><span class="date-val">25.10 ~ 25.11</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-start-5">시작일</span><span class="date-val">2025.04.01</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-5">종료일</span><span class="date-val">2025.06.18</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-5">기간</span><span class="date-val">25.03 ~ 25.06</span></div>
             </div>
             <button class="expand-btn" data-project-id="5">더 보기 <i data-lucide="maximize-2"></i></button>
           </div>
         </div>
 
         <!-- Project 6 -->
-        <div class="project-block-card draggable-block" id="proj-card-6" data-skills="circuit-design power-system github troubleshooting rca notion ms-office aftercare b2c" data-proj-title="MCU 기반 AC 전력계 설계">
+        <div class="project-block-card draggable-block" id="proj-card-6" data-skills="circuit-design verilog-hdl quartus-ii modelsim matlab simulink simscape troubleshooting rca github" data-proj-title="MCU 기반 AC 전력계 설계">
           <div class="card-dots">
             <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
           </div>
           <div class="project-card-header">
             <div class="header-left">
-              <div class="project-icon-box"><i data-lucide="activity"></i></div>
+              <div class="project-icon-box"><i data-lucide="plug"></i></div>
               <h3 class="project-card-title" id="lbl-proj-title-6">MCU 기반 AC 전력계 설계</h3>
             </div>
           </div>
@@ -1081,6 +1207,13 @@
             <div class="thumbnail-chip-pattern"></div>
             <div class="thumbnail-text-overlay">
               <span class="thumbnail-badge">EMBEDDED HARDWARE</span>
+            </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
             </div>
           </div>
           <div class="project-card-footer">
@@ -1110,6 +1243,13 @@
             <div class="thumbnail-text-overlay">
               <span class="thumbnail-badge">ANALOG CIRCUIT</span>
             </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+            </div>
           </div>
           <div class="project-card-footer">
             <div class="project-dates">
@@ -1138,6 +1278,13 @@
             <div class="thumbnail-text-overlay">
               <span class="thumbnail-badge">POWER CONVERSION</span>
             </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+            </div>
           </div>
           <div class="project-card-footer">
             <div class="project-dates">
@@ -1165,6 +1312,13 @@
             <div class="thumbnail-chip-pattern"></div>
             <div class="thumbnail-text-overlay">
               <span class="thumbnail-badge">LOGIC IC DESIGN</span>
+            </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
             </div>
           </div>
           <div class="project-card-footer">
