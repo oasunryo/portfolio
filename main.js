@@ -1090,6 +1090,11 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('#pane-skills [data-ko]').forEach(el => {
         el.textContent = lang === 'ko' ? el.dataset.ko : el.dataset.en;
       });
+
+      // 13. Dynamically update floating music player text language on the fly!
+      if (typeof loadTrack === 'function') {
+        loadTrack(currentTrackIdx);
+      }
     } catch (err) {
       console.error("Error setting language:", err);
     }
@@ -1313,38 +1318,38 @@ document.addEventListener('DOMContentLoaded', () => {
   // Premium royalty-free ambient audio tracks perfectly curated for programming focus
   const playlistTracks = [
     {
-      titleKo: "1. 실리콘 오디세이 (Silicon Odyssey)",
-      titleEn: "1. Silicon Odyssey Ambient",
-      commentKo: "하드웨어 설계를 돕는 아날로그 신디사이저",
-      commentEn: "Analog synth focus wave",
+      titleKo: "Litho Waves",
+      titleEn: "Litho Waves",
+      commentKo: "반도체 포토공정용 차분한 Lofi 비트",
+      commentEn: "Calm semiconductor photo-process lofi",
       url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
     },
     {
-      titleKo: "2. 청정실 로파이 비트 (Cleanroom Lofi)",
-      titleEn: "2. Cleanroom Lofi Beats",
-      commentKo: "반도체 패키징 공정 연구용 백그라운드 Lofi",
-      commentEn: "OSAT study lofi beats",
+      titleKo: "Silicon Dream",
+      titleEn: "Silicon Dream",
+      commentKo: "깊고 감성적인 아날로그 신디사이저",
+      commentEn: "Deep analog synthesis flow",
       url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
     },
     {
-      titleKo: "3. 아날로그 오실로스코프 (Oscilloscope)",
-      titleEn: "3. Oscilloscope Flow",
-      commentKo: "뇌파를 정돈하는 전자 펄스 앰비언스",
-      commentEn: "Brainwave ordering pulse",
+      titleKo: "Logic Loop",
+      titleEn: "Logic Loop",
+      commentKo: "하드웨어 설계를 돕는 활력 코딩 리듬",
+      commentEn: "Active logic coding rhythm",
       url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
     },
     {
-      titleKo: "4. 논리 게이트 설계 (Logic Gates)",
-      titleEn: "4. Logic Gates Rhythm",
-      commentKo: "Verilog 논리회로 코딩용 활력 비트",
-      commentEn: "Active logic gate beats",
+      titleKo: "Pulse Flow",
+      titleEn: "Pulse Flow",
+      commentKo: "오실로스코프 파형을 닮은 아날로그 펄스",
+      commentEn: "Aesthetic oscilloscope analog pulse",
       url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"
     },
     {
-      titleKo: "5. 캐필러리 접합 플로우 (Capillary Wave)",
-      titleEn: "5. Capillary Bonding Wave",
-      commentKo: "초음파 열압착 geometry 설계용 평온 피아노",
-      commentEn: "Geometry design calm wave",
+      titleKo: "Bonding Point",
+      titleEn: "Bonding Point",
+      commentKo: "캐필러리 와이어 접합부의 미세 평온",
+      commentEn: "Capillary micro-geometry chill sound",
       url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3"
     }
   ];
