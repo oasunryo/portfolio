@@ -440,10 +440,10 @@
        12. FLOATING PREMIUM BACKGROUND MUSIC PLAYER (Spotify-style mini layout)
        ========================================================================== */
     .canvas-music-player {
-      position: fixed !important;
-      bottom: 24px !important;
-      right: 24px !important;
-      z-index: 9999 !important; /* Floats above canvas but sits under side peek overlay */
+      position: relative !important;
+      bottom: auto !important;
+      right: auto !important;
+      z-index: auto !important;
       background: rgba(255, 255, 255, 0.85) !important;
       backdrop-filter: blur(20px) !important;
       -webkit-backdrop-filter: blur(20px) !important;
@@ -456,6 +456,7 @@
       display: flex !important;
       align-items: center !important;
       transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+      pointer-events: auto !important;
     }
 
     .canvas-music-player:hover {
@@ -654,12 +655,53 @@
     /* ==========================================================================
        12.6 UNTITLED UI STYLED ULTRA-MINIMALIST GROWTH JOURNEY TIMELINE (Light-Glass Skin)
        ========================================================================== */
-    .minimal-journey-trigger-btn {
-      position: fixed !important;
+    .canvas-bottom-bar {
+      position: absolute !important;
       bottom: 24px !important;
-      left: 50% !important;
-      transform: translateX(-50%) !important;
-      z-index: 9999 !important; /* Under side-peek-overlay */
+      left: 24px !important;
+      right: 24px !important;
+      z-index: 9999 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 16px !important;
+      pointer-events: none !important;
+    }
+    .bottom-bar-left {
+      flex: 1 1 0% !important;
+      display: flex !important;
+      justify-content: flex-start !important;
+      pointer-events: none !important;
+    }
+    .bottom-bar-center {
+      flex: 0 0 auto !important;
+      display: flex !important;
+      justify-content: center !important;
+      pointer-events: none !important;
+    }
+    .bottom-bar-right {
+      flex: 1 1 0% !important;
+      display: flex !important;
+      justify-content: flex-end !important;
+      pointer-events: none !important;
+    }
+    
+    .canvas-helper-text {
+      position: relative !important;
+      bottom: auto !important;
+      left: auto !important;
+      margin: 0 !important;
+      z-index: auto !important;
+      pointer-events: auto !important;
+      max-width: 100% !important;
+    }
+
+    .minimal-journey-trigger-btn {
+      position: relative !important;
+      bottom: auto !important;
+      left: auto !important;
+      transform: none !important;
+      z-index: auto !important;
       background: rgba(255, 255, 255, 0.85) !important;
       backdrop-filter: blur(20px) !important;
       -webkit-backdrop-filter: blur(20px) !important;
@@ -675,12 +717,13 @@
       gap: 6px !important;
       transition: all 0.2s ease !important;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+      pointer-events: auto !important;
     }
     .minimal-journey-trigger-btn:hover {
       background: rgba(37, 99, 235, 0.08) !important;
       color: #2563EB !important;
       border-color: rgba(37, 99, 235, 0.3) !important;
-      transform: translateX(-50%) scale(1.03) !important;
+      transform: scale(1.03) !important;
     }
     .minimal-journey-card.light-glass {
       position: fixed !important;
@@ -867,7 +910,7 @@
       .minimal-journey-card {
         display: none !important;
       }
-      .minimal-journey-trigger-btn {
+      .canvas-bottom-bar {
         display: none !important;
       }
     }
@@ -2107,16 +2150,82 @@
 
       <!-- Blocks end -->
 
-      <!-- Helper Text bottom left -->
-      <div class="canvas-helper-text">
-        <i data-lucide="info" class="helper-icon"></i>
-        <span id="canvas-helper-msg">원하는 블록을 클릭해 보세요. 더 자세한 내용을 확인할 수 있습니다.</span>
-      </div>
+      <!-- Bottom Controls Bar (Auto Layout Center Alignment) -->
+      <div class="canvas-bottom-bar">
+        <div class="bottom-bar-left">
+          <!-- Helper Text bottom left -->
+          <div class="canvas-helper-text">
+            <i data-lucide="info" class="helper-icon"></i>
+            <span id="canvas-helper-msg">원하는 블록을 클릭해 보세요. 더 자세한 내용을 확인할 수 있습니다.</span>
+          </div>
+        </div>
 
-      <!-- Growth Journey Trigger Button (Independent bottom center) -->
-      <button class="minimal-journey-trigger-btn" id="btn-open-journey">
-        <span id="journey-trigger-text">성장 여정 보기 ↗</span>
-      </button>
+        <div class="bottom-bar-center">
+          <!-- Growth Journey Trigger Button -->
+          <button class="minimal-journey-trigger-btn" id="btn-open-journey">
+            <span id="journey-trigger-text">성장 여정 보기 ↗</span>
+          </button>
+        </div>
+
+        <div class="bottom-bar-right">
+          <!-- Floating Spotify-Style Single Line Background Music Player -->
+          <div class="canvas-music-player" id="canvas-music-player">
+            <div class="music-player-main">
+              
+              <!-- 1. Left: Album Cover Art & Equalizer -->
+              <div class="music-album-cover">
+                <div class="album-record-disc"><i data-lucide="music"></i></div>
+                
+                <!-- Animated visualizer bars from Uiverse.io -->
+                <div class="music-loading-spectrum" id="music-spectrum">
+                  <div class="music-spectrum-bar"></div>
+                  <div class="music-spectrum-bar"></div>
+                  <div class="music-spectrum-bar"></div>
+                  <div class="music-spectrum-bar"></div>
+                </div>
+              </div>
+
+              <!-- 2. Middle: Current Track Meta (Translates automatically) -->
+              <div class="music-song-meta">
+                <span class="music-song-title" id="music-song-title">Late Cleanroom</span>
+                <span class="music-artist-comment" id="music-artist-comment">심야 클린룸 감성의 따뜻한 LP 노이즈 Lofi</span>
+              </div>
+
+              <!-- 3. Right: Control buttons (Previous, Play/Pause, Next, Loop, Shuffle) -->
+              <div class="music-controls">
+                
+                <!-- Loop Toggle -->
+                <button class="music-ctrl-btn" id="btn-music-loop" title="Repeat Track">
+                  <i data-lucide="repeat"></i>
+                </button>
+
+                <!-- Previous Track -->
+                <button class="music-ctrl-btn" id="btn-music-prev" title="Previous Track">
+                  <i data-lucide="skip-back"></i>
+                </button>
+
+                <!-- Play/Pause Button (Dynamic toggle clip-path/icon) -->
+                <button class="music-ctrl-btn play-pause-trigger" id="btn-music-play" title="Play">
+                  <i data-lucide="play" class="icon-play-state"></i>
+                  <i data-lucide="pause" class="icon-pause-state"></i>
+                </button>
+
+                <!-- Next Track -->
+                <button class="music-ctrl-btn" id="btn-music-next" title="Next Track">
+                  <i data-lucide="skip-forward"></i>
+                </button>
+
+                <!-- Shuffle Toggle -->
+                <button class="music-ctrl-btn" id="btn-music-shuffle" title="Shuffle Playlist">
+                  <i data-lucide="shuffle"></i>
+                </button>
+                
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
 
     </main>
 
@@ -2258,62 +2367,7 @@
     </div>
   </div>
 
-  <!-- Floating Spotify-Style Single Line Background Music Player -->
-  <div class="canvas-music-player" id="canvas-music-player">
-    <div class="music-player-main">
-      
-      <!-- 1. Left: Album Cover Art & Equalizer -->
-      <div class="music-album-cover">
-        <div class="album-record-disc"><i data-lucide="music"></i></div>
-        
-        <!-- Animated visualizer bars from Uiverse.io -->
-        <div class="music-loading-spectrum" id="music-spectrum">
-          <div class="music-spectrum-bar"></div>
-          <div class="music-spectrum-bar"></div>
-          <div class="music-spectrum-bar"></div>
-          <div class="music-spectrum-bar"></div>
-        </div>
-      </div>
 
-      <!-- 2. Middle: Current Track Meta (Translates automatically) -->
-      <div class="music-song-meta">
-        <span class="music-song-title" id="music-song-title">Late Cleanroom</span>
-        <span class="music-artist-comment" id="music-artist-comment">심야 클린룸 감성의 따뜻한 LP 노이즈 Lofi</span>
-      </div>
-
-      <!-- 3. Right: Control buttons (Previous, Play/Pause, Next, Loop, Shuffle) -->
-      <div class="music-controls">
-        
-        <!-- Loop Toggle -->
-        <button class="music-ctrl-btn" id="btn-music-loop" title="Repeat Track">
-          <i data-lucide="repeat"></i>
-        </button>
-
-        <!-- Previous Track -->
-        <button class="music-ctrl-btn" id="btn-music-prev" title="Previous Track">
-          <i data-lucide="skip-back"></i>
-        </button>
-
-        <!-- Play/Pause Button (Dynamic toggle clip-path/icon) -->
-        <button class="music-ctrl-btn play-pause-trigger" id="btn-music-play" title="Play">
-          <i data-lucide="play" class="icon-play-state"></i>
-          <i data-lucide="pause" class="icon-pause-state"></i>
-        </button>
-
-        <!-- Next Track -->
-        <button class="music-ctrl-btn" id="btn-music-next" title="Next Track">
-          <i data-lucide="skip-forward"></i>
-        </button>
-
-        <!-- Shuffle Toggle -->
-        <button class="music-ctrl-btn" id="btn-music-shuffle" title="Shuffle Playlist">
-          <i data-lucide="shuffle"></i>
-        </button>
-        
-      </div>
-
-    </div>
-  </div>
 
   <script src="projectsData.js"></script>
   <script src="main.js"></script>
