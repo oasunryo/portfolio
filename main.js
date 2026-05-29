@@ -1323,35 +1323,35 @@ document.addEventListener('DOMContentLoaded', () => {
       titleEn: "Late Cleanroom",
       commentKo: "심야 클린룸 감성의 따뜻한 LP 노이즈 Lofi",
       commentEn: "Rainy lofi beat with warm analog vinyl crackle",
-      url: "https://assets.mixkit.co/music/preview/mixkit-lofi-study-481.mp3"
+      url: "https://raw.githubusercontent.com/SamirSaad786/lofi-room/main/Crackling%20Coffee%20Cups.mp3"
     },
     {
       titleKo: "Silicon Breeze",
       titleEn: "Silicon Breeze",
       commentKo: "귀가 편안해지는 재즈 기타 리프 Lofi 백그라운드",
       commentEn: "Super gentle jazzy guitar lofi study focus",
-      url: "https://assets.mixkit.co/music/preview/mixkit-dreaming-big-31.mp3"
+      url: "https://raw.githubusercontent.com/SamirSaad786/lofi-room/main/Crackling%20Coffee%20Cups%20(1).mp3"
     },
     {
       titleKo: "Wafer Glow",
       titleEn: "Wafer Glow",
       commentKo: "마음을 안정시켜 주는 로즈 피아노 코드 Lofi",
       commentEn: "Calming Rhodes piano chords chill study wave",
-      url: "https://assets.mixkit.co/music/preview/mixkit-sleepy-cat-135.mp3"
+      url: "https://raw.githubusercontent.com/SamirSaad786/lofi-room/main/Sunlit%20Breakers.mp3"
     },
     {
       titleKo: "Quantum Sleep",
       titleEn: "Quantum Sleep",
       commentKo: "잡념을 없애고 뇌파를 조율하는 미니멀 진정 Lofi",
       commentEn: "Cozy minimal vinyl lounge lofi for pure study",
-      url: "https://assets.mixkit.co/music/preview/mixkit-ambient-lounge-16.mp3"
+      url: "https://raw.githubusercontent.com/SamirSaad786/lofi-room/main/Sunlit%20Breakers%20(1).mp3"
     },
     {
       titleKo: "Capillary Flow",
       titleEn: "Capillary Flow",
       commentKo: "영감을 주는 지극히 고요하고 시적인 피아노 Lofi",
       commentEn: "Extremely quiet poetic acoustic piano study beat",
-      url: "https://assets.mixkit.co/music/preview/mixkit-forest-trail-1200.mp3"
+      url: "https://raw.githubusercontent.com/SamirSaad786/lofi-room/main/Tideglass%20Afternoon.mp3"
     }
   ];
 
