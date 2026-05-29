@@ -1299,6 +1299,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function updateMinimapDotsRealtime(cardId, x, y) {
+    const dot = document.getElementById(`mini-dot-${cardId}`);
+    if (dot) {
+      dot.style.left = `${(x / BOARD_WIDTH) * 100}%`;
+      dot.style.top = `${(y / BOARD_HEIGHT) * 100}%`;
+    }
   }
 
   // ==========================================================================
