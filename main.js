@@ -1094,6 +1094,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // 13. Dynamically update floating music player text language on the fly!
       if (typeof loadTrack === 'function') {
         loadTrack(currentTrackIdx);
+        if (typeof renderPlaylist === 'function') renderPlaylist();
       }
     } catch (err) {
       console.error("Error setting language:", err);
@@ -1374,6 +1375,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnLoop = document.getElementById('btn-music-loop');
   const btnShuffle = document.getElementById('btn-music-shuffle');
 
+  // Detailed Interactive Music Card DOM Nodes
+  const detailedCard = document.getElementById('main-music-card');
+  const cardTrackTitle = document.getElementById('card-track-title');
+  const cardArtistName = document.getElementById('card-artist-name');
+  const cardPlaylistMenu = document.getElementById('card-playlist-menu');
+  const musicTimeSlider = document.getElementById('music-time-slider');
+  const musicCurrentTime = document.getElementById('music-current-time');
+  const musicRemainingTime = document.getElementById('music-remaining-time');
+  const miniAlbumCover = document.querySelector('.music-album-cover');
+
   // Synchronize dynamic active shuffle & loop button styling states
   const syncPlayerUIControls = () => {
     if (btnLoop) {
@@ -1383,6 +1394,93 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnShuffle) {
       if (isShuffle) btnShuffle.classList.add('active');
       else btnShuffle.classList.remove('active');
+    }
+  };
+
+  // Helper function to format time (seconds -> M:SS)
+  const formatTime = (secs) => {
+    if (isNaN(secs) || secs === Infinity) return '0:00';
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  };
+
+  // Dynamic Playlist UI Renderer
+  const renderPlaylist = () => {
+    if (!cardPlaylistMenu) return;
+    cardPlaylistMenu.innerHTML = '';
+
+    playlistTracks.forEach((track, index) => {
+      const item = document.createElement('div');
+      item.className = 'playlist-item';
+      item.setAttribute('data-index', index);
+      
+      const title = currentLang === 'ko' ? track.titleKo : track.titleEn;
+      const comment = currentLang === 'ko' ? track.commentKo : track.commentEn;
+
+      item.innerHTML = `
+        <div class="playlist-item-meta">
+          <span class="playlist-item-title">${title}</span>
+          <span class="playlist-item-comment">${comment}</span>
+        </div>
+        <div class="playlist-active-eq">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      `;
+
+      item.addEventListener('click', () => {
+        const wasPlaying = isPlaying;
+        loadTrack(index);
+        isPlaying = true;
+        bgAudio.play().then(() => {
+          if (playerContainer) playerContainer.classList.add('playing');
+          if (detailedCard) detailedCard.classList.add('playing');
+          
+          // Sync card sound wave triggers
+          updateCardSoundWaves(true);
+        }).catch(err => console.warn(err));
+      });
+
+      cardPlaylistMenu.appendChild(item);
+    });
+
+    updatePlaylistUIHighlight();
+  };
+
+  // Playlist Active highlight syncer
+  const updatePlaylistUIHighlight = () => {
+    if (!cardPlaylistMenu) return;
+    const items = cardPlaylistMenu.querySelectorAll('.playlist-item');
+    items.forEach((item, index) => {
+      if (index === currentTrackIdx) {
+        item.classList.add('active');
+        if (isPlaying) {
+          item.classList.add('playing');
+        } else {
+          item.classList.remove('playing');
+        }
+      } else {
+        item.classList.remove('active', 'playing');
+      }
+    });
+  };
+
+  // Helper to sync sound visualizer bars inside cards
+  const updateCardSoundWaves = (playState) => {
+    const sidePeekOpen = sidePeekPanel && sidePeekPanel.classList.contains('open');
+    if (sidePeekOpen) {
+      const peekTitle = document.querySelector('.newsletter-title')?.textContent;
+      if (peekTitle) {
+        document.querySelectorAll('.project-block-card').forEach(card => {
+          const title = card.getAttribute('data-proj-title');
+          if (title && peekTitle.includes(title)) {
+            if (playState) card.classList.add('playing');
+            else card.classList.remove('playing');
+          }
+        });
+      }
     }
   };
 
@@ -1400,10 +1498,27 @@ document.addEventListener('DOMContentLoaded', () => {
       if (currentLang === 'ko') {
         if (songTitleEl) songTitleEl.textContent = track.titleKo;
         if (artistCommentEl) artistCommentEl.textContent = track.commentKo;
+        if (cardTrackTitle) cardTrackTitle.textContent = track.titleKo;
+        if (cardArtistName) cardArtistName.textContent = track.commentKo;
       } else {
         if (songTitleEl) songTitleEl.textContent = track.titleEn;
         if (artistCommentEl) artistCommentEl.textContent = track.commentEn;
+        if (cardTrackTitle) cardTrackTitle.textContent = track.titleEn;
+        if (cardArtistName) cardArtistName.textContent = track.commentEn;
       }
+
+      // Reset seek bar values immediately
+      if (musicTimeSlider) {
+        musicTimeSlider.value = 0;
+      }
+      if (musicCurrentTime) {
+        musicCurrentTime.textContent = "0:00";
+      }
+      if (musicRemainingTime) {
+        musicRemainingTime.textContent = "-0:00";
+      }
+
+      updatePlaylistUIHighlight();
     } catch(e) {
       console.error("Audio Load Error:", e);
     }
@@ -1416,31 +1531,22 @@ document.addEventListener('DOMContentLoaded', () => {
         bgAudio.pause();
         isPlaying = false;
         if (playerContainer) playerContainer.classList.remove('playing');
+        if (detailedCard) detailedCard.classList.remove('playing');
         
         // Turn off sound waves inside preview cards too
         document.querySelectorAll('.project-block-card').forEach(card => {
           card.classList.remove('playing');
         });
+        updatePlaylistUIHighlight();
       } else {
         // Enforce audio hardware wakeup securely
         bgAudio.play().then(() => {
           isPlaying = true;
           if (playerContainer) playerContainer.classList.add('playing');
+          if (detailedCard) detailedCard.classList.add('playing');
           
-          // Re-trigger active card visual waves
-          const sidePeekOpen = sidePeekPanel && sidePeekPanel.classList.contains('open');
-          if (sidePeekOpen) {
-            // Find which project is currently active in peek view to sync spectrum!
-            const peekTitle = document.querySelector('.newsletter-title')?.textContent;
-            if (peekTitle) {
-              document.querySelectorAll('.project-block-card').forEach(card => {
-                const title = card.getAttribute('data-proj-title');
-                if (title && peekTitle.includes(title)) {
-                  card.classList.add('playing');
-                }
-              });
-            }
-          }
+          updateCardSoundWaves(true);
+          updatePlaylistUIHighlight();
         }).catch(err => {
           console.warn("Audio hardware play triggered blocked by browser user interaction policy:", err);
         });
@@ -1469,6 +1575,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isPlaying) {
       bgAudio.play().then(() => {
         if (playerContainer) playerContainer.classList.add('playing');
+        if (detailedCard) detailedCard.classList.add('playing');
+        updatePlaylistUIHighlight();
       }).catch(err => console.log(err));
     }
   };
@@ -1491,11 +1599,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isPlaying) {
       bgAudio.play().then(() => {
         if (playerContainer) playerContainer.classList.add('playing');
+        if (detailedCard) detailedCard.classList.add('playing');
+        updatePlaylistUIHighlight();
       }).catch(err => console.log(err));
     }
   };
 
-  // Event bindings
+  // Event bindings for mini player
   if (btnPlay) btnPlay.addEventListener('click', togglePlay);
   if (btnNext) btnNext.addEventListener('click', nextTrack);
   if (btnPrev) btnPrev.addEventListener('click', prevTrack);
@@ -1514,6 +1624,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Toggle show detailed music controller card
+  if (miniAlbumCover) {
+    miniAlbumCover.style.cursor = 'pointer';
+    miniAlbumCover.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (detailedCard) {
+        detailedCard.classList.toggle('open');
+      }
+    });
+  }
+
+  // Close when clicking outside of detailed card
+  document.addEventListener('click', (e) => {
+    if (detailedCard && detailedCard.classList.contains('open')) {
+      if (!detailedCard.contains(e.target) && !miniAlbumCover.contains(e.target)) {
+        detailedCard.classList.remove('open');
+      }
+    }
+  });
+
   // Handle automatic progression when track ends
   bgAudio.addEventListener('ended', () => {
     if (isLoop) {
@@ -1525,6 +1655,53 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // HTML5 audio event listeners for seeking & real-time slider sync
+  bgAudio.addEventListener('timeupdate', () => {
+    if (isNaN(bgAudio.duration)) return;
+    
+    // Update slider position
+    if (musicTimeSlider) {
+      musicTimeSlider.value = bgAudio.currentTime;
+    }
+    
+    // Update timers text
+    if (musicCurrentTime) {
+      musicCurrentTime.textContent = formatTime(bgAudio.currentTime);
+    }
+    
+    if (musicRemainingTime) {
+      const remaining = bgAudio.duration - bgAudio.currentTime;
+      musicRemainingTime.textContent = `-${formatTime(remaining)}`;
+    }
+  });
+
+  bgAudio.addEventListener('loadedmetadata', () => {
+    if (musicTimeSlider) {
+      musicTimeSlider.max = bgAudio.duration;
+      musicTimeSlider.value = bgAudio.currentTime;
+    }
+    if (musicCurrentTime) {
+      musicCurrentTime.textContent = formatTime(bgAudio.currentTime);
+    }
+    if (musicRemainingTime) {
+      musicRemainingTime.textContent = `-${formatTime(bgAudio.duration)}`;
+    }
+  });
+
+  // Handle Dragging Slider (Seeking)
+  if (musicTimeSlider) {
+    musicTimeSlider.addEventListener('input', () => {
+      bgAudio.currentTime = musicTimeSlider.value;
+      if (musicCurrentTime) {
+        musicCurrentTime.textContent = formatTime(bgAudio.currentTime);
+      }
+      if (musicRemainingTime) {
+        const remaining = bgAudio.duration - bgAudio.currentTime;
+        musicRemainingTime.textContent = `-${formatTime(remaining)}`;
+      }
+    });
+  }
+
   // ==========================================================================
   // 13. INITIALISATION & MOUNT
   // ==========================================================================
@@ -1534,6 +1711,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2nd: Mount audio engine default track securely
     loadTrack(currentTrackIdx);
+    renderPlaylist();
     syncPlayerUIControls();
 
     // Initialize default language and dates formatting

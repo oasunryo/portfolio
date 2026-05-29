@@ -651,6 +651,295 @@
       background: rgba(37, 99, 235, 0.12) !important;
     }
 
+    /* ==========================================================================
+       12.5 EXPANDABLE HIGH-FIDELITY MUSIC STREAMING CONTROL CARD (Light-Glass Skin)
+       ========================================================================== */
+    .main-music-card.light-glass {
+      position: fixed !important;
+      bottom: 96px !important;
+      right: 24px !important;
+      z-index: 1000000 !important; /* Above mini player but under absolute popups */
+      max-width: 360px !important;
+      width: 90% !important;
+      padding: 20px !important;
+      border-radius: 24px !important;
+      background: rgba(255, 255, 255, 0.93) !important;
+      backdrop-filter: blur(28px) !important;
+      -webkit-backdrop-filter: blur(28px) !important;
+      border: 1px solid rgba(228, 228, 231, 0.9) !important;
+      box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+      color: #18181B !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 16px !important;
+      transform: translateY(15px) scale(0.95) !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .main-music-card.light-glass.open {
+      transform: translateY(0) scale(1) !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+
+    .track-info {
+      display: flex !important;
+      align-items: center !important;
+      gap: 14px !important;
+    }
+
+    .album-art {
+      width: 56px !important;
+      height: 56px !important;
+      border-radius: 14px !important;
+      background: linear-gradient(135deg, #34D399, #3B82F6) !important; /* Premium Emerald-to-Cyan matching semiconductor theme */
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25) !important;
+      flex-shrink: 0 !important;
+      transition: transform 0.3s ease !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      color: #FFFFFF !important;
+    }
+
+    .album-art svg {
+      width: 24px !important;
+      height: 24px !important;
+    }
+
+    .album-art:hover {
+      transform: scale(1.05) !important;
+    }
+
+    .track-details {
+      flex-grow: 1 !important;
+      overflow: hidden !important;
+      min-width: 0 !important;
+    }
+
+    .track-title {
+      font-size: 15px !important;
+      font-weight: 700 !important;
+      color: #18181B !important;
+      white-space: nowrap !important;
+      text-overflow: ellipsis !important;
+      overflow: hidden !important;
+      line-height: 1.3 !important;
+    }
+
+    .artist-name {
+      font-size: 11px !important;
+      color: #71717A !important;
+      margin-top: 2px !important;
+      white-space: nowrap !important;
+      text-overflow: ellipsis !important;
+      overflow: hidden !important;
+      line-height: 1.2 !important;
+    }
+
+    .volume-bars {
+      display: flex !important;
+      align-items: flex-end !important;
+      gap: 2.5px !important;
+      width: 32px !important;
+      height: 24px !important;
+      flex-shrink: 0 !important;
+    }
+
+    .volume-bars .bar {
+      width: 3px !important;
+      height: 6px !important;
+      background: linear-gradient(180deg, #10B981, #3B82F6) !important; /* OSAT custom LED */
+      border-radius: 2px !important;
+      transition: height 0.15s ease !important;
+    }
+
+    .main-music-card.playing .volume-bars .bar {
+      animation: bounce 0.8s infinite ease-in-out !important;
+      animation-delay: var(--delay) !important;
+    }
+
+    @keyframes bounce {
+      0%, 100% { height: 6px; }
+      50% { height: 22px; }
+    }
+
+    /* Playback controls container */
+    .playback-controls {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 6px !important;
+    }
+
+    .progress-bar-container {
+      width: 100% !important;
+      position: relative !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+
+    /* Premium styled seek slider range input */
+    .real-time-slider {
+      -webkit-appearance: none !important;
+      appearance: none !important;
+      width: 100% !important;
+      height: 6px !important;
+      border-radius: 3px !important;
+      background: rgba(228, 228, 231, 0.9) !important; /* Zinc-200 slider track */
+      outline: none !important;
+      cursor: pointer !important;
+      margin: 0 !important;
+      transition: background 0.15s ease !important;
+    }
+
+    /* Custom Slider Thumb */
+    .real-time-slider::-webkit-slider-thumb {
+      -webkit-appearance: none !important;
+      appearance: none !important;
+      width: 14px !important;
+      height: 14px !important;
+      border-radius: 50% !important;
+      background: #3B82F6 !important;
+      border: 2px solid #FFFFFF !important;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
+      cursor: pointer !important;
+      transition: transform 0.1s ease !important;
+    }
+
+    .real-time-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2) !important;
+    }
+
+    .real-time-slider::-moz-range-thumb {
+      width: 12px !important;
+      height: 12px !important;
+      border-radius: 50% !important;
+      background: #3B82F6 !important;
+      border: 2px solid #FFFFFF !important;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
+      cursor: pointer !important;
+    }
+
+    .time-info {
+      display: flex !important;
+      justify-content: space-between !important;
+      font-size: 11px !important;
+      color: #71717A !important;
+      font-weight: 500 !important;
+      user-select: none !important;
+    }
+
+    /* Playlist selector container */
+    .playlist-menu {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 5px !important;
+      max-height: 150px !important;
+      overflow-y: auto !important;
+      border-top: 1px solid rgba(228, 228, 231, 0.7) !important;
+      padding-top: 12px !important;
+      margin-top: 4px !important;
+    }
+
+    /* Custom Scrollbar for Playlist */
+    .playlist-menu::-webkit-scrollbar {
+      width: 4px !important;
+    }
+
+    .playlist-menu::-webkit-scrollbar-track {
+      background: transparent !important;
+    }
+
+    .playlist-menu::-webkit-scrollbar-thumb {
+      background: rgba(228, 228, 231, 0.9) !important;
+      border-radius: 2px !important;
+    }
+
+    .playlist-item {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 8px 10px !important;
+      border-radius: 10px !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      font-size: 12px !important;
+      color: #3F3F46 !important;
+      font-weight: 500 !important;
+    }
+
+    .playlist-item:hover {
+      background: rgba(37, 99, 235, 0.05) !important;
+      color: #2563EB !important;
+    }
+
+    .playlist-item.active {
+      background: rgba(37, 99, 235, 0.08) !important;
+      color: #2563EB !important;
+      font-weight: 700 !important;
+    }
+
+    .playlist-item-meta {
+      display: flex !important;
+      flex-direction: column !important;
+      min-width: 0 !important;
+      flex-grow: 1 !important;
+    }
+
+    .playlist-item-title {
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+
+    .playlist-item-comment {
+      font-size: 9px !important;
+      color: #71717A !important;
+      margin-top: 1px !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+
+    .playlist-active-eq {
+      width: 12px !important;
+      height: 12px !important;
+      display: none !important;
+      align-items: flex-end !important;
+      gap: 1.5px !important;
+      margin-left: 8px !important;
+      flex-shrink: 0 !important;
+    }
+
+    .playlist-active-eq span {
+      width: 2px !important;
+      height: 3px !important;
+      background-color: #2563EB !important;
+      border-radius: 1px !important;
+    }
+
+    .playlist-item.active.playing .playlist-active-eq {
+      display: flex !important;
+    }
+
+    .playlist-item.active.playing .playlist-active-eq span {
+      animation: bounce-spectrum 0.6s ease-in-out infinite alternate !important;
+    }
+
+    .playlist-item.active.playing .playlist-active-eq span:nth-child(1) { animation-delay: 0.1s !important; }
+    .playlist-item.active.playing .playlist-active-eq span:nth-child(2) { animation-delay: 0.3s !important; }
+    .playlist-item.active.playing .playlist-active-eq span:nth-child(3) { animation-delay: 0.2s !important; }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .main-music-card.light-glass {
+        display: none !important;
+      }
+    }
+
     /* Responsive hidden player state for mobile device viewport */
     @media (max-width: 1024px) {
       .canvas-music-player {
@@ -1625,6 +1914,43 @@
       <!-- Injected Dynamically by JS -->
     </div>
   </aside>
+
+  <!-- Floating Spotify-Style Detailed Expandable Music Card (Light-Glass Skin) -->
+  <div class="main-music-card light-glass" id="main-music-card">
+    <div class="track-info">
+      <!-- Emerald-to-Cyan Album cover with disc icon -->
+      <div class="album-art">
+        <i data-lucide="disc"></i>
+      </div>
+      <div class="track-details">
+        <div class="track-title" id="card-track-title">Litho Waves</div>
+        <div class="artist-name" id="card-artist-name">Calm semiconductor photo-process lofi</div>
+      </div>
+      <!-- Equalizer Visualizer LEDs -->
+      <div class="volume-bars" id="card-volume-bars">
+        <div class="bar" style="--delay: 0s;"></div>
+        <div class="bar" style="--delay: 0.2s;"></div>
+        <div class="bar" style="--delay: 0.4s;"></div>
+        <div class="bar" style="--delay: 0.6s;"></div>
+      </div>
+    </div>
+
+    <!-- Interactive Progress Seek Bar -->
+    <div class="playback-controls">
+      <div class="progress-bar-container">
+        <input type="range" class="real-time-slider" id="music-time-slider" min="0" max="100" value="0">
+      </div>
+      <div class="time-info">
+        <span class="current-time" id="music-current-time">0:00</span>
+        <span class="remaining-time" id="music-remaining-time">-0:00</span>
+      </div>
+    </div>
+
+    <!-- Active Playlist selection tracks panel -->
+    <div class="playlist-menu" id="card-playlist-menu">
+      <!-- Tracks are dynamically rendered here with full click and EQ synchronisation -->
+    </div>
+  </div>
 
   <!-- Floating Spotify-Style Single Line Background Music Player -->
   <div class="canvas-music-player" id="canvas-music-player">
