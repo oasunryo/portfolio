@@ -561,50 +561,15 @@ body {
 
 /* Skill Tree Item Layout (Name on the left, Compact slider on the right) */
 .tree-container .file-item.list-item.skill-tree-item {
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: flex-start;
+  gap: 8px;
 }
 
-/* Let the text wrap or shrink properly but try to stay on one line */
-.tree-container .file-item.list-item.skill-tree-item .item-text {
-  flex-grow: 1;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-/* Compact mini slider track (Mono-tone background for premium minimal aesthetic) */
 .skill-mini-slider {
-  width: 50px;
-  height: 2px;
-  background: #E5E7EB; /* Light gray track */
-  border-radius: 1px;
-  position: relative;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-/* Compact mini slider fill bar (Elegant dark gray/monotone matching non-active tab gray) */
-.skill-mini-fill {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 0%; /* Starts at 0, animated to --target-pct via JS */
-  background: #9CA3AF; /* Minimalist gray */
-  border-radius: 1px;
-  transition: width 0.9s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-/* Subtle active highlight color on hover */
-.tree-container .file-item.list-item.skill-tree-item:hover .skill-mini-fill {
-  background: var(--accent-blue); /* Match accent on hover */
+  display: none !important;
 }
 
 /* Active skill filter state */
-.tree-container .file-item.list-item.skill-tree-item.active .skill-mini-fill {
-  background: var(--accent-blue);
-}
 .tree-container .file-item.list-item.skill-tree-item.active .item-text {
   color: var(--accent-blue);
 }

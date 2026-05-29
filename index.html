@@ -403,29 +403,32 @@
       max-width: 100% !important;
     }
 
-    /* Set maximum width and layout properties on tree items, text and sliders */
-    .tree-container .file-item.list-item.skill-tree-item {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      box-sizing: border-box !important;
-      max-width: 100% !important;
-      gap: 8px !important;
-      width: 100% !important;
+    /* Completely hide and eliminate the skill level gauge slider bars */
+    .skill-mini-slider {
+      display: none !important;
     }
 
-    .tree-container .file-item.list-item.skill-tree-item .item-text {
-      flex: 1 1 0% !important; /* Allows flexible shrinking first */
-      min-width: 0 !important;   /* Crucial flexbox property to trigger ellipsis wrapping */
+    /* Elegant ellipsis truncation formatting for all tree view file list-items when text spills over sidebar boundary */
+    .tree-container .file-item.list-item {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      box-sizing: border-box !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      gap: 8px !important;
+      overflow: hidden !important; /* Forces clip container boundary */
+    }
+
+    /* Apply strict ellipses constraints on both projects & skills leaf text nodes */
+    .tree-container .file-item.list-item .item-text {
+      flex: 1 1 auto !important;
+      min-width: 0 !important;   /* Critical parameter to trigger CSS word truncation rules inside flex containers */
       white-space: nowrap !important;
       overflow: hidden !important;
       text-overflow: ellipsis !important;
       font-size: 13px !important;
-    }
-
-    .skill-mini-slider {
-      flex-shrink: 0 !important; /* Forces slider bar to never shrink or break row */
-      margin-left: auto !important;
+      max-width: 100% !important;
     }
 
     /* Keep chevrons elegant and strictly inside folder row bounds */
