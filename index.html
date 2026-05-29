@@ -25,6 +25,230 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
   <link rel="stylesheet" href="index.css">
+  <style>
+    /* ==========================================================================
+       9 PROJECT BLOCKS (Ultra-Minimalist Playlist Row Style)
+       ========================================================================== */
+    .project-block-card {
+      width: 290px !important;
+      height: 64px !important;
+      background: #FFFFFF !important;
+      border: 1px solid #E4E4E7 !important;
+      border-radius: 12px !important;
+      padding: 12px !important;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      position: absolute !important;
+      cursor: grab !important;
+      overflow: hidden !important;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+
+    .project-block-card:hover {
+      border-color: #2563EB !important; /* Subtle accent highlight */
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+    }
+
+    .project-block-card:active {
+      cursor: grabbing !important;
+    }
+
+    /* Left Side: Flat Cover */
+    .project-thumbnail {
+      width: 40px !important;
+      height: 40px !important;
+      border-radius: 8px !important;
+      margin: 0 16px 0 0 !important;
+      flex-shrink: 0 !important;
+      order: 1 !important;
+      position: relative !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow: hidden !important;
+      border: none !important;
+      background: #F4F4F5 !important; /* Minimalist Flat gray */
+    }
+
+    .thumbnail-chip-pattern,
+    .thumbnail-gradient-overlay,
+    .thumbnail-text-overlay {
+      display: none !important;
+    }
+
+    /* Minimalist gray centered icon inside left cover */
+    .project-icon-box {
+      width: 20px !important;
+      height: 20px !important;
+      background: none !important;
+      color: #71717A !important; /* Minimalist dark zinc */
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      position: absolute !important;
+      left: 32px !important; /* Centered inside 40px cover with 12px left padding */
+      top: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      z-index: 3 !important;
+      pointer-events: none !important;
+    }
+
+    .project-icon-box svg {
+      width: 16px !important;
+      height: 16px !important;
+    }
+
+    /* Middle Side: Text Block */
+    .project-card-header {
+      order: 2 !important;
+      flex-grow: 1 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      justify-content: center !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: none !important;
+      max-width: calc(100% - 76px) !important;
+    }
+
+    .project-card-header .header-left {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 2px !important;
+      overflow: hidden !important;
+      max-width: 100% !important;
+    }
+
+    .project-card-title {
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      color: #18181B !important;
+      line-height: 1.3 !important;
+      margin: 0 !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      max-width: 185px !important;
+    }
+
+    /* Right/Bottom Side: Metadata, hidden footer structure, and compact floating expand button */
+    .project-card-footer {
+      order: 3 !important;
+      display: flex !important;
+      align-items: center !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: none !important;
+      background: none !important;
+    }
+
+    .project-dates {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    .project-dates .date-row {
+      display: none !important;
+    }
+
+    /* Minimalist Date text right below the title */
+    .project-dates .date-row:nth-child(3) {
+      display: block !important;
+      font-size: 10px !important;
+      font-weight: 400 !important;
+      color: #71717A !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      position: absolute !important;
+      left: 68px !important; /* Positioned below title */
+      top: 36px !important;
+      white-space: nowrap !important;
+      pointer-events: none !important;
+    }
+
+    .project-dates .date-row:nth-child(3) .date-lbl {
+      display: none !important;
+    }
+
+    .project-dates .date-row:nth-child(3) .date-val {
+      font-weight: 400 !important;
+      color: #71717A !important;
+    }
+
+    /* Minimalist expand button on the far right */
+    .expand-btn {
+      position: absolute !important;
+      right: 12px !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+      width: 24px !important;
+      height: 24px !important;
+      border-radius: 6px !important;
+      background: transparent !important;
+      border: none !important;
+      color: #A1A1AA !important; /* Soft zinc-400 */
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 0 !important;
+      font-size: 0 !important; /* Hides text "더 보기" / "Read More" */
+      cursor: pointer !important;
+      transition: color 0.2s ease, background 0.2s ease !important;
+      z-index: 5 !important;
+      flex-shrink: 0 !important;
+    }
+
+    .expand-btn svg {
+      width: 12px !important;
+      height: 12px !important;
+    }
+
+    .expand-btn:hover {
+      background: #F4F4F5 !important;
+      color: #18181B !important;
+    }
+
+    /* Let the macOS header dots stay hidden */
+    .card-dots {
+      display: none !important;
+    }
+
+    /* Tree Folder Chevron Icons */
+    .tree-label {
+      justify-content: flex-start !important;
+      position: relative !important;
+      width: 100% !important;
+    }
+
+    .chevron-icon {
+      margin-left: auto !important;
+      width: 14px !important;
+      height: 14px !important;
+      color: #9CA3AF !important; /* Elegant gray */
+      flex-shrink: 0 !important;
+      transition: transform 0.2s ease !important;
+    }
+
+    .open-chevron {
+      display: none !important;
+    }
+
+    .closed-chevron {
+      display: block !important;
+    }
+
+    .tree-toggle:checked ~ .tree-label .open-chevron {
+      display: block !important;
+    }
+
+    .tree-toggle:checked ~ .tree-label .closed-chevron {
+      display: none !important;
+    }
+  </style>
 </head>
 <body>
   <div class="app-container">
@@ -119,22 +343,18 @@
                       <i data-lucide="folder" class="icon folder-closed-icon"></i>
                       <i data-lucide="folder-open" class="icon folder-open-icon"></i>
                       <span>projects</span>
-                    
-                      <i data-lucide="chevron-down" class="chevron-icon arrow-down"></i>
-                      <i data-lucide="chevron-up" class="chevron-icon arrow-up"></i></label>
+                    </label>
                     <div class="tree-children-wrapper">
                       <ul class="tree-children">
                         
                         <!-- 1. Process & Analysis -->
                         <li class="tree-item">
-                          <input type="checkbox" id="fold-process" class="tree-toggle">
+                          <input type="checkbox" id="fold-process" class="tree-toggle" checked>
                           <label for="fold-process" class="tree-label">
                             <i data-lucide="folder" class="icon folder-closed-icon"></i>
                             <i data-lucide="folder-open" class="icon folder-open-icon"></i>
                             <span>process-analysis</span>
-                          
-                      <i data-lucide="chevron-down" class="chevron-icon arrow-down"></i>
-                      <i data-lucide="chevron-up" class="chevron-icon arrow-up"></i></label>
+                          </label>
                           <div class="tree-children-wrapper">
                             <ul class="tree-children">
                               <li class="tree-item">
@@ -161,14 +381,12 @@
 
                         <!-- 2. Digital Systems -->
                         <li class="tree-item">
-                          <input type="checkbox" id="fold-digital" class="tree-toggle">
+                          <input type="checkbox" id="fold-digital" class="tree-toggle" checked>
                           <label for="fold-digital" class="tree-label">
                             <i data-lucide="folder" class="icon folder-closed-icon"></i>
                             <i data-lucide="folder-open" class="icon folder-open-icon"></i>
                             <span>digital-systems</span>
-                          
-                      <i data-lucide="chevron-down" class="chevron-icon arrow-down"></i>
-                      <i data-lucide="chevron-up" class="chevron-icon arrow-up"></i></label>
+                          </label>
                           <div class="tree-children-wrapper">
                             <ul class="tree-children">
                               <li class="tree-item">
@@ -189,14 +407,12 @@
 
                         <!-- 3. Analog & Power -->
                         <li class="tree-item">
-                          <input type="checkbox" id="fold-analog" class="tree-toggle">
+                          <input type="checkbox" id="fold-analog" class="tree-toggle" checked>
                           <label for="fold-analog" class="tree-label">
                             <i data-lucide="folder" class="icon folder-closed-icon"></i>
                             <i data-lucide="folder-open" class="icon folder-open-icon"></i>
                             <span>circuits-power</span>
-                          
-                      <i data-lucide="chevron-down" class="chevron-icon arrow-down"></i>
-                      <i data-lucide="chevron-up" class="chevron-icon arrow-up"></i></label>
+                          </label>
                           <div class="tree-children-wrapper">
                             <ul class="tree-children">
                               <li class="tree-item">
@@ -247,35 +463,29 @@
                       <i data-lucide="folder" class="icon folder-closed-icon"></i>
                       <i data-lucide="folder-open" class="icon folder-open-icon"></i>
                       <span>skills</span>
-                    
-                      <i data-lucide="chevron-down" class="chevron-icon arrow-down"></i>
-                      <i data-lucide="chevron-up" class="chevron-icon arrow-up"></i></label>
+                    </label>
                     <div class="tree-children-wrapper">
                       <ul class="tree-children">
 
                         <!-- 대분류 1: Technical Skills -->
                         <li class="tree-item">
-                          <input type="checkbox" id="fold-tech-skills" class="tree-toggle">
+                          <input type="checkbox" id="fold-tech-skills" class="tree-toggle" checked>
                           <label for="fold-tech-skills" class="tree-label">
                             <i data-lucide="folder" class="icon folder-closed-icon"></i>
                             <i data-lucide="folder-open" class="icon folder-open-icon"></i>
-                            <span data-ko="하드웨어 &amp; 엔지니어링 역량" data-en="Technical Skills">하드웨어 &amp; 엔지니어링 역량</span>
-                          
-                      <i data-lucide="chevron-down" class="chevron-icon arrow-down"></i>
-                      <i data-lucide="chevron-up" class="chevron-icon arrow-up"></i></label>
+                            <span data-ko="⚙️ 하드웨어 &amp; 엔지니어링 역량" data-en="⚙️ Technical Skills">⚙️ 하드웨어 &amp; 엔지니어링 역량</span>
+                          </label>
                           <div class="tree-children-wrapper">
                             <ul class="tree-children">
 
                               <!-- Level 3 -->
                               <li class="tree-item">
-                                <input type="checkbox" id="fold-tech-l3" class="tree-toggle">
+                                <input type="checkbox" id="fold-tech-l3" class="tree-toggle" checked>
                                 <label for="fold-tech-l3" class="tree-label">
                                   <i data-lucide="folder" class="icon folder-closed-icon"></i>
                                   <i data-lucide="folder-open" class="icon folder-open-icon"></i>
                                   <span data-ko="우수함 (Level 3)" data-en="Advanced (Level 3)">우수함 (Level 3)</span>
-                                
-                      <i data-lucide="chevron-down" class="chevron-icon arrow-down"></i>
-                      <i data-lucide="chevron-up" class="chevron-icon arrow-up"></i></label>
+                                </label>
                                 <div class="tree-children-wrapper">
                                   <ul class="tree-children">
                                     <li class="tree-item">
@@ -338,14 +548,12 @@
 
                               <!-- Level 2 -->
                               <li class="tree-item">
-                                <input type="checkbox" id="fold-tech-l2" class="tree-toggle">
+                                <input type="checkbox" id="fold-tech-l2" class="tree-toggle" checked>
                                 <label for="fold-tech-l2" class="tree-label">
                                   <i data-lucide="folder" class="icon folder-closed-icon"></i>
                                   <i data-lucide="folder-open" class="icon folder-open-icon"></i>
                                   <span data-ko="준비됨 (Level 2)" data-en="Intermediate (Level 2)">준비됨 (Level 2)</span>
-                                
-                      <i data-lucide="chevron-down" class="chevron-icon arrow-down"></i>
-                      <i data-lucide="chevron-up" class="chevron-icon arrow-up"></i></label>
+                                </label>
                                 <div class="tree-children-wrapper">
                                   <ul class="tree-children">
                                     <li class="tree-item">
@@ -399,14 +607,12 @@
 
                               <!-- Level 1 -->
                               <li class="tree-item">
-                                <input type="checkbox" id="fold-tech-l1" class="tree-toggle">
+                                <input type="checkbox" id="fold-tech-l1" class="tree-toggle" checked>
                                 <label for="fold-tech-l1" class="tree-label">
                                   <i data-lucide="folder" class="icon folder-closed-icon"></i>
                                   <i data-lucide="folder-open" class="icon folder-open-icon"></i>
                                   <span data-ko="기초 (Level 1)" data-en="Basic (Level 1)">기초 (Level 1)</span>
-                                
-                      <i data-lucide="chevron-down" class="chevron-icon arrow-down"></i>
-                      <i data-lucide="chevron-up" class="chevron-icon arrow-up"></i></label>
+                                </label>
                                 <div class="tree-children-wrapper">
                                   <ul class="tree-children">
                                     <li class="tree-item">
@@ -482,27 +688,23 @@
 
                         <!-- 대분류 2: Interpersonal Skills -->
                         <li class="tree-item">
-                          <input type="checkbox" id="fold-inter-skills" class="tree-toggle">
+                          <input type="checkbox" id="fold-inter-skills" class="tree-toggle" checked>
                           <label for="fold-inter-skills" class="tree-label">
                             <i data-lucide="folder" class="icon folder-closed-icon"></i>
                             <i data-lucide="folder-open" class="icon folder-open-icon"></i>
-                            <span data-ko="대인 역량 &amp; 소통" data-en="Interpersonal Skills">대인 역량 &amp; 소통</span>
-                          
-                      <i data-lucide="chevron-down" class="chevron-icon arrow-down"></i>
-                      <i data-lucide="chevron-up" class="chevron-icon arrow-up"></i></label>
+                            <span data-ko="🤝 대인 역량 &amp; 소통" data-en="🤝 Interpersonal Skills">🤝 대인 역량 &amp; 소통</span>
+                          </label>
                           <div class="tree-children-wrapper">
                             <ul class="tree-children">
 
                               <!-- Level 3 -->
                               <li class="tree-item">
-                                <input type="checkbox" id="fold-inter-l3" class="tree-toggle">
+                                <input type="checkbox" id="fold-inter-l3" class="tree-toggle" checked>
                                 <label for="fold-inter-l3" class="tree-label">
                                   <i data-lucide="folder" class="icon folder-closed-icon"></i>
                                   <i data-lucide="folder-open" class="icon folder-open-icon"></i>
                                   <span data-ko="우수함 (Level 3)" data-en="Advanced (Level 3)">우수함 (Level 3)</span>
-                                
-                      <i data-lucide="chevron-down" class="chevron-icon arrow-down"></i>
-                      <i data-lucide="chevron-up" class="chevron-icon arrow-up"></i></label>
+                                </label>
                                 <div class="tree-children-wrapper">
                                   <ul class="tree-children">
                                     <li class="tree-item">
@@ -547,14 +749,12 @@
 
                               <!-- Level 2 -->
                               <li class="tree-item">
-                                <input type="checkbox" id="fold-inter-l2" class="tree-toggle">
+                                <input type="checkbox" id="fold-inter-l2" class="tree-toggle" checked>
                                 <label for="fold-inter-l2" class="tree-label">
                                   <i data-lucide="folder" class="icon folder-closed-icon"></i>
                                   <i data-lucide="folder-open" class="icon folder-open-icon"></i>
                                   <span data-ko="준비됨 (Level 2)" data-en="Intermediate (Level 2)">준비됨 (Level 2)</span>
-                                
-                      <i data-lucide="chevron-down" class="chevron-icon arrow-down"></i>
-                      <i data-lucide="chevron-up" class="chevron-icon arrow-up"></i></label>
+                                </label>
                                 <div class="tree-children-wrapper">
                                   <ul class="tree-children">
                                     <li class="tree-item">
@@ -590,14 +790,12 @@
 
                               <!-- Level 1 -->
                               <li class="tree-item">
-                                <input type="checkbox" id="fold-inter-l1" class="tree-toggle">
+                                <input type="checkbox" id="fold-inter-l1" class="tree-toggle" checked>
                                 <label for="fold-inter-l1" class="tree-label">
                                   <i data-lucide="folder" class="icon folder-closed-icon"></i>
                                   <i data-lucide="folder-open" class="icon folder-open-icon"></i>
                                   <span data-ko="기초 (Level 1)" data-en="Basic (Level 1)">기초 (Level 1)</span>
-                                
-                      <i data-lucide="chevron-down" class="chevron-icon arrow-down"></i>
-                      <i data-lucide="chevron-up" class="chevron-icon arrow-up"></i></label>
+                                </label>
                                 <div class="tree-children-wrapper">
                                   <ul class="tree-children">
                                     <li class="tree-item">
@@ -922,6 +1120,12 @@
       </div>
 
       <!-- Blocks end -->
+
+      <!-- Helper Text bottom left -->
+      <div class="canvas-helper-text">
+        <i data-lucide="info" class="helper-icon"></i>
+        <span>원하는 블록을 클릭해 보세요. 더 자세한 내용을 확인할 수 있습니다.</span>
+      </div>
 
     </main>
 

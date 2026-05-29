@@ -1,6 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
   console.log("Semiconductor Portfolio Builder: Javascript Mounting...");
 
+  // ==========================================================================
+  // 0. DYNAMIC TREE VIEW FOLDER COLLAPSE & CHEVRON ICONS INJECTION
+  // ==========================================================================
+  const treeToggles = document.querySelectorAll('.tree-toggle');
+  treeToggles.forEach(toggle => {
+    // Force fold closed on load
+    toggle.checked = false;
+
+    // Find the next label and inject Lucide chevron icons
+    const label = toggle.nextElementSibling;
+    if (label && label.classList.contains('tree-label')) {
+      // Remove any existing chevrons to prevent duplicates
+      label.querySelectorAll('.chevron-icon').forEach(el => el.remove());
+
+      // Create closed chevron (chevron-down)
+      const closedChevron = document.createElement('i');
+      closedChevron.setAttribute('data-lucide', 'chevron-down');
+      closedChevron.className = 'chevron-icon closed-chevron';
+
+      // Create open chevron (chevron-up)
+      const openChevron = document.createElement('i');
+      openChevron.setAttribute('data-lucide', 'chevron-up');
+      openChevron.className = 'chevron-icon open-chevron';
+
+      label.appendChild(closedChevron);
+      label.appendChild(openChevron);
+    }
+  });
+
+  // Re-initialize Lucide icons so our new chevrons are drawn
+  if (window.lucide && window.lucide.createIcons) {
+    window.lucide.createIcons();
+  }
+
   // Safety checker wrapper for adding event listeners securely
   const safeAddListener = (elementId, event, callback) => {
     const el = document.getElementById(elementId);
@@ -115,8 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const screenW = dims.width;
       const screenH = dims.height;
 
-      const projW = 320;
-      const projH = 220; // Styled height
+      const projW = 290;
+      const projH = 72; // Slimmed down to music streaming track row height
 
       // 1. Shuffled project card IDs for random sequence scattering
       const projectCardIds = [];
@@ -199,10 +233,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Centered compact layout geometry (Compact project cards are 320px wide)
       const cols = Math.max(2, Math.floor(screenW / 360));
-      const projW = 320;
-      const projH = 260;
-      const gapX = 30; // compact gap
-      const gapY = 20; 
+      const projW = 290;
+      const projH = 72;
+      const gapX = 20; // compact gap
+      const gapY = 16; 
 
       // Shuffle order of all cards for random grid sequence
       const shuffledCards = Array.from(allCards).filter(c => c.id !== 'portfolio-preview-card');
@@ -282,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const dims = getCanvasDimensions();
     const cardW = (activeDragCard.id === 'portfolio-preview-card') ? 520 : 320;
-    const cardH = (activeDragCard.id === 'portfolio-preview-card') ? 500 : 260;
+    const cardH = (activeDragCard.id === 'portfolio-preview-card') ? 500 : 160;
 
     // Strict boundary cap to stay within visible screen limits
     const x = Math.max(10, Math.min(dims.width - cardW - 10, dx));
@@ -649,6 +683,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (previewIntro) previewIntro.textContent = data.intro;
       if (previewEmail) previewEmail.textContent = data.email;
       if (previewLinkedin) previewLinkedin.textContent = data.linkedin;
+
+      // Update Copy Toast Text
+      const copyToast = document.getElementById('copy-toast');
+      if (copyToast) {
+        copyToast.textContent = lang === 'ko' ? '✓ 복사됨' : '✓ Copied';
+      }
 
       // 3. Update UI Labels (Sidebar labels & descriptions)
       const lblName = document.querySelector('label[for="input-name"]');
