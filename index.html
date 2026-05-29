@@ -655,29 +655,40 @@
        12.6 UNTITLED UI STYLED ULTRA-MINIMALIST GROWTH JOURNEY TIMELINE (Light-Glass Skin)
        ========================================================================== */
     .minimal-journey-trigger-btn {
-      background: #18181B !important;
-      color: #FFFFFF !important;
-      border: none !important;
-      border-radius: 8px !important;
-      padding: 4px 10px !important;
+      position: fixed !important;
+      bottom: 24px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      z-index: 999999 !important;
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      color: #18181B !important;
+      border: 1px solid rgba(228, 228, 231, 0.9) !important;
+      border-radius: 9999px !important;
+      padding: 8px 16px !important;
       font-size: 11px !important;
       font-weight: 600 !important;
       cursor: pointer !important;
       display: inline-flex !important;
       align-items: center !important;
-      margin-left: 8px !important;
+      gap: 6px !important;
       transition: all 0.2s ease !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
     }
     .minimal-journey-trigger-btn:hover {
-      background: #2563EB !important; /* Royal Blue */
-      transform: scale(1.03) !important;
+      background: rgba(37, 99, 235, 0.08) !important;
+      color: #2563EB !important;
+      border-color: rgba(37, 99, 235, 0.3) !important;
+      transform: translateX(-50%) scale(1.03) !important;
     }
     .minimal-journey-card.light-glass {
       position: fixed !important;
-      bottom: 96px !important;
-      left: 24px !important;
+      bottom: 74px !important;
+      left: 50% !important;
+      transform: translateX(-50%) translateY(15px) scale(0.95) !important;
       z-index: 999999 !important;
-      width: 330px !important;
+      width: 340px !important;
       padding: 18px !important;
       border-radius: 20px !important;
       background: rgba(255, 255, 255, 0.94) !important;
@@ -690,13 +701,12 @@
       display: flex !important;
       flex-direction: column !important;
       gap: 14px !important;
-      transform: translateY(15px) scale(0.95) !important;
       opacity: 0 !important;
       pointer-events: none !important;
       transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
     .minimal-journey-card.light-glass.open {
-      transform: translateY(0) scale(1) !important;
+      transform: translateX(-50%) translateY(0) scale(1) !important;
       opacity: 1 !important;
       pointer-events: auto !important;
     }
@@ -2101,10 +2111,12 @@
       <div class="canvas-helper-text">
         <i data-lucide="info" class="helper-icon"></i>
         <span id="canvas-helper-msg">원하는 블록을 클릭해 보세요. 더 자세한 내용을 확인할 수 있습니다.</span>
-        <button class="minimal-journey-trigger-btn" id="btn-open-journey">
-          <span id="journey-trigger-text">성장 여정 보기 ↗</span>
-        </button>
       </div>
+
+      <!-- Growth Journey Trigger Button (Independent bottom center) -->
+      <button class="minimal-journey-trigger-btn" id="btn-open-journey">
+        <span id="journey-trigger-text">성장 여정 보기 ↗</span>
+      </button>
 
     </main>
 
