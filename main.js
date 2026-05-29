@@ -496,7 +496,22 @@ document.addEventListener('DOMContentLoaded', () => {
         lblEnd: "종료일",
         lblDur: "기간",
         btnExpand: "더 보기",
-        durSuffix: "주"
+        durSuffix: "주",
+
+        // Minimalist Growth Journey Timeline
+        journeyTrigger: "성장 여정 보기 ↗",
+        journeyBadge: "Odyssey",
+        journeyTitle: "Growth Journey",
+        stepTitle1: "기초 충전",
+        stepDesc1: "대학 전기공학 입문 및 전자기학 학술 기초 확립",
+        stepTitle2: "아날로그 이해",
+        stepDesc2: "전력 회로 제어 및 아날로그 능동 필터 응용 설계",
+        stepTitle3: "논리의 도약",
+        stepDesc3: "FPGA 칩 실기기 합성 및 Verilog HDL 디지털 시스템 개발",
+        stepTitle4: "나노공정 연구",
+        stepDesc4: "Spotfire 수율 분석 및 EUV 무기 PR 신소재 공정 연구",
+        stepTitle5: "OSAT 합격",
+        stepDesc5: "Amkor Technology OSAT 패키징 엔지니어 최종 합격"
       }
     },
     en: {
@@ -540,7 +555,22 @@ document.addEventListener('DOMContentLoaded', () => {
         lblEnd: "End",
         lblDur: "Duration",
         btnExpand: "Read More",
-        durSuffix: " wks"
+        durSuffix: " wks",
+
+        // Minimalist Growth Journey Timeline
+        journeyTrigger: "Growth Journey ↗",
+        journeyBadge: "Odyssey",
+        journeyTitle: "Growth Journey",
+        stepTitle1: "EE Foundation",
+        stepDesc1: "Enrolled in EE at Kwangwoon Univ. & established solid core physics foundation",
+        stepTitle2: "Analog Core",
+        stepDesc2: "Mastered power circuit control & Sallen-Key active filter boards design",
+        stepTitle3: "Logic Synthesis",
+        stepDesc3: "Programmed FPGA microchips and synthesised digital logic using Verilog",
+        stepTitle4: "Nano-Litho Study",
+        stepDesc4: "Mastered Spotfire yield analytics and researched inorganic PR EUV material",
+        stepTitle5: "Amkor Admission",
+        stepDesc5: "Officially hired as a Semiconductor Packaging & Test Engineer at Amkor Technology"
       }
     }
   };
@@ -1007,8 +1037,26 @@ document.addEventListener('DOMContentLoaded', () => {
       if (badgeText) badgeText.textContent = data.labels.badge;
 
       // 5. Update Helper Box Label
-      const helperTextEl = document.querySelector('.canvas-helper-text span');
+      const helperTextEl = document.getElementById('canvas-helper-msg');
       if (helperTextEl) helperTextEl.textContent = data.labels.helper;
+
+      // 5.5 Update Growth Journey Timeline Labels & Steps
+      const journeyTriggerText = document.getElementById('journey-trigger-text');
+      if (journeyTriggerText) journeyTriggerText.textContent = data.labels.journeyTrigger;
+      
+      const journeyBadgeTxt = document.getElementById('journey-badge-txt');
+      if (journeyBadgeTxt) journeyBadgeTxt.textContent = data.labels.journeyBadge;
+
+      const journeyTitleTxt = document.getElementById('journey-title-txt');
+      if (journeyTitleTxt) journeyTitleTxt.textContent = data.labels.journeyTitle;
+
+      for (let s = 1; s <= 5; s++) {
+        const stepTitleEl = document.getElementById(`step-title-${s}`);
+        if (stepTitleEl) stepTitleEl.textContent = data.labels[`stepTitle${s}`];
+        
+        const stepDescEl = document.getElementById(`step-desc-${s}`);
+        if (stepDescEl) stepDescEl.textContent = data.labels[`stepDesc${s}`];
+      }
 
       // 6. Update Canvas Title Label (Multilingual Fix!)
       const canvasTitleText = document.querySelector('.canvas-title span');
@@ -1636,11 +1684,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Close when clicking outside of detailed card
+  // Detailed Growth Journey Timeline UI Logic
+  const journeyCard = document.getElementById('minimal-journey-card');
+  const btnOpenJourney = document.getElementById('btn-open-journey');
+  const btnCloseJourney = document.getElementById('btn-close-journey');
+  const journeySteps = document.querySelectorAll('.minimal-step');
+
+  if (btnOpenJourney) {
+    btnOpenJourney.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Close music card if open
+      if (detailedCard) detailedCard.classList.remove('open');
+      if (journeyCard) {
+        journeyCard.classList.toggle('open');
+      }
+    });
+  }
+
+  if (btnCloseJourney) {
+    btnCloseJourney.addEventListener('click', () => {
+      if (journeyCard) journeyCard.classList.remove('open');
+    });
+  }
+
+  // Hovering steps dynamically updates the .active class
+  journeySteps.forEach(step => {
+    step.addEventListener('mouseenter', () => {
+      journeySteps.forEach(s => s.classList.remove('active'));
+      step.classList.add('active');
+    });
+  });
+
+  // Close when clicking outside of detailed card or journey card
   document.addEventListener('click', (e) => {
     if (detailedCard && detailedCard.classList.contains('open')) {
       if (!detailedCard.contains(e.target) && !miniAlbumCover.contains(e.target)) {
         detailedCard.classList.remove('open');
+      }
+    }
+    if (journeyCard && journeyCard.classList.contains('open')) {
+      if (!journeyCard.contains(e.target) && (!btnOpenJourney || !btnOpenJourney.contains(e.target))) {
+        journeyCard.classList.remove('open');
       }
     }
   });

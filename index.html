@@ -652,6 +652,217 @@
     }
 
     /* ==========================================================================
+       12.6 UNTITLED UI STYLED ULTRA-MINIMALIST GROWTH JOURNEY TIMELINE (Light-Glass Skin)
+       ========================================================================== */
+    .minimal-journey-trigger-btn {
+      background: #18181B !important;
+      color: #FFFFFF !important;
+      border: none !important;
+      border-radius: 8px !important;
+      padding: 4px 10px !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      margin-left: 8px !important;
+      transition: all 0.2s ease !important;
+    }
+    .minimal-journey-trigger-btn:hover {
+      background: #2563EB !important; /* Royal Blue */
+      transform: scale(1.03) !important;
+    }
+    .minimal-journey-card.light-glass {
+      position: fixed !important;
+      bottom: 96px !important;
+      left: 24px !important;
+      z-index: 999999 !important;
+      width: 330px !important;
+      padding: 18px !important;
+      border-radius: 20px !important;
+      background: rgba(255, 255, 255, 0.94) !important;
+      backdrop-filter: blur(28px) !important;
+      -webkit-backdrop-filter: blur(28px) !important;
+      border: 1px solid rgba(228, 228, 231, 0.9) !important;
+      box-shadow: 0 12px 36px -12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+      color: #18181B !important;
+      font-family: inherit !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 14px !important;
+      transform: translateY(15px) scale(0.95) !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .minimal-journey-card.light-glass.open {
+      transform: translateY(0) scale(1) !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    .minimal-journey-header {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+    }
+    .header-main {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+    .journey-badge {
+      background: rgba(37, 99, 235, 0.08) !important;
+      color: #2563EB !important;
+      font-size: 10px !important;
+      font-weight: 700 !important;
+      padding: 2px 8px !important;
+      border-radius: 9999px !important;
+      text-transform: uppercase !important;
+    }
+    .journey-title {
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      color: #18181B !important;
+      margin: 0 !important;
+    }
+    .minimal-close-btn {
+      background: transparent !important;
+      border: none !important;
+      width: 24px !important;
+      height: 24px !important;
+      border-radius: 6px !important;
+      color: #71717A !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      cursor: pointer !important;
+      transition: all 0.15s ease !important;
+    }
+    .minimal-close-btn:hover {
+      background: rgba(244, 244, 245, 0.9) !important;
+      color: #18181B !important;
+    }
+    .timeline-track-wrapper {
+      position: relative !important;
+      padding-left: 12px !important;
+      max-height: 320px !important;
+      overflow-y: auto !important;
+      padding-right: 4px !important;
+    }
+    .timeline-track-wrapper::-webkit-scrollbar {
+      width: 3px !important;
+    }
+    .timeline-track-wrapper::-webkit-scrollbar-thumb {
+      background: rgba(228, 228, 231, 0.9) !important;
+      border-radius: 1.5px !important;
+    }
+    .minimal-timeline-axis {
+      position: absolute !important;
+      top: 6px !important;
+      bottom: 6px !important;
+      left: 20px !important;
+      width: 1.5px !important;
+      background: #E4E4E7 !important;
+      z-index: 1 !important;
+    }
+    .minimal-timeline-steps {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 16px !important;
+      position: relative !important;
+      z-index: 2 !important;
+    }
+    .minimal-step {
+      display: flex !important;
+      gap: 14px !important;
+      position: relative !important;
+      padding-left: 24px !important;
+      cursor: pointer !important;
+    }
+    .step-year-badge {
+      position: absolute !important;
+      left: -20px !important;
+      top: -2px !important;
+      font-size: 8px !important;
+      font-weight: 700 !important;
+      padding: 1px 5px !important;
+      border-radius: 4px !important;
+      z-index: 10 !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+      white-space: nowrap !important;
+    }
+    .step-year-badge.blue-pill {
+      background: #EFF6FF !important;
+      color: #2563EB !important;
+      border: 0.5px solid rgba(37, 99, 235, 0.2) !important;
+    }
+    .step-year-badge.gray-pill {
+      background: #F4F4F5 !important;
+      color: #71717A !important;
+      border: 0.5px solid rgba(113, 113, 122, 0.15) !important;
+    }
+    .step-year-badge.green-pill {
+      background: #ECFDF5 !important;
+      color: #10B981 !important;
+      border: 0.5px solid rgba(16, 185, 129, 0.2) !important;
+    }
+    .step-dot-container {
+      position: absolute !important;
+      left: 17px !important;
+      top: 10px !important;
+      transform: translateX(-50%) !important;
+      width: 8px !important;
+      height: 8px !important;
+      background: #FFFFFF !important;
+      border-radius: 50% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      z-index: 5 !important;
+    }
+    .step-dot {
+      width: 4px !important;
+      height: 4px !important;
+      background: #D4D4D8 !important;
+      border-radius: 50% !important;
+      transition: all 0.25s ease !important;
+    }
+    .minimal-step:hover .step-dot,
+    .minimal-step.active .step-dot {
+      background: #2563EB !important;
+      box-shadow: 0 0 6px rgba(37, 99, 235, 0.6) !important;
+      transform: scale(1.3) !important;
+    }
+    .minimal-step.active .step-year-badge {
+      box-shadow: 0 0 6px rgba(37, 99, 235, 0.1) !important;
+    }
+    .step-meta {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 3px !important;
+    }
+    .step-title {
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      color: #18181B !important;
+      margin: 0 !important;
+    }
+    .step-desc {
+      font-size: 9.5px !important;
+      color: #71717A !important;
+      margin: 0 !important;
+      line-height: 1.35 !important;
+    }
+    @media (max-width: 1024px) {
+      .minimal-journey-card {
+        display: none !important;
+      }
+      .minimal-journey-trigger-btn {
+        display: none !important;
+      }
+    }
+
+    /* ==========================================================================
        12.5 EXPANDABLE HIGH-FIDELITY MUSIC STREAMING CONTROL CARD (Light-Glass Skin)
        ========================================================================== */
     .main-music-card.light-glass {
@@ -1889,7 +2100,10 @@
       <!-- Helper Text bottom left -->
       <div class="canvas-helper-text">
         <i data-lucide="info" class="helper-icon"></i>
-        <span>원하는 블록을 클릭해 보세요. 더 자세한 내용을 확인할 수 있습니다.</span>
+        <span id="canvas-helper-msg">원하는 블록을 클릭해 보세요. 더 자세한 내용을 확인할 수 있습니다.</span>
+        <button class="minimal-journey-trigger-btn" id="btn-open-journey">
+          <span id="journey-trigger-text">성장 여정 보기 ↗</span>
+        </button>
       </div>
 
     </main>
@@ -1914,6 +2128,86 @@
       <!-- Injected Dynamically by JS -->
     </div>
   </aside>
+
+  <!-- Untitled UI Styled Ultra-Minimalist Growth Journey Card -->
+  <div class="minimal-journey-card light-glass" id="minimal-journey-card">
+    <div class="minimal-journey-header">
+      <div class="header-main">
+        <span class="journey-badge" id="journey-badge-txt">Odyssey</span>
+        <h3 class="journey-title" id="journey-title-txt">Growth Journey</h3>
+      </div>
+      <button class="minimal-close-btn" id="btn-close-journey" title="Close"><i data-lucide="x"></i></button>
+    </div>
+
+    <div class="timeline-track-wrapper">
+      <!-- 1.5px Thin Axis Line -->
+      <div class="minimal-timeline-axis"></div>
+      
+      <div class="minimal-timeline-steps">
+        
+        <!-- Step 1 -->
+        <div class="minimal-step active" data-step="1">
+          <span class="step-year-badge blue-pill">2021</span>
+          <div class="step-dot-container">
+            <div class="step-dot"></div>
+          </div>
+          <div class="step-meta">
+            <h4 class="step-title" id="step-title-1">기초 충전</h4>
+            <p class="step-desc" id="step-desc-1">대학 전기공학 입문 및 전자기학 학술 기초 확립</p>
+          </div>
+        </div>
+        
+        <!-- Step 2 -->
+        <div class="minimal-step" data-step="2">
+          <span class="step-year-badge gray-pill">2024</span>
+          <div class="step-dot-container">
+            <div class="step-dot"></div>
+          </div>
+          <div class="step-meta">
+            <h4 class="step-title" id="step-title-2">아날로그 이해</h4>
+            <p class="step-desc" id="step-desc-2">전력 회로 제어 및 아날로그 능동 필터 응용 설계</p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="minimal-step" data-step="3">
+          <span class="step-year-badge gray-pill">2025</span>
+          <div class="step-dot-container">
+            <div class="step-dot"></div>
+          </div>
+          <div class="step-meta">
+            <h4 class="step-title" id="step-title-3">논리의 도약</h4>
+            <p class="step-desc" id="step-desc-3">FPGA 칩 실기기 합성 및 Verilog HDL 디지털 시스템 개발</p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="minimal-step" data-step="4">
+          <span class="step-year-badge gray-pill">2025~26</span>
+          <div class="step-dot-container">
+            <div class="step-dot"></div>
+          </div>
+          <div class="step-meta">
+            <h4 class="step-title" id="step-title-4">나노공정 연구</h4>
+            <p class="step-desc" id="step-desc-4">Spotfire 수율 분석 및 EUV 무기 PR 신소재 공정 연구</p>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="minimal-step" data-step="5">
+          <span class="step-year-badge green-pill" id="badge-amkor-year">2026</span>
+          <div class="step-dot-container">
+            <div class="step-dot"></div>
+          </div>
+          <div class="step-meta">
+            <h4 class="step-title" id="step-title-5">OSAT 합격</h4>
+            <p class="step-desc" id="step-desc-5">Amkor Technology OSAT 패키징 엔지니어 최종 합격</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <!-- Floating Spotify-Style Detailed Expandable Music Card (Light-Glass Skin) -->
   <div class="main-music-card light-glass" id="main-music-card">
