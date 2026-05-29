@@ -443,7 +443,7 @@
       position: fixed !important;
       bottom: 24px !important;
       right: 24px !important;
-      z-index: 999999 !important; /* Always sits on top */
+      z-index: 9999 !important; /* Floats above canvas but sits under side peek overlay */
       background: rgba(255, 255, 255, 0.85) !important;
       backdrop-filter: blur(20px) !important;
       -webkit-backdrop-filter: blur(20px) !important;
@@ -659,7 +659,7 @@
       bottom: 24px !important;
       left: 50% !important;
       transform: translateX(-50%) !important;
-      z-index: 999999 !important;
+      z-index: 9999 !important; /* Under side-peek-overlay */
       background: rgba(255, 255, 255, 0.85) !important;
       backdrop-filter: blur(20px) !important;
       -webkit-backdrop-filter: blur(20px) !important;
@@ -687,7 +687,7 @@
       bottom: 74px !important;
       left: 50% !important;
       transform: translateX(-50%) translateY(15px) scale(0.95) !important;
-      z-index: 999999 !important;
+      z-index: 10000 !important; /* Under side-peek-overlay but sits above trigger button */
       width: 340px !important;
       padding: 18px !important;
       border-radius: 20px !important;
@@ -879,7 +879,7 @@
       position: fixed !important;
       bottom: 96px !important;
       right: 24px !important;
-      z-index: 1000000 !important; /* Above mini player but under absolute popups */
+      z-index: 10000 !important; /* Above mini player but sits under side peek overlay */
       max-width: 360px !important;
       width: 90% !important;
       padding: 20px !important;
