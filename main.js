@@ -105,6 +105,41 @@ document.addEventListener('DOMContentLoaded', () => {
   let zoomLevel = 98;
   let currentLang = 'ko';
 
+  // Board constraints for viewport boundaries
+  const BOARD_WIDTH = 2500;
+  const BOARD_HEIGHT = 1800;
+  const MIN_PAN_X = -1500;
+  const MAX_PAN_X = 1500;
+  const MIN_PAN_Y = -1200;
+  const MAX_PAN_Y = 1200;
+
+  // Real-time minimap viewport bounding box updater
+  function updateMinimapViewport() {
+    if (!minimapViewport) return;
+    const MINIMAP_W = 200;
+    const MINIMAP_H = 150;
+
+    const zoomFrac = zoomLevel / 100;
+    const canvasWidth = designerCanvas ? (designerCanvas.clientWidth || window.innerWidth - 380) : 1000;
+    const canvasHeight = designerCanvas ? (designerCanvas.clientHeight || window.innerHeight) : 800;
+
+    const visibleW = canvasWidth / zoomFrac;
+    const visibleH = canvasHeight / zoomFrac;
+
+    const viewCenterX = (BOARD_WIDTH / 2) - (panX / zoomFrac);
+    const viewCenterY = (BOARD_HEIGHT / 2) - (panY / zoomFrac);
+
+    const leftPercent = ((viewCenterX - visibleW / 2) / BOARD_WIDTH) * 100;
+    const topPercent = ((viewCenterY - visibleH / 2) / BOARD_HEIGHT) * 100;
+    const widthPercent = (visibleW / BOARD_WIDTH) * 100;
+    const heightPercent = (visibleH / BOARD_HEIGHT) * 100;
+
+    minimapViewport.style.left = `${Math.max(0, Math.min(100, leftPercent))}%`;
+    minimapViewport.style.top = `${Math.max(0, Math.min(100, topPercent))}%`;
+    minimapViewport.style.width = `${Math.max(5, Math.min(100, widthPercent))}%`;
+    minimapViewport.style.height = `${Math.max(5, Math.min(100, heightPercent))}%`;
+  }
+
   // Skill tag elements selection
   const skillBtns = document.querySelectorAll('.skill-tree-item');
 
@@ -274,71 +309,147 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // ==========================================================================
-  // 3. MOVE TOOL: DRAG INDIVIDUAL BLOCKS
+  // 3. MOVE TOOL: DRAG INDIVIDUAL BLOCKS (Pointer Events API Integrated)
   // ==========================================================================
   let isDraggingCard = false;
   let activeDragCard = null;
   let cardStartX = 0;
   let cardStartY = 0;
+  let initialCardX = 0;
+  let initialCardY = 0;
 
-  allCards.forEach(singleCard => {
-    singleCard.addEventListener('mousedown', (e) => {
-      // Prevent drag if clicking on interactive child components like buttons or inputs
-      if (e.target.closest('.expand-btn') || e.target.closest('.editor-input') || e.target.closest('a') || e.target.closest('.modal-close-btn') || e.target.closest('.side-peek-close-btn')) {
-        return; // Do NOT stopPropagation here so click fires normally
+  // Track pointer movements for smooth drag and drop
+  allCards.forEach(c => {
+    if (c.id === 'portfolio-preview-card') return;
+
+    // Set touch-action none to prevent browser gesture conflicts
+    c.style.touchAction = 'none';
+
+    c.addEventListener('pointerdown', (e) => {
+      // Don't drag if we are on mobile/tablet view (<= 1024px)
+      if (window.innerWidth <= 1024) return;
+
+      // Only drag on left click (button === 0) for mice
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+      // Skip if clicking interactive elements inside the card
+      if (e.target.closest('button') || e.target.closest('a') || e.target.closest('input') || e.target.closest('textarea')) {
+        return;
       }
 
       isDraggingCard = true;
-      activeDragCard = singleCard;
-
-      // Bring clicked card to front
-      allCards.forEach(c => c.style.zIndex = '3');
-      singleCard.style.zIndex = '5';
-
-      // Disable card transition during drag so it follows the pointer instantly
-      singleCard.style.setProperty('--card-pos-transition', '0s');
-
-      const pos = cardPositions[singleCard.id];
-      if (pos) {
-        cardStartX = e.clientX - pos.x;
-        cardStartY = e.clientY - pos.y;
+      activeDragCard = c;
+      
+      try {
+        c.setPointerCapture(e.pointerId);
+      } catch (err) {
+        console.warn("Failed to set pointer capture:", err);
       }
 
-      e.stopPropagation(); // prevent panning drag bubbling
+      cardStartX = e.clientX;
+      cardStartY = e.clientY;
+
+      const currentPos = cardPositions[c.id] || { x: 0, y: 0 };
+      initialCardX = currentPos.x || parseInt(c.style.left) || 0;
+      initialCardY = currentPos.y || parseInt(c.style.top) || 0;
+
+      // Bring active card to front
+      allCards.forEach(card => {
+        if (card.id !== 'portfolio-preview-card') {
+          card.style.zIndex = '10';
+        }
+      });
+      c.style.zIndex = '100';
+
+      c.style.setProperty('--card-pos-transition', 'none');
+    });
+
+    c.addEventListener('pointermove', (e) => {
+      if (!isDraggingCard || activeDragCard !== c) return;
+      if (window.innerWidth <= 1024) return;
+
+      const deltaX = e.clientX - cardStartX;
+      const deltaY = e.clientY - cardStartY;
+
+      let newX = initialCardX + deltaX;
+      let newY = initialCardY + deltaY;
+
+      const dims = getCanvasDimensions();
+      const screenW = dims.width;
+      const screenH = dims.height;
+
+      const projW = c.offsetWidth || 320;
+      const projH = c.offsetHeight || 260;
+
+      newX = Math.max(10, Math.min(screenW - projW - 10, newX));
+      newY = Math.max(70, Math.min(screenH - projH - 20, newY));
+
+      cardPositions[c.id] = { x: newX, y: newY };
+      c.style.left = `${newX}px`;
+      c.style.top = `${newY}px`;
+
+      updateMinimapDotsRealtime(c.id, newX, newY);
+    });
+
+    const endDrag = (e) => {
+      if (!isDraggingCard || activeDragCard !== c) return;
+      
+      isDraggingCard = false;
+      activeDragCard = null;
+
+      try {
+        c.releasePointerCapture(e.pointerId);
+      } catch (err) {
+        // Safe check
+      }
+
+      c.style.setProperty('--card-pos-transition', '0.4s cubic-bezier(0.16, 1, 0.3, 1)');
+      
+      if (typeof buildMinimapDots === 'function') {
+        buildMinimapDots();
+      }
+    };
+
+    c.addEventListener('pointerup', endDrag);
+    c.addEventListener('pointercancel', endDrag);
+  });
+
+  // ==========================================================================
+  // MOBILE DRAWER TOGGLE INTERACTION
+  // ==========================================================================
+  const sidebar = document.getElementById('sidebar');
+  const sidebarOverlay = document.getElementById('sidebar-overlay');
+  const btnMobileMenu = document.getElementById('btn-mobile-menu');
+
+  const openSidebarDrawer = () => {
+    if (sidebar) sidebar.classList.add('open');
+    if (sidebarOverlay) sidebarOverlay.classList.add('open');
+  };
+
+  const closeSidebarDrawer = () => {
+    if (sidebar) sidebar.classList.remove('open');
+    if (sidebarOverlay) sidebarOverlay.classList.remove('open');
+  };
+
+  if (btnMobileMenu) {
+    btnMobileMenu.addEventListener('click', openSidebarDrawer);
+  }
+
+  if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', closeSidebarDrawer);
+  }
+
+  // Auto-close sidebar on mobile when clicking navigation links or skill tags
+  const listItems = document.querySelectorAll('.list-item, .skill-tree-item, .project-item');
+  listItems.forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 1024) {
+        closeSidebarDrawer();
+      }
     });
   });
 
-  window.addEventListener('mousemove', (e) => {
-    if (!isDraggingCard || !activeDragCard) return;
 
-    const dx = e.clientX - cardStartX;
-    const dy = e.clientY - cardStartY;
-
-    const dims = getCanvasDimensions();
-    const cardW = (activeDragCard.id === 'portfolio-preview-card') ? 520 : 320;
-    const cardH = (activeDragCard.id === 'portfolio-preview-card') ? 500 : 160;
-
-    // Strict boundary cap to stay within visible screen limits
-    const x = Math.max(10, Math.min(dims.width - cardW - 10, dx));
-    const y = Math.max(10, Math.min(dims.height - cardH - 10, dy));
-
-    if (cardPositions[activeDragCard.id]) {
-      cardPositions[activeDragCard.id].x = x;
-      cardPositions[activeDragCard.id].y = y;
-    }
-
-    activeDragCard.style.left = `${x}px`;
-    activeDragCard.style.top = `${y}px`;
-  });
-
-  window.addEventListener('mouseup', () => {
-    if (isDraggingCard && activeDragCard) {
-      isDraggingCard = false;
-      // Re-enable smooth transition style
-      activeDragCard.style.setProperty('--card-pos-transition', '0.4s cubic-bezier(0.16, 1, 0.3, 1)');
-      activeDragCard = null;
-    }
-  });
 
   // ==========================================================================
   // 4. MULTI-LANGUAGE TRANSLATION DATABASE

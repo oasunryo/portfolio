@@ -1881,3 +1881,164 @@ body {
   display: none !important;
 }
 
+/* Default hidden elements for desktop */
+.mobile-menu-toggle {
+  display: none;
+}
+
+/* ==========================================================================
+   6. MOBILE RESPONSIVE AND TOUCH OPTIMIZATIONS
+   ========================================================================== */
+@media (max-width: 1024px) {
+  body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    height: auto !important;
+    min-height: 100vh;
+  }
+
+  .app-container {
+    grid-template-columns: 1fr !important;
+    width: 100vw;
+    height: auto !important;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Mobile menu toggle button in top bar */
+  .mobile-menu-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--text-main);
+    margin-right: 8px;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background-color var(--transition-fast);
+  }
+  .mobile-menu-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  .mobile-menu-toggle svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Left sidebar drawer mode */
+  .editor-sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 320px;
+    max-width: 85vw;
+    height: 100vh;
+    z-index: 100000 !important;
+    transform: translateX(-100%) !important;
+    transition: transform var(--transition-normal) !important;
+    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.1) !important;
+  }
+  .editor-sidebar.open {
+    transform: translateX(0) !important;
+  }
+
+  /* Sidebar backdrop overlay */
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 99999 !important;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-normal) ease;
+  }
+  .sidebar-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Canvas view stacked in vertical column */
+  .designer-canvas {
+    width: 100vw !important;
+    height: auto !important;
+    min-height: 100vh;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    padding: 0 !important;
+    user-select: auto !important;
+  }
+
+  .canvas-top-bar {
+    position: fixed !important;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 1000 !important;
+    pointer-events: none;
+    width: auto !important;
+  }
+
+  .preview-card-container {
+    position: relative !important;
+    inset: auto !important;
+    width: 100vw !important;
+    height: auto !important;
+    min-height: 100vh;
+    overflow: visible !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 85px 16px 40px 16px !important;
+    gap: 24px !important;
+    z-index: 2;
+  }
+
+  /* Absolute to relative stacking */
+  .preview-card, 
+  .project-block-card {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 500px !important;
+    box-shadow: var(--shadow-md) !important;
+    cursor: default !important;
+    transform-style: flat !important;
+    transition: box-shadow var(--transition-fast), transform var(--transition-fast) !important;
+  }
+  
+  .preview-card:hover,
+  .project-block-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: var(--shadow-lg) !important;
+  }
+
+  /* Zoom controls, minimap, helper and toolbar are hidden on mobile */
+  .canvas-zoom-control,
+  .minimap-container,
+  .canvas-helper-text,
+  .floating-toolbar {
+    display: none !important;
+  }
+  
+  /* Prevent scroll jumping on touch inputs in active filter state */
+  .preview-card-container.has-active-filter .preview-card,
+  .preview-card-container.has-active-filter .project-block-card {
+    transform: scale(0.98) !important;
+    filter: none !important; /* simplify rendering on mobile */
+  }
+
+  /* Modals and Notion side peek scaling */
+  .side-peek-panel {
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
+}
+}
+
