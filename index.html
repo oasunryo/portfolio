@@ -1202,12 +1202,39 @@
       .main-music-card.light-glass {
         display: none !important;
       }
-    }
-
-    /* Responsive hidden player state for mobile device viewport */
-    @media (max-width: 1024px) {
       .canvas-music-player {
         display: none !important;
+      }
+      .canvas-bottom-bar {
+        display: none !important;
+      }
+      
+      /* Mobile layout overrides for scattered project cards to prevent overlapping */
+      .project-block-card {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        margin: 8px 0 !important;
+        width: calc(100% - 32px) !important;
+        max-width: 480px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+        cursor: default !important;
+      }
+      
+      .preview-card-container {
+        position: relative !important;
+        inset: auto !important;
+        width: 100vw !important;
+        height: auto !important;
+        min-height: 100vh;
+        overflow-y: visible !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        padding: 85px 16px 40px 16px !important;
+        gap: 16px !important;
+        box-sizing: border-box !important;
       }
     }
   </style>
