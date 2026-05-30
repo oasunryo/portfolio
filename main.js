@@ -6,9 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   const treeToggles = document.querySelectorAll('.tree-toggle');
   treeToggles.forEach(toggle => {
-    // Force fold closed on load
-    toggle.checked = false;
-
     // Find the next label and inject Lucide chevron icons
     const label = toggle.nextElementSibling;
     if (label && label.classList.contains('tree-label')) {
