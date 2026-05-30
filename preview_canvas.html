@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semiconductor Odyssey | 캔버스 뷰 프리미엄 미리보기</title>
+  <!-- Google Fonts Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg-canvas: #FBFBFC;
+      --accent-blue: #2563EB;
+      --accent-glow: rgba(37, 99, 235, 0.45);
+      --card-bg: #FFFFFF;
+      --card-border: #E4E4E7;
+      --text-main: #18181B;
+      --text-muted: #71717A;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
+    }
+
+    /* ==========================================================================
+       BACKGROUND GRID & CIRCUIT LINES (Sophisticated Warm Dotted Pattern)
+       ========================================================================== */
+    .designer-canvas {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Subtle warm radial dot pattern matching original design */
+    .canvas-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(#DDD8D3 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Embedded circuit path lines in background using SVG */
+    .circuit-lines-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .circuit-path {
+      fill: none;
+      stroke: rgba(0, 0, 0, 0.05);
+      stroke-width: 1.5;
+      transition: stroke 0.5s, stroke-width 0.5s;
+    }
+
+    .circuit-path.active {
+      stroke: var(--accent-blue);
+      stroke-width: 2;
+      opacity: 0.65;
+      filter: drop-shadow(0 0 3px rgba(37, 99, 235, 0.3));
+    }
+
+    /* ==========================================================================
+       STAGES / VISUAL COLUMNS (Dashed containers in background)
+       ========================================================================== */
+    .stage-column-container {
+      position: absolute;
+      inset: 80px 40px 100px 40px;
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+      z-index: 3;
+      pointer-events: none;
+      transition: all 0.5s ease;
+    }
+
+    .stage-column {
+      flex: 1;
+      border: 1px dashed rgba(0, 0, 0, 0.06);
+      border-radius: 20px;
+      background-color: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(1px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+      position: relative;
+      transition: opacity 0.5s, transform 0.5s;
+    }
+
+    .stage-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #52525B;
+      background-color: #F4F4F5;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+
+    /* ==========================================================================
+       PREMIUM RESTORED PROJECT CARDS (Original aesthetics matching index.html)
+       ========================================================================== */
+    .project-block-card {
+      width: 290px;
+      height: 64px;
+      background: #FFFFFF;
+      border: 1px solid #E4E4E7;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      position: absolute;
+      cursor: grab;
+      z-index: 10;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: auto;
+      overflow: hidden;
+    }
+
+    .project-block-card:hover {
+      border-color: var(--accent-blue);
+      box-shadow: 0 4px 12px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(37, 99, 235, 0.03);
+      transform: translateY(-2px);
+    }
+
+    .project-block-card:active {
+      cursor: grabbing;
+      z-index: 100;
+    }
+
+    /* Original Left Side Gradient Cover thumbnail */
+    .project-thumbnail {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      margin-right: 12px;
+      flex-shrink: 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+    }
+
+    .thumbnail-badge {
+      font-size: 6px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.65);
+      letter-spacing: 0.05em;
+      position: absolute;
+      top: 4px;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    /* Sound equalizer inside card thumbnail */
+    .sound-wave-eq {
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: flex-end;
+      gap: 1.5px;
+      height: 8px;
+      z-index: 4;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .sound-wave-bar {
+      width: 1.5px;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 0.5px;
+      animation: eq-bounce 0.8s ease-in-out infinite alternate;
+      transform-origin: bottom;
+    }
+    .sound-wave-bar:nth-child(2) { animation-delay: -0.2s; }
+    .sound-wave-bar:nth-child(3) { animation-delay: -0.4s; }
+
+    @keyframes eq-bounce {
+      0% { transform: scaleY(0.2); }
+      100% { transform: scaleY(1); }
+    }
+
+    /* Card Middle: Text Block */
+    .project-card-header {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      max-width: calc(100% - 52px);
+    }
+
+    .project-card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #18181B;
+      line-height: 1.2;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .project-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .project-id-badge {
+      font-size: 9px;
+      color: #71717A;
+      font-weight: 600;
+      font-family: var(--font-mono), monospace;
+      background-color: #F4F4F5;
+      padding: 1px 4px;
+      border-radius: 4px;
+      line-height: 1.2;
+    }
+
+    .project-date {
+      font-size: 9.5px;
+      color: #71717A;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    /* ==========================================================================
+       TOP BAR & BOTTOM TOOLBAR
+       ========================================================================== */
+    .canvas-top-bar {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 50;
+    }
+
+    .brand-title {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 8px 16px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    .brand-title h1 {
+      font-size: 12px;
+      font-weight: 700;
+      color: #18181B;
+    }
+
+    .top-badge {
+      font-size: 8px;
+      background-color: var(--accent-blue);
+      color: #FFFFFF;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      letter-spacing: 0.05em;
+    }
+
+    .canvas-bottom-bar {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 9999px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      z-index: 50;
+      max-width: 90%;
+      white-space: nowrap;
+    }
+
+    .btn-toggle {
+      background: transparent;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-toggle.active {
+      background-color: var(--accent-blue);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+
+    .btn-toggle svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .divider {
+      width: 1px;
+      height: 20px;
+      background-color: #E4E4E7;
+    }
+
+    .helper-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Auto-zoom / Mobile responsive wrapper */
+    .zoom-outer-wrapper {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .zoom-inner-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @media (max-width: 1024px) {
+      .stage-column-container {
+        flex-direction: column;
+        inset: 120px 20px 100px 20px;
+        gap: 16px;
+        overflow-y: auto;
+        pointer-events: auto;
+      }
+      .stage-column {
+        height: auto;
+        min-height: 220px;
+        padding-bottom: 40px;
+      }
+      .canvas-bottom-bar {
+        padding: 6px 12px;
+        gap: 8px;
+      }
+      .helper-text {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="designer-canvas" id="canvas">
+    <!-- Grid Background -->
+    <div class="canvas-grid-bg"></div>
+
+    <div class="zoom-outer-wrapper">
+      <div class="zoom-inner-container" id="zoom-container">
+        <!-- SVG Circuit Lines (subtle routing) -->
+        <svg class="circuit-lines-svg" id="svg-grid"></svg>
+
+        <!-- Visual Columns in background -->
+        <div class="stage-column-container" id="columns-container">
+          <div class="stage-column" id="col-1">
+            <span class="stage-title">1단계: 기초 회로 및 아날로그 코어</span>
+          </div>
+          <div class="stage-column" id="col-2">
+            <span class="stage-title">2단계: 디지털 설계 & 빅데이터</span>
+          </div>
+          <div class="stage-column" id="col-3">
+            <span class="stage-title">3단계: 첨단 반도체 패키징 OSAT</span>
+          </div>
+        </div>
+
+        <!-- 9 RESTORED PREMIUM PROJECT CARDS (Original Colors & Gradients) -->
+        <!-- Stage 1 (Analog & HW Core) -->
+        <div class="project-block-card" id="card-7" data-stage="1" data-id="filter_01" data-badge="ANALOG CIRCUIT" data-gradient="linear-gradient(135deg, #030712, #111827)" data-icon="sliders" data-title="능동 필터 오디오 레벨 미터" data-date="24.10 ~ 24.12"></div>
+        <div class="project-block-card" id="card-8" data-stage="1" data-id="chrg_01" data-badge="POWER CONVERSION" data-gradient="linear-gradient(135deg, #451a03, #78350f)" data-icon="zap" data-title="스마트 리튬이온 차저 설계" data-date="24.08 ~ 24.09"></div>
+        <div class="project-block-card" id="card-9" data-stage="1" data-id="batt_01" data-badge="LOGIC IC DESIGN" data-gradient="linear-gradient(135deg, #14532d, #166534)" data-icon="battery-charging" data-title="배터리 잔량 테스터 설계" data-date="24.05 ~ 24.06"></div>
+        <div class="project-block-card" id="card-6" data-stage="1" data-id="mcu_01" data-badge="EMBEDDED HARDWARE" data-gradient="linear-gradient(135deg, #312e81, #3730a3)" data-icon="plug" data-title="MCU 기반 AC 전력계 설계" data-date="25.02 ~ 25.03"></div>
+
+        <!-- Stage 2 (Digital & Data) -->
+        <div class="project-block-card" id="card-3" data-stage="2" data-id="fpga_01" data-badge="FPGA LOGIC DESIGN" data-gradient="linear-gradient(135deg, #022c22, #064e3b)" data-icon="cpu" data-title="FPGA 및 Verilog HDL 시스템" data-date="25.11 ~ 25.12"></div>
+        <div class="project-block-card" id="card-5" data-stage="2" data-id="spot_01" data-badge="YIELD ANALYSIS" data-gradient="linear-gradient(135deg, #022c22, #0f172a)" data-icon="line-chart" data-title="Spotfire 기반 반도체 수율 분석" data-date="25.04 ~ 25.06"></div>
+
+        <!-- Stage 3 (Semiconductor Processing & OSAT) -->
+        <div class="project-block-card" id="card-4" data-stage="3" data-id="euv_01" data-badge="CHEMISTRY ANALYSIS" data-gradient="linear-gradient(135deg, #311042, #4c1d95)" data-icon="atom" data-title="EUV 무기 포토레지스트 공정" data-date="25.09 ~ 25.10"></div>
+        <div class="project-block-card" id="card-1" data-stage="3" data-id="wb_01" data-badge="PROCESS ANALYSIS" data-gradient="linear-gradient(135deg, #1e1b4b, #311042)" data-icon="wrench" data-title="와이어 본딩 캐필러리 신뢰성" data-date="26.05 ~ 26.05"></div>
+        <div class="project-block-card" id="card-2" data-stage="3" data-id="pkg_01" data-badge="THEORY INTEGRATION" data-gradient="linear-gradient(135deg, #0f172a, #1e293b)" data-icon="layers" data-title="후공정 패키지 및 테스트 종합" data-date="26.04 ~ 진행 중"></div>
+      </div>
+    </div>
+
+    <!-- Top Bar Title -->
+    <div class="canvas-top-bar">
+      <div class="brand-title">
+        <i data-lucide="cpu" style="color: var(--accent-blue); width: 15px; height: 15px;"></i>
+        <h1>오준서 포트폴리오 캔버스 뷰 샌드박스</h1>
+        <span class="top-badge">PREMIUM STYLED</span>
+      </div>
+    </div>
+
+    <!-- Bottom Control Bar -->
+    <div class="canvas-bottom-bar">
+      <button class="btn-toggle active" id="btn-align">
+        <i data-lucide="git-commit"></i>공정 흐름도 정렬 (Align by Process)
+      </button>
+      <button class="btn-toggle" id="btn-scatter">
+        <i data-lucide="shuffle"></i>무작위 배치 (Scatter - 이전 방식)
+      </button>
+      <div class="divider"></div>
+      <div class="helper-text">
+        <i data-lucide="info" style="width: 12px; height: 12px;"></i>
+        <span>블록을 자유롭게 드래그해 보세요. 논리적 선후수 흐름선이 실시간으로 변형됩니다.</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log("Canvas Premium Sandbox Mounting...");
+
+      const canvas = document.getElementById('canvas');
+      const zoomContainer = document.getElementById('zoom-container');
+      const cards = document.querySelectorAll('.project-block-card');
+      const svgGrid = document.getElementById('svg-grid');
+      const btnAlign = document.getElementById('btn-align');
+      const btnScatter = document.getElementById('btn-scatter');
+      const columnsContainer = document.getElementById('columns-container');
+
+      let currentMode = 'align';
+      const cardPositions = {};
+
+      // 1. Restore Original Aesthetic Elements dynamically
+      cards.forEach(card => {
+        const icon = card.getAttribute('data-icon');
+        const title = card.getAttribute('data-title');
+        const id = card.getAttribute('data-id');
+        const date = card.getAttribute('data-date');
+        const badgeText = card.getAttribute('data-badge');
+        const gradColor = card.getAttribute('data-gradient');
+
+        card.innerHTML = `
+          <div class="project-thumbnail" style="background: ${gradColor};">
+            <span class="thumbnail-badge">${badgeText}</span>
+            <!-- Equalizer animation -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+            </div>
+          </div>
+          <div class="project-card-header">
+            <h3 class="project-card-title">${title}</h3>
+            <div class="project-meta-row">
+              <span class="project-id-badge">${id}</span>
+              <span class="project-date">${date}</span>
+            </div>
+          </div>
+        `;
+      });
+
+      // Render Lucide Icons
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      // Define Logical Semiconductor dependency chains
+      // Maps source Card ID -> target Card ID
+      const dependencies = [
+        { from: 'card-7', to: 'card-3' }, // Active Filter -> FPGA
+        { from: 'card-8', to: 'card-3' }, // Smart Charger -> FPGA
+        { from: 'card-9', to: 'card-3' }, // Battery Tester -> FPGA
+        { from: 'card-6', to: 'card-3' }, // AC Meter -> FPGA
+        { from: 'card-3', to: 'card-4' }, // FPGA -> EUV
+        { from: 'card-5', to: 'card-4' }, // Spotfire -> EUV
+        { from: 'card-4', to: 'card-1' }, // EUV -> Wire Bonding
+        { from: 'card-1', to: 'card-2' }  // Wire Bonding -> Packaging Theory
+      ];
+
+      // 2. Alignment Logic
+      const updateLayout = () => {
+        const isMobile = window.innerWidth <= 1024;
+        const canvasW = canvas.clientWidth;
+        const canvasH = canvas.clientHeight;
+        const cardW = 290;
+        const cardH = 64;
+
+        if (currentMode === 'align') {
+          columnsContainer.style.opacity = '1';
+          columnsContainer.style.transform = 'scale(1)';
+
+          if (isMobile) {
+            // Stack inside containers gracefully
+            let idx1 = 0, idx2 = 0, idx3 = 0;
+            cards.forEach(c => {
+              const stage = c.getAttribute('data-stage');
+              let x, y;
+              if (stage === '1') {
+                x = (canvasW - cardW) / 2;
+                y = 180 + idx1 * 80;
+                idx1++;
+              } else if (stage === '2') {
+                x = (canvasW - cardW) / 2;
+                y = 540 + idx2 * 80;
+                idx2++;
+              } else {
+                x = (canvasW - cardW) / 2;
+                y = 780 + idx3 * 80;
+                idx3++;
+              }
+              setCardPosition(c, x, y);
+            });
+          } else {
+            // Strict 3 columns based on canvas width
+            const colWidth = (canvasW - 80 - 80) / 3; 
+            const startY = 160;
+            const gapY = 24;
+
+            const stage1Cards = Array.from(cards).filter(c => c.getAttribute('data-stage') === '1');
+            const stage2Cards = Array.from(cards).filter(c => c.getAttribute('data-stage') === '2');
+            const stage3Cards = Array.from(cards).filter(c => c.getAttribute('data-stage') === '3');
+
+            // Align Stage 1
+            stage1Cards.forEach((c, idx) => {
+              const x = 80 + (colWidth - cardW) / 2;
+              const y = startY + idx * (cardH + gapY);
+              setCardPosition(c, x, y);
+            });
+
+            // Align Stage 2
+            stage2Cards.forEach((c, idx) => {
+              const x = 80 + colWidth + (colWidth - cardW) / 2;
+              const y = startY + (idx + 1) * (cardH + gapY); // shifted for visual balance
+              setCardPosition(c, x, y);
+            });
+
+            // Align Stage 3
+            stage3Cards.forEach((c, idx) => {
+              const x = 80 + colWidth * 2 + (colWidth - cardW) / 2;
+              const y = startY + idx * (cardH + gapY);
+              setCardPosition(c, x, y);
+            });
+          }
+        } else {
+          // Scatter mode (old random way)
+          columnsContainer.style.opacity = '0.08';
+          columnsContainer.style.transform = 'scale(0.98)';
+
+          cards.forEach(c => {
+            const maxX = isMobile ? (canvasW - cardW - 20) : (canvasW - cardW - 200);
+            const maxY = isMobile ? 800 : (canvasH - cardH - 280);
+            const x = Math.max(20, 100 + Math.random() * maxX);
+            const y = Math.max(120, 140 + Math.random() * maxY);
+            setCardPosition(c, x, y);
+          });
+        }
+
+        // Draw connections after cards are placed
+        setTimeout(drawConnections, 400);
+      };
+
+      const setCardPosition = (card, x, y) => {
+        cardPositions[card.id] = { x, y };
+        card.style.left = `${x}px`;
+        card.style.top = `${y}px`;
+      };
+
+      // 3. Draw SVG Connection lines based on logical semiconductor dependency
+      const drawConnections = () => {
+        svgGrid.innerHTML = '';
+        if (currentMode !== 'align') return; 
+
+        dependencies.forEach(dep => {
+          const c1 = document.getElementById(dep.from);
+          const c2 = document.getElementById(dep.to);
+          if (c1 && c2) {
+            drawCurveBetween(c1, c2, 'active');
+          }
+        });
+      };
+
+      const drawCurveBetween = (c1, c2, className = '') => {
+        const pos1 = cardPositions[c1.id];
+        const pos2 = cardPositions[c2.id];
+        if (!pos1 || !pos2) return;
+
+        const w = 290;
+        const h = 64;
+
+        // Start from right center of c1
+        const startX = pos1.x + w;
+        const startY = pos1.y + h / 2;
+
+        // End at left center of c2
+        const endX = pos2.x;
+        const endY = pos2.y + h / 2;
+
+        // Control points for nice S-curve (cubic bezier)
+        const cpX1 = startX + (endX - startX) * 0.45;
+        const cpY1 = startY;
+        const cpX2 = startX + (endX - startX) * 0.55;
+        const cpY2 = endY;
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const d = `M ${startX} ${startY} C ${cpX1} ${cpY1}, ${cpX2} ${cpY2}, ${endX} ${endY}`;
+        path.setAttribute('d', d);
+        path.setAttribute('class', `circuit-path ${className}`);
+        svgGrid.appendChild(path);
+      };
+
+      // 4. Drag & Drop Engine (Pointer Events API)
+      let activeDragCard = null;
+      let startX, startY, initX, initY;
+
+      cards.forEach(card => {
+        card.addEventListener('pointerdown', (e) => {
+          activeDragCard = card;
+          card.setPointerCapture(e.pointerId);
+          card.style.transition = 'none';
+          card.classList.add('active');
+
+          startX = e.clientX;
+          startY = e.clientY;
+
+          const pos = cardPositions[card.id] || { x: 0, y: 0 };
+          initX = pos.x;
+          initY = pos.y;
+        });
+
+        card.addEventListener('pointermove', (e) => {
+          if (activeDragCard !== card) return;
+
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+
+          const newX = initX + dx;
+          const newY = initY + dy;
+
+          setCardPosition(card, newX, newY);
+          drawConnections(); 
+        });
+
+        const endDrag = (e) => {
+          if (activeDragCard !== card) return;
+          card.releasePointerCapture(e.pointerId);
+          card.style.transition = 'left 0.3s ease, top 0.3s ease, transform 0.3s';
+          card.classList.remove('active');
+          activeDragCard = null;
+        };
+
+        card.addEventListener('pointerup', endDrag);
+        card.addEventListener('pointercancel', endDrag);
+      });
+
+      // 5. Button Toggles
+      btnAlign.addEventListener('click', () => {
+        if (currentMode === 'align') return;
+        currentMode = 'align';
+        btnAlign.classList.add('active');
+        btnScatter.classList.remove('active');
+        cards.forEach(c => c.style.transition = 'left 0.5s cubic-bezier(0.16, 1, 0.3, 1), top 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s');
+        updateLayout();
+      });
+
+      btnScatter.addEventListener('click', () => {
+        if (currentMode === 'scatter') return;
+        currentMode = 'scatter';
+        btnScatter.classList.add('active');
+        btnAlign.classList.remove('active');
+        cards.forEach(c => c.style.transition = 'left 0.5s cubic-bezier(0.16, 1, 0.3, 1), top 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s');
+        updateLayout();
+      });
+
+      // Initial layout & resize listener
+      window.addEventListener('resize', updateLayout);
+      updateLayout();
+    });
+  </script>
+</body>
+</html>

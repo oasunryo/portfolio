@@ -368,7 +368,7 @@
     .tree-toggle:checked ~ .tree-children-wrapper {
       overflow: visible !important;
     }
-    .tree-toggle:checked ~ .tree-children-wrapper .tree-children {
+    .tree-toggle:checked ~ .tree-children-wrapper > .tree-children {
       overflow: visible !important;
     }
 
@@ -1864,222 +1864,15 @@
       </div>
 
       <!-- Centered Interactive Preview Card Container (Miro/Figma Board Scattered style) -->
+      
       <div class="preview-card-container" id="canvas-card-holder">
         
-        <!-- 9 PROJECT BLOCKS (Twitter-style compact blocks) -->
+        <!-- 3 FIGMA COMPONENT SET CONTAINERS FOR 3 STAGES -->
         
-        <!-- Project 1 -->
-        <div class="project-block-card draggable-block" id="proj-card-1" data-skills="matlab ms-office mermaid rca troubleshooting notion github b2b" data-proj-title="와이어 본딩 캐필러리 신뢰성">
-          <div class="card-dots">
-            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
-          </div>
-          <div class="project-card-header">
-            <div class="header-left">
-              <div class="project-icon-box"><i data-lucide="wrench"></i></div>
-              <h3 class="project-card-title" id="lbl-proj-title-1">와이어 본딩 캐필러리 신뢰성</h3>
-            </div>
-          </div>
-          <div class="project-thumbnail" style="background: linear-gradient(135deg, #1e1b4b, #311042);">
-            <div class="thumbnail-gradient-overlay"></div>
-            <div class="thumbnail-chip-pattern"></div>
-            <div class="thumbnail-text-overlay">
-              <span class="thumbnail-badge">PROCESS ANALYSIS</span>
-            </div>
-            <!-- Equalizer anim rows -->
-            <div class="sound-wave-eq">
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-            </div>
-          </div>
-          <div class="project-card-footer">
-            <div class="project-dates">
-              <div class="date-row"><span class="date-lbl" id="lbl-start-1">시작일</span><span class="date-val">2026.05.01</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-end-1">종료일</span><span class="date-val">2026.05.18</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-dur-1">기간</span><span class="date-val">26.05 ~ 26.05</span></div>
-            </div>
-            <button class="expand-btn" data-project-id="1">더 보기 <i data-lucide="maximize-2"></i></button>
-          </div>
-        </div>
-
-        <!-- Project 2 -->
-        <div class="project-block-card draggable-block" id="proj-card-2" data-skills="notion ms-office mermaid rca troubleshooting github economics active-listening linkedin b2b" data-proj-title="후공정 패키지 및 테스트 종합 이론">
-          <div class="card-dots">
-            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
-          </div>
-          <div class="project-card-header">
-            <div class="header-left">
-              <div class="project-icon-box"><i data-lucide="layers"></i></div>
-              <h3 class="project-card-title" id="lbl-proj-title-2">후공정 패키지 및 테스트 종합 이론</h3>
-            </div>
-          </div>
-          <div class="project-thumbnail" style="background: linear-gradient(135deg, #0f172a, #1e293b);">
-            <div class="thumbnail-gradient-overlay"></div>
-            <div class="thumbnail-chip-pattern"></div>
-            <div class="thumbnail-text-overlay">
-              <span class="thumbnail-badge">THEORY INTEGRATION</span>
-            </div>
-            <!-- Equalizer anim rows -->
-            <div class="sound-wave-eq">
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-            </div>
-          </div>
-          <div class="project-card-footer">
-            <div class="project-dates">
-              <div class="date-row"><span class="date-lbl" id="lbl-start-2">시작일</span><span class="date-val">2026.01.10</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-end-2">종료일</span><span class="date-val">2026.02.28</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-dur-2">기간</span><span class="date-val">26.04 ~ 진행 중</span></div>
-            </div>
-            <button class="expand-btn" data-project-id="2">더 보기 <i data-lucide="maximize-2"></i></button>
-          </div>
-        </div>
-
-        <!-- Project 3 -->
-        <div class="project-block-card draggable-block" id="proj-card-3" data-skills="verilog-hdl quartus-ii modelsim circuit-design github notion troubleshooting rca" data-proj-title="FPGA 및 Verilog HDL 시스템">
-          <div class="card-dots">
-            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
-          </div>
-          <div class="project-card-header">
-            <div class="header-left">
-              <div class="project-icon-box"><i data-lucide="cpu"></i></div>
-              <h3 class="project-card-title" id="lbl-proj-title-3">FPGA 및 Verilog HDL 시스템</h3>
-            </div>
-          </div>
-          <div class="project-thumbnail" style="background: linear-gradient(135deg, #022c22, #064e3b);">
-            <div class="thumbnail-gradient-overlay"></div>
-            <div class="thumbnail-chip-pattern"></div>
-            <div class="thumbnail-text-overlay">
-              <span class="thumbnail-badge">FPGA LOGIC DESIGN</span>
-            </div>
-            <!-- Equalizer anim rows -->
-            <div class="sound-wave-eq">
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-            </div>
-          </div>
-          <div class="project-card-footer">
-            <div class="project-dates">
-              <div class="date-row"><span class="date-lbl" id="lbl-start-3">시작일</span><span class="date-val">2025.11.01</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-end-3">종료일</span><span class="date-val">2025.12.18</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-dur-3">기간</span><span class="date-val">25.09 ~ 25.12</span></div>
-            </div>
-            <button class="expand-btn" data-project-id="3">더 보기 <i data-lucide="maximize-2"></i></button>
-          </div>
-        </div>
-
-        <!-- Project 4 -->
-        <div class="project-block-card draggable-block" id="proj-card-4" data-skills="rca troubleshooting figma ms-office notion economics github active-listening linkedin" data-proj-title="EUV 무기 포토레지스트 공정">
-          <div class="card-dots">
-            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
-          </div>
-          <div class="project-card-header">
-            <div class="header-left">
-              <div class="project-icon-box"><i data-lucide="atom"></i></div>
-              <h3 class="project-card-title" id="lbl-proj-title-4">EUV 무기 포토레지스트 공정</h3>
-            </div>
-          </div>
-          <div class="project-thumbnail" style="background: linear-gradient(135deg, #311042, #4c1d95);">
-            <div class="thumbnail-gradient-overlay"></div>
-            <div class="thumbnail-chip-pattern"></div>
-            <div class="thumbnail-text-overlay">
-              <span class="thumbnail-badge">CHEMISTRY ANALYSIS</span>
-            </div>
-            <!-- Equalizer anim rows -->
-            <div class="sound-wave-eq">
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-            </div>
-          </div>
-          <div class="project-card-footer">
-            <div class="project-dates">
-              <div class="date-row"><span class="date-lbl" id="lbl-start-4">시작일</span><span class="date-val">2025.09.01</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-end-4">종료일</span><span class="date-val">2025.10.15</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-dur-4">기간</span><span class="date-val">25.09 ~ 25.12</span></div>
-            </div>
-            <button class="expand-btn" data-project-id="4">더 보기 <i data-lucide="maximize-2"></i></button>
-          </div>
-        </div>
-
-        <!-- Project 5 -->
-        <div class="project-block-card draggable-block" id="proj-card-5" data-skills="spotfire sql tableau active-listening customer-service aftercare troubleshooting rca economics" data-proj-title="Spotfire 기반 반도체 수율 분석">
-          <div class="card-dots">
-            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
-          </div>
-          <div class="project-card-header">
-            <div class="header-left">
-              <div class="project-icon-box"><i data-lucide="line-chart"></i></div>
-              <h3 class="project-card-title" id="lbl-proj-title-5">Spotfire 기반 반도체 수율 분석</h3>
-            </div>
-          </div>
-          <div class="project-thumbnail" style="background: linear-gradient(135deg, #022c22, #0f172a);">
-            <div class="thumbnail-gradient-overlay"></div>
-            <div class="thumbnail-chip-pattern"></div>
-            <div class="thumbnail-text-overlay">
-              <span class="thumbnail-badge">YIELD ANALYSIS</span>
-            </div>
-            <!-- Equalizer anim rows -->
-            <div class="sound-wave-eq">
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-            </div>
-          </div>
-          <div class="project-card-footer">
-            <div class="project-dates">
-              <div class="date-row"><span class="date-lbl" id="lbl-start-5">시작일</span><span class="date-val">2025.04.01</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-end-5">종료일</span><span class="date-val">2025.06.18</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-dur-5">기간</span><span class="date-val">25.03 ~ 25.06</span></div>
-            </div>
-            <button class="expand-btn" data-project-id="5">더 보기 <i data-lucide="maximize-2"></i></button>
-          </div>
-        </div>
-
-        <!-- Project 6 -->
-        <div class="project-block-card draggable-block" id="proj-card-6" data-skills="circuit-design verilog-hdl quartus-ii modelsim matlab simulink simscape troubleshooting rca github" data-proj-title="MCU 기반 AC 전력계 설계">
-          <div class="card-dots">
-            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
-          </div>
-          <div class="project-card-header">
-            <div class="header-left">
-              <div class="project-icon-box"><i data-lucide="plug"></i></div>
-              <h3 class="project-card-title" id="lbl-proj-title-6">MCU 기반 AC 전력계 설계</h3>
-            </div>
-          </div>
-          <div class="project-thumbnail" style="background: linear-gradient(135deg, #312e81, #3730a3);">
-            <div class="thumbnail-gradient-overlay"></div>
-            <div class="thumbnail-chip-pattern"></div>
-            <div class="thumbnail-text-overlay">
-              <span class="thumbnail-badge">EMBEDDED HARDWARE</span>
-            </div>
-            <!-- Equalizer anim rows -->
-            <div class="sound-wave-eq">
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-              <div class="sound-wave-bar"></div>
-            </div>
-          </div>
-          <div class="project-card-footer">
-            <div class="project-dates">
-              <div class="date-row"><span class="date-lbl" id="lbl-start-6">시작일</span><span class="date-val">2025.02.01</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-end-6">종료일</span><span class="date-val">2025.03.28</span></div>
-              <div class="date-row"><span class="date-lbl" id="lbl-dur-6">기간</span><span class="date-val">25.09 ~ 25.12</span></div>
-            </div>
-            <button class="expand-btn" data-project-id="6">더 보기 <i data-lucide="maximize-2"></i></button>
-          </div>
-        </div>
-
-        <!-- Project 7 -->
-        <div class="project-block-card draggable-block" id="proj-card-7" data-skills="circuit-design matlab simulink simscape troubleshooting rca notion" data-proj-title="능동 필터 오디오 레벨 미터">
+        <!-- Stage 1 Component Set -->
+        <div class="figma-component-set" id="stage-1-set">
+          <div class="figma-label" data-ko="❖ 1단계: 아날로그 &amp; 하드웨어 기초" data-en="❖ Stage 1: Analog &amp; HW Core">❖ 1단계: 아날로그 &amp; 하드웨어 기초</div>
+          <div class="project-block-card" id="proj-card-7" data-skills="circuit-design matlab simulink simscape troubleshooting rca notion" data-proj-title="능동 필터 오디오 레벨 미터">
           <div class="card-dots">
             <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
           </div>
@@ -2112,9 +1905,7 @@
             <button class="expand-btn" data-project-id="7">더 보기 <i data-lucide="maximize-2"></i></button>
           </div>
         </div>
-
-        <!-- Project 8 -->
-        <div class="project-block-card draggable-block" id="proj-card-8" data-skills="battery-system power-system circuit-design simulink simscape matlab troubleshooting rca notion entrepreneurship aftercare" data-proj-title="스마트 리튬이온 차저 설계">
+          <div class="project-block-card" id="proj-card-8" data-skills="battery-system power-system circuit-design simulink simscape matlab troubleshooting rca notion entrepreneurship aftercare" data-proj-title="스마트 리튬이온 차저 설계">
           <div class="card-dots">
             <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
           </div>
@@ -2147,9 +1938,7 @@
             <button class="expand-btn" data-project-id="8">더 보기 <i data-lucide="maximize-2"></i></button>
           </div>
         </div>
-
-        <!-- Project 9 -->
-        <div class="project-block-card draggable-block" id="proj-card-9" data-skills="battery-system circuit-design matlab simulink simscape github troubleshooting rca notion customer-service entrepreneurship b2c" data-proj-title="배터리 잔량 테스터 설계">
+          <div class="project-block-card" id="proj-card-9" data-skills="battery-system circuit-design matlab simulink simscape github troubleshooting rca notion customer-service entrepreneurship b2c" data-proj-title="배터리 잔량 테스터 설계">
           <div class="card-dots">
             <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
           </div>
@@ -2181,6 +1970,215 @@
             </div>
             <button class="expand-btn" data-project-id="9">더 보기 <i data-lucide="maximize-2"></i></button>
           </div>
+        </div>
+          <div class="project-block-card" id="proj-card-6" data-skills="circuit-design verilog-hdl quartus-ii modelsim matlab simulink simscape troubleshooting rca github" data-proj-title="MCU 기반 AC 전력계 설계">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="plug"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-6">MCU 기반 AC 전력계 설계</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #312e81, #3730a3);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">EMBEDDED HARDWARE</span>
+            </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-6">시작일</span><span class="date-val">2025.02.01</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-6">종료일</span><span class="date-val">2025.03.28</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-6">기간</span><span class="date-val">25.09 ~ 25.12</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="6">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+        </div>
+
+        <!-- Stage 2 Component Set -->
+        <div class="figma-component-set" id="stage-2-set">
+          <div class="figma-label" data-ko="❖ 2단계: 디지털 설계 &amp; 빅데이터" data-en="❖ Stage 2: Digital Logic &amp; Data">❖ 2단계: 디지털 설계 &amp; 빅데이터</div>
+          <div class="project-block-card" id="proj-card-3" data-skills="verilog-hdl quartus-ii modelsim circuit-design github notion troubleshooting rca" data-proj-title="FPGA 및 Verilog HDL 시스템">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="cpu"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-3">FPGA 및 Verilog HDL 시스템</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #022c22, #064e3b);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">FPGA LOGIC DESIGN</span>
+            </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-3">시작일</span><span class="date-val">2025.11.01</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-3">종료일</span><span class="date-val">2025.12.18</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-3">기간</span><span class="date-val">25.09 ~ 25.12</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="3">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+          <div class="project-block-card" id="proj-card-5" data-skills="spotfire sql tableau active-listening customer-service aftercare troubleshooting rca economics" data-proj-title="Spotfire 기반 반도체 수율 분석">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="line-chart"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-5">Spotfire 기반 반도체 수율 분석</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #022c22, #0f172a);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">YIELD ANALYSIS</span>
+            </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-5">시작일</span><span class="date-val">2025.04.01</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-5">종료일</span><span class="date-val">2025.06.18</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-5">기간</span><span class="date-val">25.03 ~ 25.06</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="5">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+        </div>
+
+        <!-- Stage 3 Component Set -->
+        <div class="figma-component-set" id="stage-3-set">
+          <div class="figma-label" data-ko="❖ 3단계: 첨단 반도체 패키징 OSAT" data-en="❖ Stage 3: Semiconductor OSAT">❖ 3단계: 첨단 반도체 패키징 OSAT</div>
+          <div class="project-block-card" id="proj-card-4" data-skills="rca troubleshooting figma ms-office notion economics github active-listening linkedin" data-proj-title="EUV 무기 포토레지스트 공정">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="atom"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-4">EUV 무기 포토레지스트 공정</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #311042, #4c1d95);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">CHEMISTRY ANALYSIS</span>
+            </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-4">시작일</span><span class="date-val">2025.09.01</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-4">종료일</span><span class="date-val">2025.10.15</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-4">기간</span><span class="date-val">25.09 ~ 25.12</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="4">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+          <div class="project-block-card" id="proj-card-1" data-skills="matlab ms-office mermaid rca troubleshooting notion github b2b" data-proj-title="와이어 본딩 캐필러리 신뢰성">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="wrench"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-1">와이어 본딩 캐필러리 신뢰성</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #1e1b4b, #311042);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">PROCESS ANALYSIS</span>
+            </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-1">시작일</span><span class="date-val">2026.05.01</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-1">종료일</span><span class="date-val">2026.05.18</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-1">기간</span><span class="date-val">26.05 ~ 26.05</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="1">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
+          <div class="project-block-card" id="proj-card-2" data-skills="notion ms-office mermaid rca troubleshooting github economics active-listening linkedin b2b" data-proj-title="후공정 패키지 및 테스트 종합 이론">
+          <div class="card-dots">
+            <span class="card-dot red"></span><span class="card-dot yellow"></span><span class="card-dot green"></span>
+          </div>
+          <div class="project-card-header">
+            <div class="header-left">
+              <div class="project-icon-box"><i data-lucide="layers"></i></div>
+              <h3 class="project-card-title" id="lbl-proj-title-2">후공정 패키지 및 테스트 종합 이론</h3>
+            </div>
+          </div>
+          <div class="project-thumbnail" style="background: linear-gradient(135deg, #0f172a, #1e293b);">
+            <div class="thumbnail-gradient-overlay"></div>
+            <div class="thumbnail-chip-pattern"></div>
+            <div class="thumbnail-text-overlay">
+              <span class="thumbnail-badge">THEORY INTEGRATION</span>
+            </div>
+            <!-- Equalizer anim rows -->
+            <div class="sound-wave-eq">
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+              <div class="sound-wave-bar"></div>
+            </div>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-dates">
+              <div class="date-row"><span class="date-lbl" id="lbl-start-2">시작일</span><span class="date-val">2026.01.10</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-end-2">종료일</span><span class="date-val">2026.02.28</span></div>
+              <div class="date-row"><span class="date-lbl" id="lbl-dur-2">기간</span><span class="date-val">26.04 ~ 진행 중</span></div>
+            </div>
+            <button class="expand-btn" data-project-id="2">더 보기 <i data-lucide="maximize-2"></i></button>
+          </div>
+        </div>
         </div>
 
       </div>

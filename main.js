@@ -155,261 +155,80 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
   // ==========================================================================
-  // 2. ABSOLUTE VIEWPORT BLOCKS LAYOUT ENGINE (Locked Inside Visible Screen Space)
-  // ==========================================================================
-  const cardPositions = {};
-
-  // Boundaries fit exactly to designerCanvas client width/height dynamically on paint
-  const getCanvasDimensions = () => {
-    const w = designerCanvas ? (designerCanvas.clientWidth || window.innerWidth - 380) : 1000;
-    const h = designerCanvas ? (designerCanvas.clientHeight || window.innerHeight) : 800;
-    return { width: w, height: h };
-  };
-
-  // Generate a beautiful, scattered random layout on load (Strictly inside the screen boundaries without heavy overlap)
-  const scatterCardsRandomly = () => {
+  // 2. FIGMA COMPONENT SET STATIC POSITION CACHING ENGINE
+  const updateCardPositionsCache = () => {
     try {
       allCards.forEach(c => {
         if (c.id === 'portfolio-preview-card') {
           c.style.display = 'none';
           return;
         }
-        c.style.setProperty('--card-pos-transition', '1s');
+        const col = c.closest('.figma-component-set');
+        if (col) {
+          cardPositions[c.id] = {
+            x: c.offsetLeft + col.offsetLeft,
+            y: c.offsetTop + col.offsetTop
+          };
+        } else {
+          cardPositions[c.id] = {
+            x: c.offsetLeft,
+            y: c.offsetTop
+          };
+        }
       });
-
-      const dims = getCanvasDimensions();
-      const screenW = dims.width;
-      const screenH = dims.height;
-
-      const projW = 290;
-      const projH = 72; // Slimmed down to music streaming track row height
-
-      // 1. Shuffled project card IDs for random sequence scattering
-      const projectCardIds = [];
-      for (let i = 1; i <= 9; i++) {
-        projectCardIds.push(`proj-card-${i}`);
-      }
-      for (let i = projectCardIds.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [projectCardIds[i], projectCardIds[j]] = [projectCardIds[j], projectCardIds[i]];
-      }
-
-      // Distribute in a loose 3x3 grid matching the canvas area
-      const cols = 3;
-      const rows = 3;
-
-      // Padding at boundaries
-      const padX = 40;
-      const padY = 80; // Leaves space for canvas top bar
-
-      const cellW = (screenW - padX * 2) / cols;
-      const cellH = (screenH - padY * 2) / rows;
-
-      projectCardIds.forEach((cardId, index) => {
-        const col = index % cols;
-        const row = Math.floor(index / cols);
-
-        // Center coordinates of cell
-        const cellCenterX = padX + col * cellW + cellW / 2;
-        const cellCenterY = padY + row * cellH + cellH / 2;
-
-        // Position to center the card inside the cell
-        let targetX = cellCenterX - projW / 2;
-        let targetY = cellCenterY - projH / 2;
-
-        // Add moderate, organic jitter so it looks hand-scattered but never overlaps heavily
-        const jitterRangeX = Math.max(10, (cellW - projW) * 0.4);
-        const jitterRangeY = Math.max(10, (cellH - projH) * 0.4);
-
-        const jitterX = (Math.random() - 0.5) * jitterRangeX;
-        const jitterY = (Math.random() - 0.5) * jitterRangeY;
-
-        targetX += jitterX;
-        targetY += jitterY;
-
-        // Strict boundary capping to stay completely visible inside screen
-        cardPositions[cardId] = { 
-          x: Math.max(20, Math.min(screenW - projW - 20, targetX)), 
-          y: Math.max(80, Math.min(screenH - projH - 40, targetY)) 
-        };
-      });
-
-      applyCardCoordinates();
     } catch (err) {
-      console.error("Error scattering cards:", err);
+      console.error("Error caching card positions:", err);
     }
+  };
+
+  const handleResizeAndZoom = () => {
+    try {
+      const isMobile = window.innerWidth <= 1024;
+      if (isMobile) {
+        zoomLevel = 100;
+        cardContainer.style.setProperty('--zoom', 1);
+        if (zoomValueEl) zoomValueEl.textContent = '100%';
+      } else {
+        const availableWidth = designerCanvas ? (designerCanvas.clientWidth || (window.innerWidth - 380)) : 800;
+        
+        // Target width for 3 columns: 330px * 3 + 40px gap * 2 + 40px safety padding = 1110px
+        const targetLayoutWidth = 1110;
+        
+        // Calculate dynamic zoom fraction to fit the available space
+        const dynamicZoom = (availableWidth / targetLayoutWidth) * 100;
+        
+        // Cap dynamic zoom elegantly between 45% and 98%
+        zoomLevel = Math.max(45, Math.min(98, dynamicZoom));
+        
+        cardContainer.style.setProperty('--zoom', zoomLevel / 100);
+        if (zoomValueEl) zoomValueEl.textContent = `${Math.round(zoomLevel)}%`;
+      }
+      
+      // Update coordinates cache after browser rendering settles
+      setTimeout(updateCardPositionsCache, 150);
+    } catch (err) {
+      console.error("Error in handleResizeAndZoom:", err);
+    }
+  };
+
+  const scatterCardsRandomly = () => {
+    handleResizeAndZoom();
+  };
+
+  const organizeCardsGrid = () => {
+    handleResizeAndZoom();
   };
 
   const applyCardCoordinates = () => {
-    allCards.forEach(c => {
-      if (c.id === 'portfolio-preview-card') return;
-      const pos = cardPositions[c.id];
-      if (pos) {
-        c.style.left = `${pos.x}px`;
-        c.style.top = `${pos.y}px`;
-      }
-    });
+    // CSS Flexbox handles layouts natively!
   };
 
-  // Re-organize cards in a neat structured grid inside visible screen space
-  const organizeCardsGrid = () => {
-    try {
-      allCards.forEach(c => {
-        if (c.id === 'portfolio-preview-card') return;
-        c.style.setProperty('--card-pos-transition', '0.6s cubic-bezier(0.16, 1, 0.3, 1)');
-      });
+  // Perform initial fitting and caching
+  setTimeout(handleResizeAndZoom, 200);
 
-      const dims = getCanvasDimensions();
-      const screenW = dims.width;
-      const screenH = dims.height;
+  // Bind to resize handler for dynamic fluid scale fitting
+  window.addEventListener('resize', handleResizeAndZoom);
 
-      // Centered compact layout geometry (Compact project cards are 320px wide)
-      const cols = Math.max(2, Math.floor(screenW / 360));
-      const projW = 290;
-      const projH = 72;
-      const gapX = 20; // compact gap
-      const gapY = 16; 
-
-      // Shuffle order of all cards for random grid sequence
-      const shuffledCards = Array.from(allCards).filter(c => c.id !== 'portfolio-preview-card');
-      for (let i = shuffledCards.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledCards[i], shuffledCards[j]] = [shuffledCards[j], shuffledCards[i]];
-      }
-
-      const totalRows = Math.ceil(shuffledCards.length / cols);
-      const gridW = cols * projW + (cols - 1) * gapX; 
-      const gridH = totalRows * projH + (totalRows - 1) * gapY;
-
-      // Start centering
-      const gridStartX = Math.max(20, (screenW - gridW) / 2);
-      const gridStartY = Math.max(80, (screenH - gridH) / 2);
-
-      shuffledCards.forEach((c, idx) => {
-        const col = idx % cols;
-        const row = Math.floor(idx / cols);
-
-        let x = gridStartX + col * (projW + gapX);
-        let y = gridStartY + row * (projH + gapY);
-
-        // Constrain so they don't break visible edges
-        x = Math.max(20, Math.min(screenW - projW - 20, x));
-        y = Math.max(80, Math.min(screenH - projH - 40, y));
-
-        cardPositions[c.id] = { x, y };
-      });
-
-      applyCardCoordinates();
-    } catch (err) {
-      console.error("Error organizing cards:", err);
-    }
-  };
-
-  // ==========================================================================
-  // 3. MOVE TOOL: DRAG INDIVIDUAL BLOCKS (Pointer Events API Integrated)
-  // ==========================================================================
-  let isDraggingCard = false;
-  let activeDragCard = null;
-  let cardStartX = 0;
-  let cardStartY = 0;
-  let initialCardX = 0;
-  let initialCardY = 0;
-
-  // Track pointer movements for smooth drag and drop
-  allCards.forEach(c => {
-    if (c.id === 'portfolio-preview-card') return;
-
-    // Set touch-action none to prevent browser gesture conflicts
-    c.style.touchAction = 'none';
-
-    c.addEventListener('pointerdown', (e) => {
-      // Don't drag if we are on mobile/tablet view (<= 1024px)
-      if (window.innerWidth <= 1024) return;
-
-      // Only drag on left click (button === 0) for mice
-      if (e.pointerType === 'mouse' && e.button !== 0) return;
-
-      // Skip if clicking interactive elements inside the card
-      if (e.target.closest('button') || e.target.closest('a') || e.target.closest('input') || e.target.closest('textarea')) {
-        return;
-      }
-
-      isDraggingCard = true;
-      activeDragCard = c;
-      
-      try {
-        c.setPointerCapture(e.pointerId);
-      } catch (err) {
-        console.warn("Failed to set pointer capture:", err);
-      }
-
-      cardStartX = e.clientX;
-      cardStartY = e.clientY;
-
-      const currentPos = cardPositions[c.id] || { x: 0, y: 0 };
-      initialCardX = currentPos.x || parseInt(c.style.left) || 0;
-      initialCardY = currentPos.y || parseInt(c.style.top) || 0;
-
-      // Bring active card to front
-      allCards.forEach(card => {
-        if (card.id !== 'portfolio-preview-card') {
-          card.style.zIndex = '10';
-        }
-      });
-      c.style.zIndex = '100';
-
-      c.style.setProperty('--card-pos-transition', 'none');
-    });
-
-    c.addEventListener('pointermove', (e) => {
-      if (!isDraggingCard || activeDragCard !== c) return;
-      if (window.innerWidth <= 1024) return;
-
-      const deltaX = e.clientX - cardStartX;
-      const deltaY = e.clientY - cardStartY;
-
-      let newX = initialCardX + deltaX;
-      let newY = initialCardY + deltaY;
-
-      const dims = getCanvasDimensions();
-      const screenW = dims.width;
-      const screenH = dims.height;
-
-      const projW = c.offsetWidth || 320;
-      const projH = c.offsetHeight || 260;
-
-      newX = Math.max(10, Math.min(screenW - projW - 10, newX));
-      newY = Math.max(70, Math.min(screenH - projH - 20, newY));
-
-      cardPositions[c.id] = { x: newX, y: newY };
-      c.style.left = `${newX}px`;
-      c.style.top = `${newY}px`;
-
-      updateMinimapDotsRealtime(c.id, newX, newY);
-    });
-
-    const endDrag = (e) => {
-      if (!isDraggingCard || activeDragCard !== c) return;
-      
-      isDraggingCard = false;
-      activeDragCard = null;
-
-      try {
-        c.releasePointerCapture(e.pointerId);
-      } catch (err) {
-        // Safe check
-      }
-
-      c.style.setProperty('--card-pos-transition', '0.4s cubic-bezier(0.16, 1, 0.3, 1)');
-      
-      if (typeof buildMinimapDots === 'function') {
-        buildMinimapDots();
-      }
-    };
-
-    c.addEventListener('pointerup', endDrag);
-    c.addEventListener('pointercancel', endDrag);
-  });
 
   // ==========================================================================
   // MOBILE DRAWER TOGGLE INTERACTION
@@ -1234,20 +1053,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   skillBtns.forEach(btn => {
-    // Click behavior (Persistent Toggle Filter)
-    btn.addEventListener('click', () => {
-      const targetSkill = btn.getAttribute('data-skill-id');
-
-      if (btn.classList.contains('active')) {
-        btn.classList.remove('active');
-        clearFilters();
-      } else {
-        skillBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        applySkillFilter(targetSkill);
-      }
-    });
-
     // Hover Highlight Connection (Real-time micro interaction)
     btn.addEventListener('mouseenter', () => {
       const targetSkill = btn.getAttribute('data-skill-id');
@@ -1268,6 +1073,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btn.addEventListener('mouseleave', () => {
       // Restore normal view styles when mouse leaves
+      if (cardContainer) cardContainer.classList.remove('skills-filtering');
+      allCards.forEach(c => {
+        c.classList.remove('skill-matched');
+      });
+    });
+  });
+
+  // Project Hover Highlight Connection (Real-time sidebar project highlight)
+  const projectListItems = document.querySelectorAll('.list-item[data-target-proj]');
+  projectListItems.forEach(item => {
+    item.addEventListener('mouseenter', () => {
+      const projId = item.getAttribute('data-target-proj');
+      if (!projId) return;
+
+      if (cardContainer) cardContainer.classList.add('skills-filtering');
+
+      allCards.forEach(c => {
+        if (c.id === `proj-card-${projId}`) {
+          c.classList.add('skill-matched');
+        } else {
+          c.classList.remove('skill-matched');
+        }
+      });
+    });
+
+    item.addEventListener('mouseleave', () => {
       if (cardContainer) cardContainer.classList.remove('skills-filtering');
       allCards.forEach(c => {
         c.classList.remove('skill-matched');
@@ -1306,59 +1137,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================================================
-  // 11. WORKING MINI-MAP SYSTEM ( Obsidian Canvas-Minimap Style Bounding Box )
-  // ==========================================================================
-  function buildMinimapDots() {
-    try {
-      if (!minimapCardsLayer) return;
-      minimapCardsLayer.innerHTML = '';
+  // 11. MINI-MAP DELETED (Cleaned out per user request)
+  function buildMinimapDots() {}
+  function updateMinimapViewport() {}
+  function updateMinimapDotsRealtime() {}
 
-      // Minimap visual dimensions (matching CSS: 200x150)
-      const MINIMAP_W = 200;
-      const MINIMAP_H = 150;
-      
-      allCards.forEach(c => {
-        const pos = cardPositions[c.id];
-        if (!pos) return;
-
-        const dot = document.createElement('div');
-        dot.className = `minimap-card-dot ${c.id === 'portfolio-preview-card' ? 'intro' : ''}`;
-        dot.id = `mini-dot-${c.id}`;
-
-        // Calculate position as percent of board
-        const leftPercent = (pos.x / BOARD_WIDTH) * 100;
-        const topPercent = (pos.y / BOARD_HEIGHT) * 100;
-
-        // Card dimensions as percent of board -> pixel size on minimap
-        const cardW = 520;
-        const cardH = (c.id === 'portfolio-preview-card') ? 500 : 380;
-        const dotW = Math.max(4, (cardW / BOARD_WIDTH) * MINIMAP_W);
-        const dotH = Math.max(3, (cardH / BOARD_HEIGHT) * MINIMAP_H);
-
-        dot.style.left = `${leftPercent}%`;
-        dot.style.top = `${topPercent}%`;
-        dot.style.width = `${dotW}px`;
-        dot.style.height = `${dotH}px`;
-        // Use top-left as anchor
-        dot.style.transform = 'none';
-
-        minimapCardsLayer.appendChild(dot);
-      });
-      updateMinimapViewport();
-    } catch (err) {
-      console.error("Error drawing minimap:", err);
-    }
-  }
-
-  function updateMinimapDotsRealtime(cardId, x, y) {
-    const dot = document.getElementById(`mini-dot-${cardId}`);
-    if (dot) {
-      dot.style.left = `${(x / BOARD_WIDTH) * 100}%`;
-      dot.style.top = `${(y / BOARD_HEIGHT) * 100}%`;
-    }
-  }
-
-  // ==========================================================================
   // 14. INTEGRATED HIGH-FIDELITY BACKGROUND MUSIC STREAMING SYSTEM
   // ==========================================================================
   // Premium royalty-free ambient audio tracks perfectly curated for programming focus
