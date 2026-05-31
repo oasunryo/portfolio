@@ -595,6 +595,10 @@ document.addEventListener('DOMContentLoaded', () => {
       // Slide-in panel classes toggle
       if (sidePeekPanel) sidePeekPanel.classList.add('open');
       if (sidePeekOverlay) sidePeekOverlay.classList.add('open');
+
+      // Reset scroll position of side peek body to the top
+      const sidePeekBody = document.querySelector('.side-peek-body');
+      if (sidePeekBody) sidePeekBody.scrollTop = 0;
     } catch (err) {
       console.error("Error opening side peek:", err);
     }
@@ -950,8 +954,8 @@ document.addEventListener('DOMContentLoaded', () => {
       textareas.forEach(textarea => {
         adjustHeight(textarea);
       });
-      // 12. Update Skill Slider labels for language
-      document.querySelectorAll('#pane-skills [data-ko]').forEach(el => {
+      // 12. Update Dynamic labels (Skills, Figma Component sets) for language
+      document.querySelectorAll('[data-ko]').forEach(el => {
         el.textContent = lang === 'ko' ? el.dataset.ko : el.dataset.en;
       });
 
